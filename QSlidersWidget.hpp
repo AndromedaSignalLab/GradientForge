@@ -3,7 +3,9 @@
 #include <QWidget>
 #include <QMouseEvent>
 #include <QColorDialog>
-#include "QColorRampEditor.hpp"
+typedef QVector<QPair<qreal, QColor>> ColorRamp;
+
+class QColorRampEditorSlider;
 
 class QSlidersWidget : public QWidget
 {
@@ -17,10 +19,10 @@ public:
     int getSliderNum();
 
     /// return the Ramp definition
-    QVector<QPair<qreal, QColor> > getRamp();
+    ColorRamp getRamp();
 
     /// set Ramp definition
-    void setRamp(QVector<QPair<qreal, QColor> > ramp);
+    void setRamp(ColorRamp ramp);
 
     /// get the value of a slider
     qreal updateValue(QColorRampEditorSlider* sl);
@@ -30,16 +32,13 @@ public:
 
     qreal getNormalizedValue(qreal value);
 
-
-    QColorRampEditor* rampEditor;
-
     /// set a color choose dlg
     void setColorChoose(QColorDialog* coldlg);
     int getBoundSpace();
     void addSlider(const QPoint &position, const QColor &color, bool skipIfExists = true);
 
 signals:
-    void sliderMoved(int sliderId, qreal value);
+    void colorRampChanged(ColorRamp colorRamp);
 
 public slots:
     /// set the color of a slider to zero

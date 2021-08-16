@@ -18,6 +18,7 @@
 
 #include <iostream>
 using namespace std;
+typedef QVector<QPair<qreal, QColor>> ColorRamp;
 
 // -----------------------------------------------------------
 // QColorRampEditor ------------------------------------------
@@ -53,7 +54,6 @@ signals:
 
 public slots:
 
-
 protected slots:
 
     /// resize required
@@ -76,10 +76,15 @@ protected:
 
 class QRampWidget : public QWidget
 {
+    Q_OBJECT
 public:
     QRampWidget(QWidget* parent=NULL);
     QColorRampEditor* rampeditor_;
 
+public slots:
+    void onColorRampChanged(ColorRamp colorRamp);
+
 protected:
+    ColorRamp colorRamp;
     void paintEvent(QPaintEvent* e);
 };

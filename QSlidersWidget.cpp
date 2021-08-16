@@ -1,4 +1,5 @@
 #include "QSlidersWidget.hpp"
+#include <QPainter>
 
 class Sorters {
 public:
@@ -85,11 +86,11 @@ void QSlidersWidget::setSliderColor(int index, QColor col)
 }
 
 // -----------------------------------------------------------
-QVector<QPair<qreal, QColor> > QSlidersWidget::getRamp()
+ColorRamp QSlidersWidget::getRamp()
 {
 
     // create output
-    QVector<QPair<qreal, QColor> > ret;
+    ColorRamp ret;
     for (int i=0; i<sliders.size(); i++)
     {
         QColor col = sliders[i]->getColor();
@@ -102,7 +103,7 @@ QVector<QPair<qreal, QColor> > QSlidersWidget::getRamp()
 }
 
 // -----------------------------------------------------------
-void QSlidersWidget::setRamp(QVector<QPair<qreal, QColor> > ramp)
+void QSlidersWidget::setRamp(ColorRamp ramp)
 {
     if (ramp.size()<2) return;
 
@@ -221,7 +222,7 @@ void QSlidersWidget::mouseMoveEvent(QMouseEvent* e)
         QRect crec = contentsRect();
 
         qreal pos;
-        if (rampEditor->orientation==Qt::Horizontal)
+        if (orientation==Qt::Horizontal)
         {
             crec.adjust(bspace_,0,-bspace_,0);
             pos = 1.0*(e->pos().x()-bspace_)/(crec.width());
@@ -239,7 +240,7 @@ void QSlidersWidget::mouseMoveEvent(QMouseEvent* e)
         }
         else
         {
-            if (rampEditor->orientation==Qt::Horizontal)
+            if (orientation==Qt::Horizontal)
                 sliders[activeSlider]->move(e->pos().x() - 4, 0);
             else
                 sliders[activeSlider]->move(0,e->pos().y() - 4);
@@ -249,16 +250,14 @@ void QSlidersWidget::mouseMoveEvent(QMouseEvent* e)
             //if (rampeditor_->slideUpdate_) rampeditor_->updateRamp();
         }
         update();
-        rampEditor->updateRamp();
+        emit colorRampChanged(getRamp());
     }
 }
-// -----------------------------------------------------------
-void QSlidersWidget::mouseReleaseEvent(QMouseEvent* e)
-{
-    if (e->button()== Qt::LeftButton)
-    {
+
+void QSlidersWidget::mouseReleaseEvent(QMouseEvent* e) {
+    if (e->button()== Qt::LeftButton) {
         activeSlider = -1;
-        rampEditor->updateRamp();
+        emit colorRampChanged(getRamp());
     }
 }
 // -----------------------------------------------------------
@@ -282,7 +281,7 @@ void QSlidersWidget::mouseDoubleClickEvent(QMouseEvent* e)
             {
                 colorChooseDialog->exec();
                 sliders[index]->setColor(colorChooseDialog->selectedColor());
-                rampEditor->updateRamp();
+                emit colorRampChanged(getRamp());
             }
         }
 

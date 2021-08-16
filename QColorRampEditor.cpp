@@ -41,7 +41,6 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, int orientation) : QWidget(p
     layout()->addWidget(rampwid_);
 
     slidewid_ = new QSlidersWidget(orientation);
-    slidewid_->rampEditor = this;
     if (orientation==Qt::Horizontal)
     {
         slidewid_->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
@@ -60,6 +59,7 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, int orientation) : QWidget(p
     ramp.push_back(QPair<qreal, QColor>(0.0, Qt::black));
     ramp.push_back(QPair<qreal, QColor>(1.0, Qt::red));
     slidewid_->setRamp(ramp);
+    connect(slidewid_, &QSlidersWidget::colorRampChanged, rampwid_, &QRampWidget::onColorRampChanged);
 }
 
 QColorRampEditor::~QColorRampEditor() {
@@ -131,6 +131,12 @@ QRampWidget::QRampWidget(QWidget* parent) : QWidget(parent) {
     setContentsMargins(0,0,0,0);
     setMinimumHeight(5);
     setMinimumWidth(5);
+}
+
+void QRampWidget::onColorRampChanged(ColorRamp colorRamp)
+{
+    this->colorRamp = colorRamp;
+    update();
 }
 
 void QRampWidget::paintEvent(QPaintEvent* e) {
