@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.15.2, 2021-08-15T09:12:12. -->
+<!-- Written by QtCreator 4.15.2, 2021-08-16T21:10:14. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -302,7 +302,6 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/Volumes/Windows VM/Projects/build-GradientEditor-Qt_6_2_0_for_macOS-Debug/GradientEditor.app/Contents/MacOS</value>
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>
