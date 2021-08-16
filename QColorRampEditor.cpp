@@ -11,6 +11,7 @@
 #include "QColorRampEditor.hpp"
 #include <QPainter>
 #include <QMouseEvent>
+#include "QSlidersWidget.hpp"
 
 // -----------------------------------------------------------
 // QColorRampEditor ------------------------------------------
@@ -31,7 +32,7 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, int orientation) : QWidget(p
         setLayout(new QVBoxLayout());
     else
         setLayout(new QHBoxLayout());
-    layout()->setMargin(0);
+    //layout()->setMargin(0);
     layout()->setSpacing(0);
     layout()->setContentsMargins(0,0,0,0);
 
@@ -43,7 +44,7 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, int orientation) : QWidget(p
     layout()->addWidget(rampwid_);
 
     slidewid_ = new QSlidersWidget();
-    slidewid_->rampeditor_ = this;
+    slidewid_->rampEditor = this;
     if (ori_==Qt::Horizontal)
     {
         slidewid_->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
@@ -77,26 +78,17 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, int orientation) : QWidget(p
     ramp.push_back(QPair<qreal, QColor>(0.0, Qt::black));
     ramp.push_back(QPair<qreal, QColor>(1.0, Qt::red));
     setRamp(ramp);
-
-    chooser_ = new QColorDialog();
 }
 // -----------------------------------------------------------
 QColorRampEditor::~QColorRampEditor()
 {
-    for (int i=0; i<sliders_.size(); i++) delete(sliders_[i]);
-    if (chooser_) delete(chooser_);
+    for (int i=0; i<sliders.size(); i++) delete(sliders[i]);
 }
 // -----------------------------------------------------------
 int QColorRampEditor::getSliderNum()
 {
-    return sliders_.size();
+    return sliders.size();
 }
-// -----------------------------------------------------------
-void QColorRampEditor::setColorChoose(QColorDialog* coldlg)
-{
-    chooser_ = coldlg;
-}
-
 // -----------------------------------------------------------
 void QColorRampEditor::setSlideUpdate(bool val)
 {
@@ -108,24 +100,19 @@ bool QColorRampEditor::colorRampSort(const QPair<qreal, QColor> &a1, const QPair
     return a1.first < a2.first;
 }
 
-bool QColorRampEditor::SliderSort(const QColorRampEditorSlider* a1, const QColorRampEditorSlider* a2)
-{
-    return a1->val < a2->val;
-}
-
 // -----------------------------------------------------------
 QVector<QPair<qreal, QColor> > QColorRampEditor::getRamp()
 {
 
     // create output
     QVector<QPair<qreal, QColor> > ret;
-    for (int i=0; i<sliders_.size(); i++)
+    for (int i=0; i<sliders.size(); i++)
     {
-        QColor col = sliders_[i]->getColor();
-        ret.push_back(QPair<qreal, QColor>(sliders_[i]->val,col));
+        QColor col = sliders[i]->getColor();
+        ret.push_back(QPair<qreal, QColor>(sliders[i]->val,col));
     }
     // sort the slider list
-    qSort(ret.begin(), ret.end(), QColorRampEditor::colorRampSort);
+    std::sort(ret.begin(), ret.end(), QColorRampEditor::colorRampSort);
 
     return ret;
 }
@@ -171,10 +158,10 @@ void QColorRampEditor::setRamp(QVector<QPair<qreal, QColor> > ramp)
     if (ramp.size()<2) return;
 
     // sort the slider list
-    qSort(ramp.begin(), ramp.end(), QColorRampEditor::colorRampSort);
+    std::sort(ramp.begin(), ramp.end(), QColorRampEditor::colorRampSort);
 
-    for (int i=0; i<sliders_.size(); i++) delete(sliders_[i]);
-    sliders_.clear();
+    for (int i=0; i<sliders.size(); i++) delete(sliders[i]);
+    sliders.clear();
 
     // find min/max
     mi_=ramp.first().first;
@@ -185,7 +172,7 @@ void QColorRampEditor::setRamp(QVector<QPair<qreal, QColor> > ramp)
     {
         QColorRampEditorSlider* sl = new QColorRampEditorSlider(ori_,ramp[i].second, slidewid_);
         sl->val = ramp[i].first;
-        sliders_.push_back(sl);
+        sliders.push_back(sl);
         updatePos(sl);
         sl->show();
     }
@@ -255,17 +242,17 @@ int QColorRampEditor::updatePos(QColorRampEditorSlider* sl)
 // -----------------------------------------------------------
 void QColorRampEditor::setSliderColor(int index, QColor col)
 {
-    if (index<0 || index>=sliders_.size()) return;
-    sliders_[index]->setColor(col);
+    if (index<0 || index>=sliders.size()) return;
+    sliders[index]->setColor(col);
     emit rampChanged();
 }
 
 // -----------------------------------------------------------
 void QColorRampEditor::resizeEvent (QResizeEvent* e)
 {
-    for (int i=0; i<sliders_.size(); i++)
+    for (int i=0; i<sliders.size(); i++)
     {
-        QColorRampEditorSlider* sl = sliders_[i];
+        QColorRampEditorSlider* sl = sliders[i];
         updatePos(sl);
     }
 }
@@ -281,11 +268,11 @@ void QColorRampEditor::mousePressEvent(QMouseEvent* e)
             if (crec.contains(e->pos(), true )) // test mouse is in ramp
             {
                 QColorRampEditorSlider* sl = new QColorRampEditorSlider(ori_, Qt::white, slidewid_);
-                sliders_.push_back(sl);
+                sliders.push_back(sl);
                 sl->move(e->pos().x(),0);
                 updateValue(sl);
                 sl->show();
-                qSort(sliders_.begin(), sliders_.end(), QColorRampEditor::SliderSort);
+                std::sort(sliders.begin(), sliders.end(), QSlidersWidget::SliderSort);
                 updateRamp();
             }
         }
@@ -295,11 +282,11 @@ void QColorRampEditor::mousePressEvent(QMouseEvent* e)
             if (crec.contains(e->pos(), true )) // test mouse is in ramp
             {
                 QColorRampEditorSlider* sl = new QColorRampEditorSlider(ori_, Qt::white, slidewid_);
-                sliders_.push_back(sl);
+                sliders.push_back(sl);
                 sl->move(0,e->pos().y());
                 updateValue(sl);
                 sl->show();
-                qSort(sliders_.begin(), sliders_.end(), QColorRampEditor::SliderSort);
+                std::sort(sliders.begin(), sliders.end(), QSlidersWidget::SliderSort);
                 updateRamp();
             }
         }
@@ -344,10 +331,10 @@ void QRampWidget::paintEvent(QPaintEvent* e)
         grad = QLinearGradient( 0, 0, 0, crec.height()-1);
     }
 
-    for (int i=0; i<rampeditor_->sliders_.size(); i++)
+    for (int i=0; i<rampeditor_->sliders.size(); i++)
     {
-        qreal nval = (rampeditor_->sliders_[i]->val - rampeditor_->mi_)/(rampeditor_->ma_-rampeditor_->mi_);
-        grad.setColorAt(nval, rampeditor_->sliders_[i]->getColor());
+        qreal nval = (rampeditor_->sliders[i]->val - rampeditor_->mi_)/(rampeditor_->ma_-rampeditor_->mi_);
+        grad.setColorAt(nval, rampeditor_->sliders[i]->getColor());
     }
 
     painter.fillRect( crec, grad);
@@ -355,109 +342,6 @@ void QRampWidget::paintEvent(QPaintEvent* e)
 
     QWidget::paintEvent(e);
 }
-
-// -----------------------------------------------------------
-// QSlidersWidget --------------------------------------------
-// -----------------------------------------------------------
-QSlidersWidget::QSlidersWidget(QWidget* parent) : QWidget(parent),
-    activeSlider_(-1)
-{
-    setContentsMargins(0,0,0,0);
-}
-
-// -----------------------------------------------------------
-void QSlidersWidget::mousePressEvent(QMouseEvent* e)
-{
-    if (e->button()== Qt::LeftButton)
-    {
-        if (rampeditor_->sliders_.size()<2) return;
-        for (int i=1; i<rampeditor_->sliders_.size()-1; i++)
-        {
-            QRect srec = rampeditor_->sliders_[i]->geometry();
-            if (srec.contains(e->pos(), true ))
-            {
-                activeSlider_ = i;
-                break;
-            }
-        }
-    }
-}
-// -----------------------------------------------------------
-void QSlidersWidget::mouseMoveEvent(QMouseEvent* e)
-{
-    if (activeSlider_>=0)
-    {
-        QRect crec = contentsRect();
-
-        qreal pos;
-        if (rampeditor_->ori_==Qt::Horizontal)
-        {
-            crec.adjust(rampeditor_->bspace_,0,-rampeditor_->bspace_,0);
-            pos = 1.0*(e->pos().x()-rampeditor_->bspace_)/(crec.width());
-        }
-        else
-        {
-            crec.adjust(0,rampeditor_->bspace_,0,-rampeditor_->bspace_);
-            pos = 1.0*(e->pos().y()-rampeditor_->bspace_)/(crec.height());
-        }
-
-        if (pos<0.0 || pos>1.0)
-        {
-            delete(rampeditor_->sliders_[activeSlider_]);
-            rampeditor_->sliders_.removeAt(activeSlider_);
-            activeSlider_ = -1;
-            rampeditor_->updateRamp();
-        }
-        else
-        {
-            if (rampeditor_->ori_==Qt::Horizontal)
-                rampeditor_->sliders_[activeSlider_]->move(e->pos().x(), 0);
-            else
-                rampeditor_->sliders_[activeSlider_]->move(0,e->pos().y());
-
-            rampeditor_->updateValue(rampeditor_->sliders_[activeSlider_]);
-            qSort(rampeditor_->sliders_.begin(), rampeditor_->sliders_.end(), QColorRampEditor::SliderSort);
-            if (rampeditor_->slideUpdate_) rampeditor_->updateRamp();
-        }
-        update();
-    }
-}
-// -----------------------------------------------------------
-void QSlidersWidget::mouseReleaseEvent(QMouseEvent* e)
-{
-    if (e->button()== Qt::LeftButton)
-    {
-        activeSlider_ = -1;
-        rampeditor_->updateRamp();
-    }
-}
-// -----------------------------------------------------------
-void QSlidersWidget::mouseDoubleClickEvent(QMouseEvent* e)
-{
-    if (e->button()== Qt::LeftButton)
-    {
-        int index = -1;
-        for (int i=0; i<rampeditor_->sliders_.size(); i++)
-        {
-            QRect srec = rampeditor_->sliders_[i]->geometry();
-            if (srec.contains(e->pos(), true ))
-            {
-                index = i;
-                break;
-            }
-        }
-        if (index>=0)
-        {
-            if (rampeditor_->chooser_)
-            {
-                rampeditor_->chooser_->exec();
-                rampeditor_->sliders_[index]->setColor(rampeditor_->chooser_->selectedColor());
-                rampeditor_->updateRamp();
-            }
-        }
-    }
-}
-
 
 // -----------------------------------------------------------
 // QColorRampEditorSlider ------------------------------------
@@ -490,9 +374,9 @@ void QColorRampEditorSlider::paintEvent(QPaintEvent* e)
     if (ori_==Qt::Horizontal)
     {
         QRect rec(0,7,8,8);
-        painter.drawRect(rec);
+        //painter.drawRect(rec);
         QPolygon pp;
-        pp << QPoint(0,7) << QPoint(4,0) << QPoint(8,7);
+        pp << QPoint(0,7) << QPoint(4,0) << QPoint(8,7) << QPoint(8, 15) << QPoint(0, 15);
         painter.drawPolygon(pp, Qt::OddEvenFill);
     }
     else
@@ -532,33 +416,34 @@ void QSliderTextWidget::paintEvent(QPaintEvent* e)
     if (rampeditor_->ori_==Qt::Vertical)
     {
         {
-            QString txt1 = QString::number(rampeditor_->sliders_.first()->val, 'f', rampeditor_->textAcc_);
-            QString txt2 = QString::number(rampeditor_->sliders_.last()->val, 'f', rampeditor_->textAcc_);
-            int w = fm.width(txt1) + 4;
+            QString txt1 = QString::number(rampeditor_->sliders.first()->val, 'f', rampeditor_->textAcc_);
+            QString txt2 = QString::number(rampeditor_->sliders.last()->val, 'f', rampeditor_->textAcc_);
+            int w = fm.boundingRect(txt1).width() + 4;
             if (w>this->width()) setFixedWidth(w);
-            w = fm.width(txt2) + 4;
+            w = fm.boundingRect(txt2).width() + 4;
             if (w>this->width()) setFixedWidth(w);
         }
         // draw the text for vertical orientation
-        for (int i=0; i<rampeditor_->sliders_.size(); i++)
+        for (int i=0; i<rampeditor_->sliders.size(); i++)
         {
-            int pos = rampeditor_->sliders_[i]->pos().y();
-            qreal val = rampeditor_->sliders_[i]->val;
+            int pos = rampeditor_->sliders[i]->pos().y();
+            qreal val = rampeditor_->sliders[i]->val;
             QString txt = QString::number(val, 'f', rampeditor_->textAcc_);
-            painter.drawText(2, pos + rampeditor_->sliders_[i]->height(), txt);
+            painter.drawText(2, pos + rampeditor_->sliders[i]->height(), txt);
         }
     }
     else // draw the text for horizontal orientation
     {
-        for (int i=0; i<rampeditor_->sliders_.size(); i++)
+        for (int i=0; i<rampeditor_->sliders.size(); i++)
         {
-            int pos = rampeditor_->sliders_[i]->pos().x();
-            qreal val = rampeditor_->sliders_[i]->val;
+            int pos = rampeditor_->sliders[i]->pos().x();
+            qreal val = rampeditor_->sliders[i]->val;
             QString txt = QString::number(val, 'f', rampeditor_->textAcc_);
-            if ((pos+fm.width(txt))>width()) pos += -fm.width(txt) + rampeditor_->sliders_[i]->width();
+            if ((pos+fm.boundingRect(txt).width())>width()) pos += -fm.boundingRect(txt).width() + rampeditor_->sliders[i]->width();
             painter.drawText(pos, 2+fm.height(), txt);
         }
     }
 
     QWidget::paintEvent(e);
 }
+

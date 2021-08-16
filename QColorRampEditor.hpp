@@ -46,9 +46,6 @@ public:
     /// get the number of sliders
     int getSliderNum();
 
-    /// set a color choose dlg
-    void setColorChoose(QColorDialog* coldlg);
-
 	/// set the update emitting when sliding
 	void setSlideUpdate(bool val);
 
@@ -102,11 +99,8 @@ protected:
     /// sort the color ramp
     static bool colorRampSort(const QPair<qreal, QColor> &a1, const QPair<qreal, QColor> &a2);
 
-    /// sort the slider list
-    static bool SliderSort(const QColorRampEditorSlider* a1, const QColorRampEditorSlider* a2);
-
     /// all poses with its sliders
-    QList<QColorRampEditorSlider*> sliders_;
+    QList<QColorRampEditorSlider*> sliders;
 
     /// the orientation
     int ori_;
@@ -124,9 +118,6 @@ protected:
 
     /// the index of the active slider
     int activeSlider_;
-
-    /// a color chooser dlg
-    QColorDialog* chooser_;
 
 	/// flag to visualize the mapping
 	bool visText_;
@@ -185,33 +176,6 @@ protected:
     void paintEvent(QPaintEvent* e);
 };
 
-class QSlidersWidget : public QWidget
-{
-    Q_OBJECT
-public:
-    /// Constructor
-    QSlidersWidget(QWidget* parent=NULL);
-
-    QColorRampEditor* rampeditor_;
-
-protected slots:
-
-    /// detect a mouse is pressed
-    virtual void mousePressEvent(QMouseEvent* e);
-
-    /// detect a mouse is moved
-    virtual void mouseMoveEvent(QMouseEvent* e);
-
-    /// detect a mouse is released
-    virtual void mouseReleaseEvent(QMouseEvent* e);
-
-    /// detect a mouse is released
-    virtual void mouseDoubleClickEvent(QMouseEvent* e);
-
-protected:
-    /// the active slider
-    int activeSlider_;
-};
 
 class QSliderTextWidget : public QWidget
 {
