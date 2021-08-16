@@ -51,8 +51,7 @@ int QSlidersWidget::getBoundSpace()
     return bspace_;
 }
 
-void QSlidersWidget::addSlider(const QPoint &position, const QColor &color, bool skipIfExists)
-{
+void QSlidersWidget::addSlider(const QPoint &position, const QColor &color, bool skipIfExists) {
     if(skipIfExists) {
         for (int i=1; i<sliders.size()-1; i++)
         {
@@ -76,19 +75,15 @@ void QSlidersWidget::addSlider(const QPoint &position, const QColor &color, bool
     updateValue(sl);
     sl->show();
     std::sort(sliders.begin(), sliders.end(), Sorters::SliderSort);
+    emit colorRampChanged(getRamp());
 }
 
-// -----------------------------------------------------------
-void QSlidersWidget::setSliderColor(int index, QColor col)
-{
+void QSlidersWidget::setSliderColor(int index, QColor col) {
     if (index<0 || index>=sliders.size()) return;
     sliders[index]->setColor(col);
 }
 
-// -----------------------------------------------------------
-ColorRamp QSlidersWidget::getRamp()
-{
-
+ColorRamp QSlidersWidget::getRamp() {
     // create output
     ColorRamp ret;
     for (int i=0; i<sliders.size(); i++)
@@ -102,9 +97,7 @@ ColorRamp QSlidersWidget::getRamp()
     return ret;
 }
 
-// -----------------------------------------------------------
-void QSlidersWidget::setRamp(ColorRamp ramp)
-{
+void QSlidersWidget::setRamp(ColorRamp ramp) {
     if (ramp.size()<2) return;
 
     // sort the slider list
@@ -127,13 +120,11 @@ void QSlidersWidget::setRamp(ColorRamp ramp)
         sl->show();
     }
 
-    //emit rampChanged();
+    emit colorRampChanged(ramp);
     update();
 }
 
-// -----------------------------------------------------------
-qreal QSlidersWidget::updateValue(QColorRampEditorSlider* sl)
-{
+qreal QSlidersWidget::updateValue(QColorRampEditorSlider* sl) {
     QRect crec = contentsRect();
     if (orientation==Qt::Horizontal)
     {
@@ -148,9 +139,7 @@ qreal QSlidersWidget::updateValue(QColorRampEditorSlider* sl)
     return sl->value;
 }
 
-// -----------------------------------------------------------
-int QSlidersWidget::updatePos(QColorRampEditorSlider* sl)
-{
+int QSlidersWidget::updatePos(QColorRampEditorSlider* sl) {
     QRect crec = contentsRect();
     qreal pos;
     if (orientation==Qt::Horizontal)
@@ -172,14 +161,11 @@ int QSlidersWidget::updatePos(QColorRampEditorSlider* sl)
     return pos;
 }
 
-qreal QSlidersWidget::getNormalizedValue(qreal value)
-{
+qreal QSlidersWidget::getNormalizedValue(qreal value) {
     return (value - mi_)/(ma_-mi_);
 }
 
-// -----------------------------------------------------------
-void QSlidersWidget::resizeEvent (QResizeEvent*)
-{
+void QSlidersWidget::resizeEvent (QResizeEvent*) {
     for (int i=0; i<sliders.size(); i++)
     {
         QColorRampEditorSlider* sl = sliders[i];
@@ -187,17 +173,14 @@ void QSlidersWidget::resizeEvent (QResizeEvent*)
     }
 }
 
-void QSlidersWidget::removeActiveSlider()
-{
+void QSlidersWidget::removeActiveSlider() {
     delete(sliders[activeSlider]);
     sliders.removeAt(activeSlider);
     activeSlider = -1;
+    emit colorRampChanged(getRamp());
 }
 
-// -----------------------------------------------------------
-void QSlidersWidget::mousePressEvent(QMouseEvent* e)
-{
-
+void QSlidersWidget::mousePressEvent(QMouseEvent* e) {
     if (e->button()== Qt::LeftButton)
     {
         if (sliders.size()<2) return;
@@ -212,11 +195,12 @@ void QSlidersWidget::mousePressEvent(QMouseEvent* e)
         }
     }
 
-    //addSliderUnderMousePointer(e->pos());
+    //for slider addition by single mouse click
+    //addSlider(e->pos());
+    //emit colorRampChanged(getRamp());
 }
-// -----------------------------------------------------------
-void QSlidersWidget::mouseMoveEvent(QMouseEvent* e)
-{
+
+void QSlidersWidget::mouseMoveEvent(QMouseEvent* e) {
     if (activeSlider>=0)
     {
         QRect crec = contentsRect();
@@ -233,10 +217,11 @@ void QSlidersWidget::mouseMoveEvent(QMouseEvent* e)
             pos = 1.0*(e->pos().y()-bspace_)/(crec.height());
         }
 
+
+
         if (pos<0.0 || pos>1.0)
         {
             removeActiveSlider();
-            //rampeditor_->updateRamp();
         }
         else
         {

@@ -62,9 +62,6 @@ protected slots:
     /// detect a mouse is pressed
     virtual void mousePressEvent(QMouseEvent* e);    
 
-    /// on update the ramp because sliders are changed
-    virtual void updateRamp();
-
 protected:
     /// the orientation
     int orientation;

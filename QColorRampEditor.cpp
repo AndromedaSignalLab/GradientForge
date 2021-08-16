@@ -111,16 +111,9 @@ void QColorRampEditor::mousePressEvent(QMouseEvent* e) {
         if (crec.contains(e->pos(), true )) // test mouse is in ramp
         {
             slidewid_->addSlider(e->pos(), Qt::white);
-            updateRamp();
         }
     }
 }
-
-void QColorRampEditor::updateRamp() {
-    rampwid_->update();
-    emit rampChanged();
-}
-
 
 // -----------------------------------------------------------
 // QRampWidget -----------------------------------------------
