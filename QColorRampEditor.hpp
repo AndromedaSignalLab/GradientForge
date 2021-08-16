@@ -32,7 +32,7 @@ class QColorRampEditor : public QWidget
 public:
 
     /// Basic Constructor
-    QColorRampEditor(QWidget* parent=0, int orientation = Qt::Horizontal);
+    QColorRampEditor(QWidget* parent=0, int orientation = Qt::Vertical);
 
     /// Destructor
     virtual ~QColorRampEditor();

@@ -109,6 +109,29 @@ void QColorRampEditor::resizeEvent (QResizeEvent*)
 // -----------------------------------------------------------
 void QColorRampEditor::mousePressEvent(QMouseEvent* e)
 {
+
+    if (e->button()== Qt::LeftButton)
+    {
+        QRect crec = contentsRect();
+        //crec.adjust(bspace_,0,-bspace_,0);
+        if (orientation==Qt::Horizontal)
+        {
+            if (crec.contains(e->pos(), true )) // test mouse is in ramp
+            {
+                slidewid_->addSlider(e->pos().x(), Qt::white);
+                updateRamp();
+            }
+        }
+        else
+        {
+            //crec.adjust(0,bspace_,0,-bspace_);
+            if (crec.contains(e->pos(), true )) // test mouse is in ramp
+            {
+                slidewid_->addSlider(e->pos().y(), Qt::white);
+                updateRamp();
+            }
+        }
+    }
 }
 
 void QColorRampEditor::updateRamp()
