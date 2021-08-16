@@ -102,6 +102,8 @@ public:
     /// the value
     qreal value;
 
+    inline void move(int ax, int ay);
+
 protected slots:
 
     /// paint the widget

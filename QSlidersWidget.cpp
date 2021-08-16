@@ -1,6 +1,6 @@
 #include "QSlidersWidget.hpp"
 #include <QPainter>
-
+#include <QDebug>
 class Sorters {
 public:
     /// sort the slider list
@@ -66,11 +66,11 @@ void QSlidersWidget::addSlider(const QPoint &position, const QColor &color, bool
     sliders.push_back(sl);
     if (orientation==Qt::Horizontal)
     {
-            sl->move(position.x() - 4,0);
+            sl->move(position.x(),0);
     }
     else
     {
-        sl->move(0,position.y() - 4);
+        sl->move(0,position.y());
     }
     updateValue(sl);
     sl->show();
@@ -98,7 +98,7 @@ ColorRamp QSlidersWidget::getRamp() {
 }
 
 void QSlidersWidget::setRamp(ColorRamp ramp) {
-    if (ramp.size()<2) return;
+    if (ramp.size()<1) return;
 
     // sort the slider list
     std::sort(ramp.begin(), ramp.end(), Sorters::colorRampSort);
@@ -210,6 +210,24 @@ void QSlidersWidget::mouseMoveEvent(QMouseEvent* e) {
         {
             crec.adjust(bspace_,0,-bspace_,0);
             pos = 1.0*(e->pos().x()-bspace_)/(crec.width());
+            if(pos < 0.0) {
+                if(pos>=-0.08) {
+                    if(activeSlider >= 0)
+                       sliders[activeSlider]->move(0,0);
+                }
+                else {
+                    removeActiveSlider();
+                }
+            }
+            else if(pos > 1.0) {
+                if(pos<=1.08) {
+                    if(activeSlider >= 0)
+                        sliders[activeSlider]->move(crec.width(),0);
+                }
+                else {
+                    removeActiveSlider();
+                }
+            }
         }
         else
         {
@@ -217,18 +235,16 @@ void QSlidersWidget::mouseMoveEvent(QMouseEvent* e) {
             pos = 1.0*(e->pos().y()-bspace_)/(crec.height());
         }
 
-
-
         if (pos<0.0 || pos>1.0)
         {
-            removeActiveSlider();
+            //removeActiveSlider();
         }
         else
         {
             if (orientation==Qt::Horizontal)
-                sliders[activeSlider]->move(e->pos().x() - 4, 0);
+                sliders[activeSlider]->move(e->pos().x(), 0);
             else
-                sliders[activeSlider]->move(0,e->pos().y() - 4);
+                sliders[activeSlider]->move(0,e->pos().y());
 
             updateValue(sliders[activeSlider]);
             //std::sort(rampEditor->sliders.begin(), rampEditor->sliders.end(), SliderSort); //Enable to make sliders can't pass each other
@@ -284,8 +300,9 @@ int QSlidersWidget::getSliderNum()
 // QColorRampEditorSlider ------------------------------------
 // -----------------------------------------------------------
 QColorRampEditorSlider::QColorRampEditorSlider(int orientation, QColor col, QWidget* parent) : QWidget(parent),
-    orientation(orientation), color(col)
+    color(col)
 {
+    this->orientation = orientation;
     if (orientation==Qt::Horizontal)
         setFixedSize(9, 16);
     else
@@ -300,6 +317,14 @@ void QColorRampEditorSlider::setColor(QColor col)
 QColor QColorRampEditorSlider::getColor()
 {
     return color;
+}
+
+void QColorRampEditorSlider::move(int ax, int ay)
+{
+    if (orientation==Qt::Horizontal)
+        QWidget::move(ax - geometry().width()/2, ay);
+    else
+        QWidget::move(ax, ay - geometry().height()/2);
 }
 
 // -----------------------------------------------------------
