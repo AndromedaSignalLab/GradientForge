@@ -50,17 +50,27 @@ int QSlidersWidget::getBoundSpace()
     return bspace_;
 }
 
-void QSlidersWidget::addSlider(int position, QColor color)
+void QSlidersWidget::addSlider(const QPoint &position, const QColor &color, bool skipIfExists)
 {
+    if(skipIfExists) {
+        for (int i=1; i<sliders.size()-1; i++)
+        {
+            QRect srec = sliders[i]->geometry();
+            if (srec.contains(position, true ))
+            {
+                return;
+            }
+        }
+    }
     QColorRampEditorSlider* sl = new QColorRampEditorSlider(orientation, color, this);
     sliders.push_back(sl);
     if (orientation==Qt::Horizontal)
     {
-            sl->move(position,0);
+            sl->move(position.x() - 4,0);
     }
     else
     {
-        sl->move(0,position);
+        sl->move(0,position.y() - 4);
     }
     updateValue(sl);
     sl->show();
@@ -176,6 +186,13 @@ void QSlidersWidget::resizeEvent (QResizeEvent*)
     }
 }
 
+void QSlidersWidget::removeActiveSlider()
+{
+    delete(sliders[activeSlider]);
+    sliders.removeAt(activeSlider);
+    activeSlider = -1;
+}
+
 // -----------------------------------------------------------
 void QSlidersWidget::mousePressEvent(QMouseEvent* e)
 {
@@ -194,40 +211,7 @@ void QSlidersWidget::mousePressEvent(QMouseEvent* e)
         }
     }
 
-
-    /*
-    if (e->button()== Qt::LeftButton)
-    {
-        QRect crec = contentsRect();
-        if (orientation==Qt::Horizontal)
-        {
-            crec.adjust(bspace_,0,-bspace_,0);
-            if (crec.contains(e->pos(), true )) // test mouse is in ramp
-            {
-                QColorRampEditorSlider* sl = new QColorRampEditorSlider(orientation, Qt::white, this);
-                sliders.push_back(sl);
-                sl->move(e->pos().x(),0);
-                updateValue(sl);
-                sl->show();
-                std::sort(sliders.begin(), sliders.end(), Sorters::SliderSort);
-                rampEditor->updateRamp();
-            }
-        }
-        else
-        {
-            crec.adjust(0,bspace_,0,-bspace_);
-            if (crec.contains(e->pos(), true )) // test mouse is in ramp
-            {
-                QColorRampEditorSlider* sl = new QColorRampEditorSlider(orientation, Qt::white, this);
-                sliders.push_back(sl);
-                sl->move(0,e->pos().y());
-                updateValue(sl);
-                sl->show();
-                std::sort(sliders.begin(), sliders.end(), Sorters::SliderSort);
-                rampEditor->updateRamp();
-            }
-        }
-    }*/
+    //addSliderUnderMousePointer(e->pos());
 }
 // -----------------------------------------------------------
 void QSlidersWidget::mouseMoveEvent(QMouseEvent* e)
@@ -250,9 +234,7 @@ void QSlidersWidget::mouseMoveEvent(QMouseEvent* e)
 
         if (pos<0.0 || pos>1.0)
         {
-            delete(sliders[activeSlider]);
-            sliders.removeAt(activeSlider);
-            activeSlider = -1;
+            removeActiveSlider();
             //rampeditor_->updateRamp();
         }
         else
@@ -303,6 +285,8 @@ void QSlidersWidget::mouseDoubleClickEvent(QMouseEvent* e)
                 rampEditor->updateRamp();
             }
         }
+
+        addSlider(e->pos(), Qt::white);
     }
 }
 

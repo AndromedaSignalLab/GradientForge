@@ -61,13 +61,11 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, int orientation) : QWidget(p
     ramp.push_back(QPair<qreal, QColor>(1.0, Qt::red));
     slidewid_->setRamp(ramp);
 }
-// -----------------------------------------------------------
-QColorRampEditor::~QColorRampEditor()
-{
+
+QColorRampEditor::~QColorRampEditor() {
 }
-// -----------------------------------------------------------
-QVector<QRgb> QColorRampEditor::getColorTable()
-{
+
+QVector<QRgb> QColorRampEditor::getColorTable() {
     // get ramp and normalize
     QVector<QPair<qreal, QColor> > ramp = slidewid_->getRamp();
     for (int i=0; i<ramp.size(); i++) ramp[i].first = slidewid_->getNormalizedValue(ramp[i].first);
@@ -102,40 +100,23 @@ QVector<QRgb> QColorRampEditor::getColorTable()
     return ctable;
 }
 
-// -----------------------------------------------------------
-void QColorRampEditor::resizeEvent (QResizeEvent*)
-{
+void QColorRampEditor::resizeEvent (QResizeEvent*) {
 }
-// -----------------------------------------------------------
-void QColorRampEditor::mousePressEvent(QMouseEvent* e)
-{
 
+void QColorRampEditor::mousePressEvent(QMouseEvent* e) {
     if (e->button()== Qt::LeftButton)
     {
         QRect crec = contentsRect();
         //crec.adjust(bspace_,0,-bspace_,0);
-        if (orientation==Qt::Horizontal)
+        if (crec.contains(e->pos(), true )) // test mouse is in ramp
         {
-            if (crec.contains(e->pos(), true )) // test mouse is in ramp
-            {
-                slidewid_->addSlider(e->pos().x(), Qt::white);
-                updateRamp();
-            }
-        }
-        else
-        {
-            //crec.adjust(0,bspace_,0,-bspace_);
-            if (crec.contains(e->pos(), true )) // test mouse is in ramp
-            {
-                slidewid_->addSlider(e->pos().y(), Qt::white);
-                updateRamp();
-            }
+            slidewid_->addSlider(e->pos(), Qt::white);
+            updateRamp();
         }
     }
 }
 
-void QColorRampEditor::updateRamp()
-{
+void QColorRampEditor::updateRamp() {
     rampwid_->update();
     emit rampChanged();
 }
@@ -145,16 +126,14 @@ void QColorRampEditor::updateRamp()
 // QRampWidget -----------------------------------------------
 // -----------------------------------------------------------
 
-QRampWidget::QRampWidget(QWidget* parent) : QWidget(parent)
-{
+QRampWidget::QRampWidget(QWidget* parent) : QWidget(parent) {
     setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     setContentsMargins(0,0,0,0);
     setMinimumHeight(5);
     setMinimumWidth(5);
 }
 
-void QRampWidget::paintEvent(QPaintEvent* e)
-{
+void QRampWidget::paintEvent(QPaintEvent* e) {
     QPainter painter(this);
     painter.setPen(Qt::black);
 

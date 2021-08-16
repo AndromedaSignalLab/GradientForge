@@ -36,7 +36,7 @@ public:
     /// set a color choose dlg
     void setColorChoose(QColorDialog* coldlg);
     int getBoundSpace();
-    void addSlider(int position, QColor color);
+    void addSlider(const QPoint &position, const QColor &color, bool skipIfExists = true);
 
 signals:
     void sliderMoved(int sliderId, qreal value);
@@ -78,6 +78,7 @@ protected:
 
     /// min and max value from initialization
     qreal mi_, ma_;
+    void removeActiveSlider();
 };
 
 
