@@ -12,7 +12,7 @@ class QSlidersWidget : public QWidget
     Q_OBJECT
 public:
     /// Constructor
-    QSlidersWidget(int orientation = Qt::Horizontal, QWidget* parent=NULL);
+    QSlidersWidget(Qt::Orientation orientation = Qt::Horizontal, QWidget* parent=NULL);
     ~QSlidersWidget();
 
     /// get the number of sliders
@@ -70,10 +70,10 @@ protected:
 
 
     /// the orientation
-    int orientation;
+    Qt::Orientation orientation;
 
     /// bound space
-    int bspace_;
+    int boundarySpace;
 
     /// min and max value from initialization
     qreal mi_, ma_;
@@ -91,7 +91,7 @@ class QColorRampEditorSlider : public QWidget
 public:
 
     /// Constructor
-    QColorRampEditorSlider(int orientation = Qt::Horizontal, QColor col = Qt::black, QWidget* parent=0);
+    QColorRampEditorSlider(Qt::Orientation orientation = Qt::Horizontal, QColor col = Qt::black, QWidget* parent=0);
 
     /// set the color of the slider
     void setColor(QColor color);
@@ -115,5 +115,5 @@ protected:
     QColor color;
 
     /// the orientation
-    int orientation;
+    Qt::Orientation orientation;
 };

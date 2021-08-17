@@ -33,7 +33,7 @@ class QColorRampEditor : public QWidget
 public:
 
     /// Basic Constructor
-    QColorRampEditor(QWidget* parent=0, int orientation = Qt::Horizontal);
+    QColorRampEditor(QWidget* parent=0, Qt::Orientation orientation = Qt::Horizontal);
 
     /// Destructor
     virtual ~QColorRampEditor();
@@ -64,7 +64,7 @@ protected slots:
 
 protected:
     /// the orientation
-    int orientation;
+    Qt::Orientation orientation;
 
     /// the widgets drawint the ramp, the sliders, the text
     QRampWidget* rampwid_;

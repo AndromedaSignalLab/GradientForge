@@ -24,9 +24,9 @@ bool Sorters::SliderSort(const QColorRampEditorSlider* a1, const QColorRampEdito
 // -----------------------------------------------------------
 // QSlidersWidget --------------------------------------------
 // -----------------------------------------------------------
-QSlidersWidget::QSlidersWidget(int orientation, QWidget* parent) : QWidget(parent),
+QSlidersWidget::QSlidersWidget(Qt::Orientation orientation, QWidget* parent) : QWidget(parent),
     activeSlider(-1),
-    bspace_(5)
+    boundarySpace(5)
 {
     this->orientation = orientation;
     setContentsMargins(0,0,0,0);
@@ -48,7 +48,7 @@ void QSlidersWidget::setColorChoose(QColorDialog* coldlg)
 
 int QSlidersWidget::getBoundSpace()
 {
-    return bspace_;
+    return boundarySpace;
 }
 
 void QSlidersWidget::addSlider(const QPoint &position, const QColor &color, bool skipIfExists) {
@@ -128,13 +128,13 @@ qreal QSlidersWidget::updateValue(QColorRampEditorSlider* sl) {
     QRect crec = contentsRect();
     if (orientation==Qt::Horizontal)
     {
-        crec.adjust(bspace_,0,-bspace_,0);
-        sl->value = mi_ + (1.0*sl->pos().x()-bspace_)/crec.width()*(ma_-mi_);
+        crec.adjust(boundarySpace,0,-boundarySpace,0);
+        sl->value = mi_ + (1.0*sl->pos().x()-boundarySpace)/crec.width()*(ma_-mi_);
     }
     else
     {
-        crec.adjust(0,bspace_,0,-bspace_);
-        sl->value = mi_ + (1.0*sl->pos().y()-bspace_)/crec.height()*(ma_-mi_);
+        crec.adjust(0,boundarySpace,0,-boundarySpace);
+        sl->value = mi_ + (1.0*sl->pos().y()-boundarySpace)/crec.height()*(ma_-mi_);
     }
     return sl->value;
 }
@@ -144,18 +144,18 @@ int QSlidersWidget::updatePos(QColorRampEditorSlider* sl) {
     qreal pos;
     if (orientation==Qt::Horizontal)
     {
-        crec.adjust(bspace_,0,-bspace_,0);
+        crec.adjust(boundarySpace,0,-boundarySpace,0);
         pos = (sl->value- mi_)/(ma_-mi_)*crec.width();
         pos -= sl->width()/2;
-        pos += bspace_;
+        pos += boundarySpace;
         sl->move(pos,0);
     }
     else
     {
-        crec.adjust(0, bspace_,0,-bspace_);
+        crec.adjust(0, boundarySpace,0,-boundarySpace);
         pos = (sl->value- mi_)/(ma_-mi_)*crec.height();
         pos -= sl->height()/2;
-        pos += bspace_;
+        pos += boundarySpace;
         sl->move(0,pos);
     }
     return pos;
@@ -208,8 +208,8 @@ void QSlidersWidget::mouseMoveEvent(QMouseEvent* e) {
         qreal pos;
         if (orientation==Qt::Horizontal)
         {
-            crec.adjust(bspace_,0,-bspace_,0);
-            pos = 1.0*(e->pos().x()-bspace_)/(crec.width());
+            crec.adjust(boundarySpace,0,-boundarySpace,0);
+            pos = 1.0*(e->pos().x()-boundarySpace)/(crec.width());
             if(pos < 0.0) {
                 if(pos>=-0.08) {
                     if(activeSlider >= 0)
@@ -231,8 +231,8 @@ void QSlidersWidget::mouseMoveEvent(QMouseEvent* e) {
         }
         else
         {
-            crec.adjust(0,bspace_,0,-bspace_);
-            pos = 1.0*(e->pos().y()-bspace_)/(crec.height());
+            crec.adjust(0,boundarySpace,0,-boundarySpace);
+            pos = 1.0*(e->pos().y()-boundarySpace)/(crec.height());
         }
 
         if (pos<0.0 || pos>1.0)
@@ -299,7 +299,7 @@ int QSlidersWidget::getSliderNum()
 // -----------------------------------------------------------
 // QColorRampEditorSlider ------------------------------------
 // -----------------------------------------------------------
-QColorRampEditorSlider::QColorRampEditorSlider(int orientation, QColor col, QWidget* parent) : QWidget(parent),
+QColorRampEditorSlider::QColorRampEditorSlider(Qt::Orientation orientation, QColor col, QWidget* parent) : QWidget(parent),
     color(col)
 {
     this->orientation = orientation;

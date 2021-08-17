@@ -16,7 +16,7 @@
 // -----------------------------------------------------------
 // QColorRampEditor ------------------------------------------
 // -----------------------------------------------------------
-QColorRampEditor::QColorRampEditor(QWidget* parent, int orientation) : QWidget(parent)
+QColorRampEditor::QColorRampEditor(QWidget* parent, Qt::Orientation orientation) : QWidget(parent)
 {
     this->orientation = orientation;
     if (orientation==Qt::Horizontal)
