@@ -120,10 +120,6 @@ void MultiHandleSliderWidget::setRamp(ColorRamp ramp) {
     for (int i=0; i<sliderHandles.size(); i++) delete(sliderHandles[i]);
     sliderHandles.clear();
 
-    // find min/max
-    mi_=ramp.first().first;
-    ma_=ramp.last().first;
-
     // create sliders
     for (int i=0; i<ramp.size(); i++)
     {
@@ -143,12 +139,12 @@ qreal MultiHandleSliderWidget::updateValue(SliderHandleWidget* sl) {
     if (orientation==Qt::Horizontal)
     {
         crec.adjust(boundarySpace,0,-boundarySpace,0);
-        sl->value = mi_ + (1.0*sl->pos().x()-boundarySpace)/crec.width()*(ma_-mi_);
+        sl->value = (1.0*sl->pos().x()-boundarySpace)/crec.width();
     }
     else
     {
         crec.adjust(0,boundarySpace,0,-boundarySpace);
-        sl->value = mi_ + (1.0*sl->pos().y()-boundarySpace)/crec.height()*(ma_-mi_);
+        sl->value = (1.0*sl->pos().y()-boundarySpace)/crec.height();
     }
     return sl->value;
 }
@@ -159,7 +155,7 @@ int MultiHandleSliderWidget::updatePos(SliderHandleWidget* sl) {
     if (orientation==Qt::Horizontal)
     {
         crec.adjust(boundarySpace,0,-boundarySpace,0);
-        pos = (sl->value- mi_)/(ma_-mi_)*crec.width();
+        pos = (sl->value)*crec.width();
         pos -= sl->width()/2;
         pos += boundarySpace;
         sl->move(pos,0);
@@ -167,7 +163,7 @@ int MultiHandleSliderWidget::updatePos(SliderHandleWidget* sl) {
     else
     {
         crec.adjust(0, boundarySpace,0,-boundarySpace);
-        pos = (sl->value- mi_)/(ma_-mi_)*crec.height();
+        pos = (sl->value)*crec.height();
         pos -= sl->height()/2;
         pos += boundarySpace;
         sl->move(0,pos);
@@ -176,7 +172,7 @@ int MultiHandleSliderWidget::updatePos(SliderHandleWidget* sl) {
 }
 
 qreal MultiHandleSliderWidget::getNormalizedValue(qreal value) {
-    return MathUtil::getNormalizedValue(value, mi_, ma_);
+    return MathUtil::getNormalizedValue(value, 0, 1);
 }
 
 void MultiHandleSliderWidget::resizeEvent (QResizeEvent*) {
@@ -326,7 +322,7 @@ QPoint MultiHandleSliderWidget::getPositionForValue(qreal value, qreal sliderWid
     if (orientation==Qt::Horizontal) {
         position.setY(0);
         crec.adjust(boundarySpace,0,-boundarySpace,0);
-        pos = (value- mi_)/(ma_-mi_)*crec.width();
+        pos = (value)*crec.width();
         pos -= sliderWidth/2;
         pos += boundarySpace;
         position.setX(pos);
@@ -335,7 +331,7 @@ QPoint MultiHandleSliderWidget::getPositionForValue(qreal value, qreal sliderWid
     {
         position.setX(0);
         crec.adjust(0, boundarySpace,0,-boundarySpace);
-        pos = (value- mi_)/(ma_-mi_)*crec.height();
+        pos = (value)*crec.height();
         pos -= sliderHeight/2;
         pos += boundarySpace;
         position.setY(pos);

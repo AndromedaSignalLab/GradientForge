@@ -79,8 +79,6 @@ protected:
     /// bound space
     int boundarySpace;
 
-    /// min and max value from initialization
-    qreal mi_, ma_;
     void removeActiveSlider();
 };
 
