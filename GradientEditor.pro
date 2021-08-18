@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     ColorRampWidget.cpp \
+    MathUtil.cpp \
     QSlidersWidget.cpp \
     gradientslider.cpp \
     QColorRampEditor.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
 HEADERS += \
     ColorRamp.hpp \
     ColorRampWidget.hpp \
+    MathUtil.hpp \
     QSlidersWidget.hpp \
     gradientslider.hpp \
     QColorRampEditor.hpp \

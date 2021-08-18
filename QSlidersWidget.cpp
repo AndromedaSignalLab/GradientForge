@@ -1,6 +1,8 @@
 #include "QSlidersWidget.hpp"
 #include <QPainter>
 #include <QDebug>
+#include "MathUtil.hpp"
+
 class Sorters {
 public:
     /// sort the slider list
@@ -72,6 +74,18 @@ void MultiHandleSliderWidget::addSlider(const QPoint &position, const QColor &co
     {
         sl->move(0,position.y());
     }
+    updateValue(sl);
+    sl->show();
+    std::sort(sliderHandles.begin(), sliderHandles.end(), Sorters::SliderSort);
+    emit colorRampChanged(getRamp());
+}
+
+void MultiHandleSliderWidget::addSlider(const double value, const QColor &color)
+{
+    SliderHandleWidget* sl = new SliderHandleWidget(orientation, color, this);
+    sliderHandles.push_back(sl);
+    QPoint position = getPositionForValue(value, sl->width(), sl->height());
+    sl->move(position);
     updateValue(sl);
     sl->show();
     std::sort(sliderHandles.begin(), sliderHandles.end(), Sorters::SliderSort);
@@ -162,7 +176,7 @@ int MultiHandleSliderWidget::updatePos(SliderHandleWidget* sl) {
 }
 
 qreal MultiHandleSliderWidget::getNormalizedValue(qreal value) {
-    return (value - mi_)/(ma_-mi_);
+    return MathUtil::getNormalizedValue(value, mi_, ma_);
 }
 
 void MultiHandleSliderWidget::resizeEvent (QResizeEvent*) {
@@ -203,15 +217,11 @@ void MultiHandleSliderWidget::mousePressEvent(QMouseEvent* e) {
 void MultiHandleSliderWidget::mouseMoveEvent(QMouseEvent* e) {
     if (activeSlider>=0)
     {
-        QRect crec = contentsRect();
-
-        qreal pos;
+        qreal activeSliderValue = getValueFromPosition(e->pos());
         if (orientation==Qt::Horizontal)
         {
-            crec.adjust(boundarySpace,0,-boundarySpace,0);
-            pos = 1.0*(e->pos().x()-boundarySpace)/(crec.width());
-            if(pos < 0.0) {
-                if(pos>=-0.08) {
+            if(activeSliderValue < 0.0) {
+                if(activeSliderValue>=-0.08) {
                     if(activeSlider >= 0)
                        sliderHandles[activeSlider]->move(0,0);
                 }
@@ -219,10 +229,10 @@ void MultiHandleSliderWidget::mouseMoveEvent(QMouseEvent* e) {
                     removeActiveSlider();
                 }
             }
-            else if(pos > 1.0) {
-                if(pos<=1.08) {
+            else if(activeSliderValue > 1.0) {
+                if(activeSliderValue<=1.08) {
                     if(activeSlider >= 0)
-                        sliderHandles[activeSlider]->move(crec.width(),0);
+                        sliderHandles[activeSlider]->move(getContentsRectangle().width(),0);
                 }
                 else {
                     removeActiveSlider();
@@ -231,11 +241,9 @@ void MultiHandleSliderWidget::mouseMoveEvent(QMouseEvent* e) {
         }
         else
         {
-            crec.adjust(0,boundarySpace,0,-boundarySpace);
-            pos = 1.0*(e->pos().y()-boundarySpace)/(crec.height());
         }
 
-        if (pos<0.0 || pos>1.0)
+        if (activeSliderValue<0.0 || activeSliderValue>1.0)
         {
             //removeActiveSlider();
         }
@@ -290,6 +298,52 @@ void MultiHandleSliderWidget::mouseDoubleClickEvent(QMouseEvent* e)
     }
 }
 
+QRect MultiHandleSliderWidget::getContentsRectangle()
+{
+    QRect crec = contentsRect();
+
+    if (orientation==Qt::Horizontal) {
+        crec.adjust(boundarySpace,0,-boundarySpace,0);
+    }
+    else {
+        crec.adjust(0,boundarySpace,0,-boundarySpace);
+    }
+    return crec;
+}
+
+qreal MultiHandleSliderWidget::getValueFromPosition(const QPoint &position)
+{
+    QRect crec = getContentsRectangle();
+    qreal pos = orientation == Qt::Horizontal ? 1.0*(position.x()-boundarySpace)/(crec.width()) : 1.0*(position.y()-boundarySpace)/(crec.height());
+    return pos;
+}
+
+QPoint MultiHandleSliderWidget::getPositionForValue(qreal value, qreal sliderWidth, qreal sliderHeight)
+{
+    QPoint position;
+    QRect crec = contentsRect();
+    qreal pos;
+    if (orientation==Qt::Horizontal) {
+        position.setY(0);
+        crec.adjust(boundarySpace,0,-boundarySpace,0);
+        pos = (value- mi_)/(ma_-mi_)*crec.width();
+        pos -= sliderWidth/2;
+        pos += boundarySpace;
+        position.setX(pos);
+    }
+    else
+    {
+        position.setX(0);
+        crec.adjust(0, boundarySpace,0,-boundarySpace);
+        pos = (value- mi_)/(ma_-mi_)*crec.height();
+        pos -= sliderHeight/2;
+        pos += boundarySpace;
+        position.setY(pos);
+    }
+
+    return position;
+}
+
 // -----------------------------------------------------------
 int MultiHandleSliderWidget::getSliderNum()
 {
@@ -325,6 +379,10 @@ void SliderHandleWidget::move(int ax, int ay)
         QWidget::move(ax - geometry().width()/2, ay);
     else
         QWidget::move(ax, ay - geometry().height()/2);
+}
+
+void SliderHandleWidget::move(const QPoint &position) {
+    move(position.x(), position.y());
 }
 
 // -----------------------------------------------------------

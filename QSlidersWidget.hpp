@@ -36,6 +36,7 @@ public:
     void setColorChoose(QColorDialog* coldlg);
     int getBoundSpace();
     void addSlider(const QPoint &position, const QColor &color, bool skipIfExists = true);
+    void addSlider(const double value, const QColor &color);
 
 signals:
     void colorRampChanged(ColorRamp colorRamp);
@@ -68,6 +69,9 @@ protected:
     /// all poses with its sliders
     QList<SliderHandleWidget*> sliderHandles;
 
+    QRect getContentsRectangle();
+    qreal getValueFromPosition(const QPoint &position);
+    QPoint getPositionForValue(qreal value, qreal sliderWidth, qreal sliderHeight);
 
     /// the orientation
     Qt::Orientation orientation;
@@ -98,6 +102,7 @@ public:
     qreal value;
 
     inline void move(int ax, int ay);
+    inline void move(const QPoint &position);
 
 protected slots:
 

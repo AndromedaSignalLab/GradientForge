@@ -44,7 +44,6 @@ public:
     friend class MultiHandleSliderWidget;
     friend class QSliderTextWidget;
 
-
 	/// return a 256 colortable from the ramp
 	QVector<QRgb> getColorTable();
 
@@ -54,6 +53,8 @@ signals:
     void rampChanged();
 
 public slots:
+    void onColorClicked(double value, QColor color);
+
 
 protected slots:
 

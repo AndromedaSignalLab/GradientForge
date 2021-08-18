@@ -13,6 +13,8 @@
 #include <QMouseEvent>
 #include "QSlidersWidget.hpp"
 #include "ColorRampWidget.hpp"
+#include "MathUtil.hpp"
+#include <QDebug>
 
 // -----------------------------------------------------------
 // QColorRampEditor ------------------------------------------
@@ -60,6 +62,7 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, Qt::Orientation orientation)
     ramp.push_back(QPair<qreal, QColor>(1.0, Qt::red));
     slidewid_->setRamp(ramp);
     connect(slidewid_, &MultiHandleSliderWidget::colorRampChanged, rampwid_, &ColorRampWidget::onColorRampChanged);
+    connect(rampwid_, &ColorRampWidget::colorClicked, this, &QColorRampEditor::onColorClicked);
 }
 
 QColorRampEditor::~QColorRampEditor() {
@@ -69,7 +72,6 @@ QVector<QRgb> QColorRampEditor::getColorTable() {
     // get ramp and normalize
     QVector<QPair<qreal, QColor> > ramp = slidewid_->getRamp();
     for (int i=0; i<ramp.size(); i++) ramp[i].first = slidewid_->getNormalizedValue(ramp[i].first);
-
     QVector<QRgb> ctable;
     int index = 0;
     for (int i = 0; i < 256; i++)
@@ -98,6 +100,11 @@ QVector<QRgb> QColorRampEditor::getColorTable() {
         ctable.push_back(cc.rgb());
     }
     return ctable;
+}
+
+void QColorRampEditor::onColorClicked(double value, QColor color)
+{
+    qDebug()<<"Color clicked. Value: "<< value << " Color: " << color;
 }
 
 void QColorRampEditor::resizeEvent (QResizeEvent*) {
