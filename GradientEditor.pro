@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    ColorRampWidget.cpp \
     QSlidersWidget.cpp \
     gradientslider.cpp \
     QColorRampEditor.cpp \
@@ -16,6 +17,8 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    ColorRamp.hpp \
+    ColorRampWidget.hpp \
     QSlidersWidget.hpp \
     gradientslider.hpp \
     QColorRampEditor.hpp \

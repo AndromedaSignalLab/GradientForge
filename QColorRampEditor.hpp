@@ -15,10 +15,11 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPainter>
+#include "ColorRamp.hpp"
 
 #include <iostream>
 using namespace std;
-typedef QVector<QPair<qreal, QColor>> ColorRamp;
+
 
 // -----------------------------------------------------------
 // QColorRampEditor ------------------------------------------
@@ -69,19 +70,4 @@ protected:
     /// the widgets drawint the ramp, the sliders, the text
     ColorRampWidget* rampwid_;
     MultiHandleSliderWidget* slidewid_;
-};
-
-class ColorRampWidget : public QWidget
-{
-    Q_OBJECT
-public:
-    ColorRampWidget(QWidget* parent=NULL);
-    QColorRampEditor* rampeditor_;
-
-public slots:
-    void onColorRampChanged(ColorRamp colorRamp);
-
-protected:
-    ColorRamp colorRamp;
-    void paintEvent(QPaintEvent* e);
 };

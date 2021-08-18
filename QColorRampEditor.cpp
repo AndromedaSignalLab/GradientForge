@@ -12,6 +12,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include "QSlidersWidget.hpp"
+#include "ColorRampWidget.hpp"
 
 // -----------------------------------------------------------
 // QColorRampEditor ------------------------------------------
@@ -34,7 +35,6 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, Qt::Orientation orientation)
     layout()->setContentsMargins(0,0,0,0);
 
     rampwid_ = new ColorRampWidget();
-    rampwid_->rampeditor_ = this;
     rampwid_->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     rampwid_->setContentsMargins(0,0,0,0);
 
@@ -113,59 +113,4 @@ void QColorRampEditor::mousePressEvent(QMouseEvent* e) {
             slidewid_->addSlider(e->pos(), Qt::white);
         }
     }
-}
-
-// -----------------------------------------------------------
-// QRampWidget -----------------------------------------------
-// -----------------------------------------------------------
-
-ColorRampWidget::ColorRampWidget(QWidget* parent) : QWidget(parent) {
-    setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    setContentsMargins(0,0,0,0);
-    setMinimumHeight(5);
-    setMinimumWidth(5);
-}
-
-void ColorRampWidget::onColorRampChanged(ColorRamp colorRamp)
-{
-    this->colorRamp = colorRamp;
-    update();
-}
-
-void ColorRampWidget::paintEvent(QPaintEvent* e) {
-    QPainter painter(this);
-    painter.setPen(Qt::black);
-
-    QLinearGradient grad;
-    QRect crec = contentsRect();
-    if (rampeditor_->orientation==Qt::Horizontal)
-    {
-        crec.adjust(rampeditor_->slidewid_->getBoundSpace(),0,-rampeditor_->slidewid_->getBoundSpace(),-1);
-        grad = QLinearGradient( 0, 0, crec.width()-1, 0);
-    }
-    else
-    {
-        crec.adjust(0,rampeditor_->slidewid_->getBoundSpace(),-1,-rampeditor_->slidewid_->getBoundSpace());
-        grad = QLinearGradient( 0, 0, 0, crec.height()-1);
-    }
-
-
-    auto ramp = rampeditor_->slidewid_->getRamp();
-
-    for (int i=0; i<ramp.size(); i++)
-    {
-        qreal nval = rampeditor_->slidewid_->getNormalizedValue(ramp[i].first);
-        grad.setColorAt(nval, ramp[i].second);
-    }
-
-    /*for (int i=0; i<rampeditor_->sliders.size(); i++)
-    {
-        qreal nval = (rampeditor_->sliders[i]->value - rampeditor_->mi_)/(rampeditor_->ma_-rampeditor_->mi_);
-        grad.setColorAt(nval, rampeditor_->sliders[i]->getColor());
-    }*/
-
-    painter.fillRect( crec, grad);
-    painter.drawRect(crec);
-
-    QWidget::paintEvent(e);
 }
