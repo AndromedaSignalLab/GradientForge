@@ -4,7 +4,7 @@
 class Sorters {
 public:
     /// sort the slider list
-    static bool SliderSort(const QSlidersHandleWidget* a1, const QSlidersHandleWidget* a2);
+    static bool SliderSort(const SliderHandleWidget* a1, const SliderHandleWidget* a2);
     /// sort the color ramp
     static bool colorRampSort(const QPair<qreal, QColor> &a1, const QPair<qreal, QColor> &a2);
 };
@@ -16,7 +16,7 @@ bool Sorters::colorRampSort(const QPair<qreal, QColor> &a1, const QPair<qreal, Q
 }
 
 // -----------------------------------------------------------
-bool Sorters::SliderSort(const QSlidersHandleWidget* a1, const QSlidersHandleWidget* a2)
+bool Sorters::SliderSort(const SliderHandleWidget* a1, const SliderHandleWidget* a2)
 {
     return a1->value < a2->value;
 }
@@ -24,7 +24,7 @@ bool Sorters::SliderSort(const QSlidersHandleWidget* a1, const QSlidersHandleWid
 // -----------------------------------------------------------
 // QSlidersWidget --------------------------------------------
 // -----------------------------------------------------------
-QSlidersWidget::QSlidersWidget(Qt::Orientation orientation, QWidget* parent) : QWidget(parent),
+MultiHandleSliderWidget::MultiHandleSliderWidget(Qt::Orientation orientation, QWidget* parent) : QWidget(parent),
     activeSlider(-1),
     boundarySpace(5)
 {
@@ -33,37 +33,37 @@ QSlidersWidget::QSlidersWidget(Qt::Orientation orientation, QWidget* parent) : Q
     colorChooseDialog = new QColorDialog();
 }
 
-QSlidersWidget::~QSlidersWidget()
+MultiHandleSliderWidget::~MultiHandleSliderWidget()
 {
    if(colorChooseDialog)
        delete(colorChooseDialog);
-   for (int i=0; i<sliders.size(); i++) delete(sliders[i]);
+   for (int i=0; i<sliderHandles.size(); i++) delete(sliderHandles[i]);
 }
 
 // -----------------------------------------------------------
-void QSlidersWidget::setColorChoose(QColorDialog* coldlg)
+void MultiHandleSliderWidget::setColorChoose(QColorDialog* coldlg)
 {
     colorChooseDialog = coldlg;
 }
 
-int QSlidersWidget::getBoundSpace()
+int MultiHandleSliderWidget::getBoundSpace()
 {
     return boundarySpace;
 }
 
-void QSlidersWidget::addSlider(const QPoint &position, const QColor &color, bool skipIfExists) {
+void MultiHandleSliderWidget::addSlider(const QPoint &position, const QColor &color, bool skipIfExists) {
     if(skipIfExists) {
-        for (int i=1; i<sliders.size()-1; i++)
+        for (int i=1; i<sliderHandles.size()-1; i++)
         {
-            QRect srec = sliders[i]->geometry();
+            QRect srec = sliderHandles[i]->geometry();
             if (srec.contains(position, true ))
             {
                 return;
             }
         }
     }
-    QSlidersHandleWidget* sl = new QSlidersHandleWidget(orientation, color, this);
-    sliders.push_back(sl);
+    SliderHandleWidget* sl = new SliderHandleWidget(orientation, color, this);
+    sliderHandles.push_back(sl);
     if (orientation==Qt::Horizontal)
     {
             sl->move(position.x(),0);
@@ -74,22 +74,22 @@ void QSlidersWidget::addSlider(const QPoint &position, const QColor &color, bool
     }
     updateValue(sl);
     sl->show();
-    std::sort(sliders.begin(), sliders.end(), Sorters::SliderSort);
+    std::sort(sliderHandles.begin(), sliderHandles.end(), Sorters::SliderSort);
     emit colorRampChanged(getRamp());
 }
 
-void QSlidersWidget::setSliderColor(int index, QColor col) {
-    if (index<0 || index>=sliders.size()) return;
-    sliders[index]->setColor(col);
+void MultiHandleSliderWidget::setSliderColor(int index, QColor col) {
+    if (index<0 || index>=sliderHandles.size()) return;
+    sliderHandles[index]->setColor(col);
 }
 
-ColorRamp QSlidersWidget::getRamp() {
+ColorRamp MultiHandleSliderWidget::getRamp() {
     // create output
     ColorRamp ret;
-    for (int i=0; i<sliders.size(); i++)
+    for (int i=0; i<sliderHandles.size(); i++)
     {
-        QColor col = sliders[i]->getColor();
-        ret.push_back(QPair<qreal, QColor>(sliders[i]->value,col));
+        QColor col = sliderHandles[i]->getColor();
+        ret.push_back(QPair<qreal, QColor>(sliderHandles[i]->value,col));
     }
     // sort the slider list
     std::sort(ret.begin(), ret.end(), Sorters::colorRampSort);
@@ -97,14 +97,14 @@ ColorRamp QSlidersWidget::getRamp() {
     return ret;
 }
 
-void QSlidersWidget::setRamp(ColorRamp ramp) {
+void MultiHandleSliderWidget::setRamp(ColorRamp ramp) {
     if (ramp.size()<1) return;
 
     // sort the slider list
     std::sort(ramp.begin(), ramp.end(), Sorters::colorRampSort);
 
-    for (int i=0; i<sliders.size(); i++) delete(sliders[i]);
-    sliders.clear();
+    for (int i=0; i<sliderHandles.size(); i++) delete(sliderHandles[i]);
+    sliderHandles.clear();
 
     // find min/max
     mi_=ramp.first().first;
@@ -113,9 +113,9 @@ void QSlidersWidget::setRamp(ColorRamp ramp) {
     // create sliders
     for (int i=0; i<ramp.size(); i++)
     {
-        QSlidersHandleWidget* sl = new QSlidersHandleWidget(orientation,ramp[i].second, this);
+        SliderHandleWidget* sl = new SliderHandleWidget(orientation,ramp[i].second, this);
         sl->value = ramp[i].first;
-        sliders.push_back(sl);
+        sliderHandles.push_back(sl);
         updatePos(sl);
         sl->show();
     }
@@ -124,7 +124,7 @@ void QSlidersWidget::setRamp(ColorRamp ramp) {
     update();
 }
 
-qreal QSlidersWidget::updateValue(QSlidersHandleWidget* sl) {
+qreal MultiHandleSliderWidget::updateValue(SliderHandleWidget* sl) {
     QRect crec = contentsRect();
     if (orientation==Qt::Horizontal)
     {
@@ -139,7 +139,7 @@ qreal QSlidersWidget::updateValue(QSlidersHandleWidget* sl) {
     return sl->value;
 }
 
-int QSlidersWidget::updatePos(QSlidersHandleWidget* sl) {
+int MultiHandleSliderWidget::updatePos(SliderHandleWidget* sl) {
     QRect crec = contentsRect();
     qreal pos;
     if (orientation==Qt::Horizontal)
@@ -161,32 +161,32 @@ int QSlidersWidget::updatePos(QSlidersHandleWidget* sl) {
     return pos;
 }
 
-qreal QSlidersWidget::getNormalizedValue(qreal value) {
+qreal MultiHandleSliderWidget::getNormalizedValue(qreal value) {
     return (value - mi_)/(ma_-mi_);
 }
 
-void QSlidersWidget::resizeEvent (QResizeEvent*) {
-    for (int i=0; i<sliders.size(); i++)
+void MultiHandleSliderWidget::resizeEvent (QResizeEvent*) {
+    for (int i=0; i<sliderHandles.size(); i++)
     {
-        QSlidersHandleWidget* sl = sliders[i];
+        SliderHandleWidget* sl = sliderHandles[i];
         updatePos(sl);
     }
 }
 
-void QSlidersWidget::removeActiveSlider() {
-    delete(sliders[activeSlider]);
-    sliders.removeAt(activeSlider);
+void MultiHandleSliderWidget::removeActiveSlider() {
+    delete(sliderHandles[activeSlider]);
+    sliderHandles.removeAt(activeSlider);
     activeSlider = -1;
     emit colorRampChanged(getRamp());
 }
 
-void QSlidersWidget::mousePressEvent(QMouseEvent* e) {
+void MultiHandleSliderWidget::mousePressEvent(QMouseEvent* e) {
     if (e->button()== Qt::LeftButton)
     {
-        if (sliders.size()<2) return;
-        for (int i=1; i<sliders.size()-1; i++)
+        if (sliderHandles.size()<2) return;
+        for (int i=1; i<sliderHandles.size()-1; i++)
         {
-            QRect srec = sliders[i]->geometry();
+            QRect srec = sliderHandles[i]->geometry();
             if (srec.contains(e->pos(), true ))
             {
                 activeSlider = i;
@@ -200,7 +200,7 @@ void QSlidersWidget::mousePressEvent(QMouseEvent* e) {
     //emit colorRampChanged(getRamp());
 }
 
-void QSlidersWidget::mouseMoveEvent(QMouseEvent* e) {
+void MultiHandleSliderWidget::mouseMoveEvent(QMouseEvent* e) {
     if (activeSlider>=0)
     {
         QRect crec = contentsRect();
@@ -213,7 +213,7 @@ void QSlidersWidget::mouseMoveEvent(QMouseEvent* e) {
             if(pos < 0.0) {
                 if(pos>=-0.08) {
                     if(activeSlider >= 0)
-                       sliders[activeSlider]->move(0,0);
+                       sliderHandles[activeSlider]->move(0,0);
                 }
                 else {
                     removeActiveSlider();
@@ -222,7 +222,7 @@ void QSlidersWidget::mouseMoveEvent(QMouseEvent* e) {
             else if(pos > 1.0) {
                 if(pos<=1.08) {
                     if(activeSlider >= 0)
-                        sliders[activeSlider]->move(crec.width(),0);
+                        sliderHandles[activeSlider]->move(crec.width(),0);
                 }
                 else {
                     removeActiveSlider();
@@ -242,11 +242,11 @@ void QSlidersWidget::mouseMoveEvent(QMouseEvent* e) {
         else
         {
             if (orientation==Qt::Horizontal)
-                sliders[activeSlider]->move(e->pos().x(), 0);
+                sliderHandles[activeSlider]->move(e->pos().x(), 0);
             else
-                sliders[activeSlider]->move(0,e->pos().y());
+                sliderHandles[activeSlider]->move(0,e->pos().y());
 
-            updateValue(sliders[activeSlider]);
+            updateValue(sliderHandles[activeSlider]);
             //std::sort(rampEditor->sliders.begin(), rampEditor->sliders.end(), SliderSort); //Enable to make sliders can't pass each other
             //if (rampeditor_->slideUpdate_) rampeditor_->updateRamp();
         }
@@ -255,21 +255,21 @@ void QSlidersWidget::mouseMoveEvent(QMouseEvent* e) {
     }
 }
 
-void QSlidersWidget::mouseReleaseEvent(QMouseEvent* e) {
+void MultiHandleSliderWidget::mouseReleaseEvent(QMouseEvent* e) {
     if (e->button()== Qt::LeftButton) {
         activeSlider = -1;
         emit colorRampChanged(getRamp());
     }
 }
 // -----------------------------------------------------------
-void QSlidersWidget::mouseDoubleClickEvent(QMouseEvent* e)
+void MultiHandleSliderWidget::mouseDoubleClickEvent(QMouseEvent* e)
 {
     if (e->button()== Qt::LeftButton)
     {
         int index = -1;
-        for (int i=0; i<sliders.size(); i++)
+        for (int i=0; i<sliderHandles.size(); i++)
         {
-            QRect srec = sliders[i]->geometry();
+            QRect srec = sliderHandles[i]->geometry();
             if (srec.contains(e->pos(), true ))
             {
                 index = i;
@@ -281,7 +281,7 @@ void QSlidersWidget::mouseDoubleClickEvent(QMouseEvent* e)
             if (colorChooseDialog)
             {
                 colorChooseDialog->exec();
-                sliders[index]->setColor(colorChooseDialog->selectedColor());
+                sliderHandles[index]->setColor(colorChooseDialog->selectedColor());
                 emit colorRampChanged(getRamp());
             }
         }
@@ -291,15 +291,15 @@ void QSlidersWidget::mouseDoubleClickEvent(QMouseEvent* e)
 }
 
 // -----------------------------------------------------------
-int QSlidersWidget::getSliderNum()
+int MultiHandleSliderWidget::getSliderNum()
 {
-    return sliders.size();
+    return sliderHandles.size();
 }
 
 // -----------------------------------------------------------
 // QColorRampEditorSlider ------------------------------------
 // -----------------------------------------------------------
-QSlidersHandleWidget::QSlidersHandleWidget(Qt::Orientation orientation, QColor col, QWidget* parent) : QWidget(parent),
+SliderHandleWidget::SliderHandleWidget(Qt::Orientation orientation, QColor col, QWidget* parent) : QWidget(parent),
     color(col)
 {
     this->orientation = orientation;
@@ -309,17 +309,17 @@ QSlidersHandleWidget::QSlidersHandleWidget(Qt::Orientation orientation, QColor c
         setFixedSize(16,9);
 }
 // -----------------------------------------------------------
-void QSlidersHandleWidget::setColor(QColor col)
+void SliderHandleWidget::setColor(QColor col)
 {
     color = col;
 }
 // -----------------------------------------------------------
-QColor QSlidersHandleWidget::getColor()
+QColor SliderHandleWidget::getColor()
 {
     return color;
 }
 
-void QSlidersHandleWidget::move(int ax, int ay)
+void SliderHandleWidget::move(int ax, int ay)
 {
     if (orientation==Qt::Horizontal)
         QWidget::move(ax - geometry().width()/2, ay);
@@ -328,7 +328,7 @@ void QSlidersHandleWidget::move(int ax, int ay)
 }
 
 // -----------------------------------------------------------
-void QSlidersHandleWidget::paintEvent(QPaintEvent* e)
+void SliderHandleWidget::paintEvent(QPaintEvent* e)
 {
     QPainter painter(this);
     painter.setPen(Qt::black);

@@ -33,14 +33,14 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, Qt::Orientation orientation)
     layout()->setSpacing(0);
     layout()->setContentsMargins(0,0,0,0);
 
-    rampwid_ = new QRampWidget();
+    rampwid_ = new ColorRampWidget();
     rampwid_->rampeditor_ = this;
     rampwid_->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     rampwid_->setContentsMargins(0,0,0,0);
 
     layout()->addWidget(rampwid_);
 
-    slidewid_ = new QSlidersWidget(orientation);
+    slidewid_ = new MultiHandleSliderWidget(orientation);
     if (orientation==Qt::Horizontal)
     {
         slidewid_->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
@@ -59,7 +59,7 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, Qt::Orientation orientation)
     ramp.push_back(QPair<qreal, QColor>(0.0, Qt::black));
     ramp.push_back(QPair<qreal, QColor>(1.0, Qt::red));
     slidewid_->setRamp(ramp);
-    connect(slidewid_, &QSlidersWidget::colorRampChanged, rampwid_, &QRampWidget::onColorRampChanged);
+    connect(slidewid_, &MultiHandleSliderWidget::colorRampChanged, rampwid_, &ColorRampWidget::onColorRampChanged);
 }
 
 QColorRampEditor::~QColorRampEditor() {
@@ -119,20 +119,20 @@ void QColorRampEditor::mousePressEvent(QMouseEvent* e) {
 // QRampWidget -----------------------------------------------
 // -----------------------------------------------------------
 
-QRampWidget::QRampWidget(QWidget* parent) : QWidget(parent) {
+ColorRampWidget::ColorRampWidget(QWidget* parent) : QWidget(parent) {
     setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     setContentsMargins(0,0,0,0);
     setMinimumHeight(5);
     setMinimumWidth(5);
 }
 
-void QRampWidget::onColorRampChanged(ColorRamp colorRamp)
+void ColorRampWidget::onColorRampChanged(ColorRamp colorRamp)
 {
     this->colorRamp = colorRamp;
     update();
 }
 
-void QRampWidget::paintEvent(QPaintEvent* e) {
+void ColorRampWidget::paintEvent(QPaintEvent* e) {
     QPainter painter(this);
     painter.setPen(Qt::black);
 

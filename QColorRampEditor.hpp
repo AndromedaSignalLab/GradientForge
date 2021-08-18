@@ -23,9 +23,9 @@ typedef QVector<QPair<qreal, QColor>> ColorRamp;
 // -----------------------------------------------------------
 // QColorRampEditor ------------------------------------------
 // -----------------------------------------------------------
-class QSlidersHandleWidget;
-class QRampWidget;
-class QSlidersWidget;
+class SliderHandleWidget;
+class ColorRampWidget;
+class MultiHandleSliderWidget;
 class QSliderTextWidget;
 class QColorRampEditor : public QWidget
 {
@@ -39,8 +39,8 @@ public:
     virtual ~QColorRampEditor();
 
     // define friends to access protected members
-    friend class QRampWidget;
-    friend class QSlidersWidget;
+    friend class ColorRampWidget;
+    friend class MultiHandleSliderWidget;
     friend class QSliderTextWidget;
 
 
@@ -67,15 +67,15 @@ protected:
     Qt::Orientation orientation;
 
     /// the widgets drawint the ramp, the sliders, the text
-    QRampWidget* rampwid_;
-    QSlidersWidget* slidewid_;
+    ColorRampWidget* rampwid_;
+    MultiHandleSliderWidget* slidewid_;
 };
 
-class QRampWidget : public QWidget
+class ColorRampWidget : public QWidget
 {
     Q_OBJECT
 public:
-    QRampWidget(QWidget* parent=NULL);
+    ColorRampWidget(QWidget* parent=NULL);
     QColorRampEditor* rampeditor_;
 
 public slots:
