@@ -58,8 +58,8 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, Qt::Orientation orientation)
 
     // init sliders
     QVector<QPair<qreal, QColor> > ramp;
-    ramp.push_back(QPair<qreal, QColor>(0.0, Qt::black));
-    ramp.push_back(QPair<qreal, QColor>(1.0, Qt::red));
+    //ramp.push_back(QPair<qreal, QColor>(0.0, Qt::black));
+    ramp.push_back(QPair<qreal, QColor>(0.5, Qt::red));
     slidewid_->setRamp(ramp);
     connect(slidewid_, &MultiHandleSliderWidget::colorRampChanged, rampwid_, &ColorRampWidget::onColorRampChanged);
     connect(rampwid_, &ColorRampWidget::colorClicked, this, &QColorRampEditor::onColorClicked);

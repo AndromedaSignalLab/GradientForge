@@ -55,7 +55,7 @@ int MultiHandleSliderWidget::getBoundSpace()
 
 void MultiHandleSliderWidget::addSlider(const QPoint &position, const QColor &color, bool skipIfExists) {
     if(skipIfExists) {
-        for (int i=1; i<sliderHandles.size()-1; i++)
+        for (int i=0; i<sliderHandles.size(); i++)
         {
             QRect srec = sliderHandles[i]->geometry();
             if (srec.contains(position, true ))
@@ -193,8 +193,8 @@ void MultiHandleSliderWidget::removeActiveSlider() {
 void MultiHandleSliderWidget::mousePressEvent(QMouseEvent* e) {
     if (e->button()== Qt::LeftButton)
     {
-        if (sliderHandles.size()<2) return;
-        for (int i=1; i<sliderHandles.size()-1; i++)
+        if (sliderHandles.size()<1) return;
+        for (int i=0; i<sliderHandles.size(); i++)
         {
             QRect srec = sliderHandles[i]->geometry();
             if (srec.contains(e->pos(), true ))
@@ -222,7 +222,10 @@ void MultiHandleSliderWidget::mouseMoveEvent(QMouseEvent* e) {
                        sliderHandles[activeSlider]->move(0,0);
                 }
                 else {
-                    removeActiveSlider();
+                    if(sliderHandles.size() > 1)
+                        removeActiveSlider();
+                    else
+                        sliderHandles[activeSlider]->move(0,0);
                 }
             }
             else if(activeSliderValue > 1.0) {
@@ -231,7 +234,10 @@ void MultiHandleSliderWidget::mouseMoveEvent(QMouseEvent* e) {
                         sliderHandles[activeSlider]->move(getContentsRectangle().width(),0);
                 }
                 else {
-                    removeActiveSlider();
+                    if(sliderHandles.size() > 1)
+                        removeActiveSlider();
+                    else
+                        sliderHandles[activeSlider]->move(getContentsRectangle().width(),0);
                 }
             }
         }
