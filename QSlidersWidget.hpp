@@ -5,7 +5,7 @@
 #include <QColorDialog>
 typedef QVector<QPair<qreal, QColor>> ColorRamp;
 
-class QColorRampEditorSlider;
+class QSlidersHandleWidget;
 
 class QSlidersWidget : public QWidget
 {
@@ -25,10 +25,10 @@ public:
     void setRamp(ColorRamp ramp);
 
     /// get the value of a slider
-    qreal updateValue(QColorRampEditorSlider* sl);
+    qreal updateValue(QSlidersHandleWidget* sl);
 
     /// get the position
-    int updatePos(QColorRampEditorSlider* sl);
+    int updatePos(QSlidersHandleWidget* sl);
 
     qreal getNormalizedValue(qreal value);
 
@@ -66,7 +66,7 @@ protected:
     /// a color chooser dlg
     QColorDialog* colorChooseDialog;
     /// all poses with its sliders
-    QList<QColorRampEditorSlider*> sliders;
+    QList<QSlidersHandleWidget*> sliders;
 
 
     /// the orientation
@@ -80,18 +80,13 @@ protected:
     void removeActiveSlider();
 };
 
-
-
-// -----------------------------------------------------------
-// QColorRampEditorSlider ------------------------------------
-// -----------------------------------------------------------
-class QColorRampEditorSlider : public QWidget
+class QSlidersHandleWidget : public QWidget
 {
     Q_OBJECT
 public:
 
     /// Constructor
-    QColorRampEditorSlider(Qt::Orientation orientation = Qt::Horizontal, QColor col = Qt::black, QWidget* parent=0);
+    QSlidersHandleWidget(Qt::Orientation orientation = Qt::Horizontal, QColor col = Qt::black, QWidget* parent=0);
 
     /// set the color of the slider
     void setColor(QColor color);

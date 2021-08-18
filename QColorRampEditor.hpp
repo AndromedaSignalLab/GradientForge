@@ -23,7 +23,7 @@ typedef QVector<QPair<qreal, QColor>> ColorRamp;
 // -----------------------------------------------------------
 // QColorRampEditor ------------------------------------------
 // -----------------------------------------------------------
-class QColorRampEditorSlider;
+class QSlidersHandleWidget;
 class QRampWidget;
 class QSlidersWidget;
 class QSliderTextWidget;

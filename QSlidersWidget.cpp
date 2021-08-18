@@ -4,7 +4,7 @@
 class Sorters {
 public:
     /// sort the slider list
-    static bool SliderSort(const QColorRampEditorSlider* a1, const QColorRampEditorSlider* a2);
+    static bool SliderSort(const QSlidersHandleWidget* a1, const QSlidersHandleWidget* a2);
     /// sort the color ramp
     static bool colorRampSort(const QPair<qreal, QColor> &a1, const QPair<qreal, QColor> &a2);
 };
@@ -16,7 +16,7 @@ bool Sorters::colorRampSort(const QPair<qreal, QColor> &a1, const QPair<qreal, Q
 }
 
 // -----------------------------------------------------------
-bool Sorters::SliderSort(const QColorRampEditorSlider* a1, const QColorRampEditorSlider* a2)
+bool Sorters::SliderSort(const QSlidersHandleWidget* a1, const QSlidersHandleWidget* a2)
 {
     return a1->value < a2->value;
 }
@@ -62,7 +62,7 @@ void QSlidersWidget::addSlider(const QPoint &position, const QColor &color, bool
             }
         }
     }
-    QColorRampEditorSlider* sl = new QColorRampEditorSlider(orientation, color, this);
+    QSlidersHandleWidget* sl = new QSlidersHandleWidget(orientation, color, this);
     sliders.push_back(sl);
     if (orientation==Qt::Horizontal)
     {
@@ -113,7 +113,7 @@ void QSlidersWidget::setRamp(ColorRamp ramp) {
     // create sliders
     for (int i=0; i<ramp.size(); i++)
     {
-        QColorRampEditorSlider* sl = new QColorRampEditorSlider(orientation,ramp[i].second, this);
+        QSlidersHandleWidget* sl = new QSlidersHandleWidget(orientation,ramp[i].second, this);
         sl->value = ramp[i].first;
         sliders.push_back(sl);
         updatePos(sl);
@@ -124,7 +124,7 @@ void QSlidersWidget::setRamp(ColorRamp ramp) {
     update();
 }
 
-qreal QSlidersWidget::updateValue(QColorRampEditorSlider* sl) {
+qreal QSlidersWidget::updateValue(QSlidersHandleWidget* sl) {
     QRect crec = contentsRect();
     if (orientation==Qt::Horizontal)
     {
@@ -139,7 +139,7 @@ qreal QSlidersWidget::updateValue(QColorRampEditorSlider* sl) {
     return sl->value;
 }
 
-int QSlidersWidget::updatePos(QColorRampEditorSlider* sl) {
+int QSlidersWidget::updatePos(QSlidersHandleWidget* sl) {
     QRect crec = contentsRect();
     qreal pos;
     if (orientation==Qt::Horizontal)
@@ -168,7 +168,7 @@ qreal QSlidersWidget::getNormalizedValue(qreal value) {
 void QSlidersWidget::resizeEvent (QResizeEvent*) {
     for (int i=0; i<sliders.size(); i++)
     {
-        QColorRampEditorSlider* sl = sliders[i];
+        QSlidersHandleWidget* sl = sliders[i];
         updatePos(sl);
     }
 }
@@ -299,7 +299,7 @@ int QSlidersWidget::getSliderNum()
 // -----------------------------------------------------------
 // QColorRampEditorSlider ------------------------------------
 // -----------------------------------------------------------
-QColorRampEditorSlider::QColorRampEditorSlider(Qt::Orientation orientation, QColor col, QWidget* parent) : QWidget(parent),
+QSlidersHandleWidget::QSlidersHandleWidget(Qt::Orientation orientation, QColor col, QWidget* parent) : QWidget(parent),
     color(col)
 {
     this->orientation = orientation;
@@ -309,17 +309,17 @@ QColorRampEditorSlider::QColorRampEditorSlider(Qt::Orientation orientation, QCol
         setFixedSize(16,9);
 }
 // -----------------------------------------------------------
-void QColorRampEditorSlider::setColor(QColor col)
+void QSlidersHandleWidget::setColor(QColor col)
 {
     color = col;
 }
 // -----------------------------------------------------------
-QColor QColorRampEditorSlider::getColor()
+QColor QSlidersHandleWidget::getColor()
 {
     return color;
 }
 
-void QColorRampEditorSlider::move(int ax, int ay)
+void QSlidersHandleWidget::move(int ax, int ay)
 {
     if (orientation==Qt::Horizontal)
         QWidget::move(ax - geometry().width()/2, ay);
@@ -328,7 +328,7 @@ void QColorRampEditorSlider::move(int ax, int ay)
 }
 
 // -----------------------------------------------------------
-void QColorRampEditorSlider::paintEvent(QPaintEvent* e)
+void QSlidersHandleWidget::paintEvent(QPaintEvent* e)
 {
     QPainter painter(this);
     painter.setPen(Qt::black);
