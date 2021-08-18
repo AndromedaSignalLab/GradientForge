@@ -105,6 +105,8 @@ QVector<QRgb> QColorRampEditor::getColorTable() {
 void QColorRampEditor::onColorClicked(double value, QColor color)
 {
     qDebug()<<"Color clicked. Value: "<< value << " Color: " << color;
+    QPoint position = MathUtil::getPositionForNormalizedValue(value, 5, 8, 6, 421, 31, Qt::Horizontal);
+    slidewid_->addSlider(position, color);
 }
 
 void QColorRampEditor::resizeEvent (QResizeEvent*) {

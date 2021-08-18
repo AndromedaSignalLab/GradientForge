@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     ColorRampWidget.cpp \
+    ColorUtil.cpp \
     MathUtil.cpp \
     QSlidersWidget.cpp \
     gradientslider.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
 HEADERS += \
     ColorRamp.hpp \
     ColorRampWidget.hpp \
+    ColorUtil.hpp \
     MathUtil.hpp \
     QSlidersWidget.hpp \
     gradientslider.hpp \
