@@ -11,24 +11,24 @@ CONFIG += c++11
 SOURCES += \
     ColorRampWidget.cpp \
     ColorUtil.cpp \
+    MainWindow.cpp \
     MathUtil.cpp \
     MultiHandleSlider.cpp \
     SliderHandle.cpp \
     Sorters.cpp \
     QColorRampEditor.cpp \
-    main.cpp \
-    mainwindow.cpp
+    main.cpp
 
 HEADERS += \
     ColorRamp.hpp \
     ColorRampWidget.hpp \
     ColorUtil.hpp \
+    MainWindow.hpp \
     MathUtil.hpp \
     MultiHandleSlider.hpp \
     SliderHandle.hpp \
     Sorters.hpp \
-    QColorRampEditor.hpp \
-    mainwindow.h
+    QColorRampEditor.hpp
 
 FORMS += \
     mainwindow.ui
