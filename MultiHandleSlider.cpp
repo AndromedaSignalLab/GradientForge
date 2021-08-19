@@ -42,7 +42,10 @@ void MultiHandleSlider::addSlider(const QPoint &position, const QColor &color, b
             }
         }
     }
-    SliderHandle* sl = new SliderHandle(orientation, color, this);
+    SliderHandleProperties handleProperties;
+    handleProperties.orientation = orientation;
+    handleProperties.color = color;
+    SliderHandle* sl = new SliderHandle(handleProperties, this);
     sliderHandles.push_back(sl);
     if (orientation==Qt::Horizontal)
     {
@@ -60,7 +63,10 @@ void MultiHandleSlider::addSlider(const QPoint &position, const QColor &color, b
 
 void MultiHandleSlider::addSlider(const double value, const QColor &color)
 {
-    SliderHandle* sl = new SliderHandle(orientation, color, this);
+    SliderHandleProperties handleProperties;
+    handleProperties.orientation = orientation;
+    handleProperties.color = color;
+    SliderHandle* sl = new SliderHandle(handleProperties, this);
     sliderHandles.push_back(sl);
     QPoint position = getPositionForValue(value, sl->width(), sl->height());
     sl->move(position);
@@ -99,9 +105,12 @@ void MultiHandleSlider::setRamp(ColorRamp ramp) {
     sliderHandles.clear();
 
     // create sliders
+    SliderHandleProperties handleProperties;
+    handleProperties.orientation = orientation;
     for (int i=0; i<ramp.size(); i++)
     {
-        SliderHandle* sl = new SliderHandle(orientation,ramp[i].second, this);
+        handleProperties.color = ramp[i].second;
+        SliderHandle* sl = new SliderHandle(handleProperties, this);
         sl->value = ramp[i].first;
         sliderHandles.push_back(sl);
         updatePos(sl);

@@ -2,11 +2,10 @@
 #include <QPainter>
 #include <QPolygon>
 
-SliderHandle::SliderHandle(Qt::Orientation orientation, QColor col, QWidget* parent) : QWidget(parent),
-    color(col)
+SliderHandle::SliderHandle(SliderHandleProperties properties, QWidget* parent) : QWidget(parent)
 {
-    this->orientation = orientation;
-    if (orientation==Qt::Horizontal)
+    this->properties = properties;
+    if (properties.orientation==Qt::Horizontal)
         setFixedSize(9, 16);
     else
         setFixedSize(16,9);
@@ -14,20 +13,20 @@ SliderHandle::SliderHandle(Qt::Orientation orientation, QColor col, QWidget* par
 
 void SliderHandle::setColor(QColor col)
 {
-    color = col;
+    properties.color = col;
 }
 
 QColor SliderHandle::getColor()
 {
-    return color;
+    return properties.color;
 }
 
 void SliderHandle::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
     painter.setPen(Qt::black);
-    painter.setBrush(color);
-    if (orientation==Qt::Horizontal)
+    painter.setBrush(properties.color);
+    if (properties.orientation==Qt::Horizontal)
     {
         //QRect rec(0,7,8,8);
         //painter.drawRect(rec);

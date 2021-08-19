@@ -4,13 +4,21 @@
 #include <QPaintEvent>
 #include <QPoint>
 
+struct SliderHandleProperties {
+    Qt::Orientation orientation = Qt::Horizontal;
+    QColor color = Qt::black;
+    int width;
+    int height;
+    int capHeight;
+};
+
 class SliderHandle : public QWidget
 {
     Q_OBJECT
 public:
 
     /// Constructor
-    SliderHandle(Qt::Orientation orientation = Qt::Horizontal, QColor col = Qt::black, QWidget* parent=0);
+    SliderHandle(SliderHandleProperties properties, QWidget* parent=0);
 
     /// set the color of the slider
     void setColor(QColor color);
@@ -31,16 +39,12 @@ protected slots:
 
 protected:
 
-    /// the color of the slider
-    QColor color;
-
-    /// the orientation
-    Qt::Orientation orientation;
+    SliderHandleProperties properties;
 };
 
 inline void SliderHandle::move(int ax, int ay)
 {
-    if (orientation==Qt::Horizontal)
+    if (properties.orientation==Qt::Horizontal)
         QWidget::move(ax - geometry().width()/2, ay);
     else
         QWidget::move(ax, ay - geometry().height()/2);
