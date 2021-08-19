@@ -12,8 +12,9 @@ SOURCES += \
     ColorRampWidget.cpp \
     ColorUtil.cpp \
     MathUtil.cpp \
-    QSlidersWidget.cpp \
-    gradientslider.cpp \
+    MultiHandleSlider.cpp \
+    SliderHandle.cpp \
+    Sorters.cpp \
     QColorRampEditor.cpp \
     main.cpp \
     mainwindow.cpp
@@ -23,8 +24,9 @@ HEADERS += \
     ColorRampWidget.hpp \
     ColorUtil.hpp \
     MathUtil.hpp \
-    QSlidersWidget.hpp \
-    gradientslider.hpp \
+    MultiHandleSlider.hpp \
+    SliderHandle.hpp \
+    Sorters.hpp \
     QColorRampEditor.hpp \
     mainwindow.h
 

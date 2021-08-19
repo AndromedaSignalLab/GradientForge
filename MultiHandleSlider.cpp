@@ -1,32 +1,10 @@
-#include "QSlidersWidget.hpp"
+#include "MultiHandleSlider.hpp"
 #include <QPainter>
 #include <QDebug>
 #include "MathUtil.hpp"
+#include "Sorters.hpp"
 
-class Sorters {
-public:
-    /// sort the slider list
-    static bool SliderSort(const SliderHandleWidget* a1, const SliderHandleWidget* a2);
-    /// sort the color ramp
-    static bool colorRampSort(const QPair<qreal, QColor> &a1, const QPair<qreal, QColor> &a2);
-};
-
-// -----------------------------------------------------------
-bool Sorters::colorRampSort(const QPair<qreal, QColor> &a1, const QPair<qreal, QColor> &a2)
-{
-    return a1.first < a2.first;
-}
-
-// -----------------------------------------------------------
-bool Sorters::SliderSort(const SliderHandleWidget* a1, const SliderHandleWidget* a2)
-{
-    return a1->value < a2->value;
-}
-
-// -----------------------------------------------------------
-// QSlidersWidget --------------------------------------------
-// -----------------------------------------------------------
-MultiHandleSliderWidget::MultiHandleSliderWidget(Qt::Orientation orientation, QWidget* parent) : QWidget(parent),
+MultiHandleSlider::MultiHandleSlider(Qt::Orientation orientation, QWidget* parent) : QWidget(parent),
     activeSlider(-1),
     boundarySpace(5)
 {
@@ -35,7 +13,7 @@ MultiHandleSliderWidget::MultiHandleSliderWidget(Qt::Orientation orientation, QW
     colorChooseDialog = new QColorDialog();
 }
 
-MultiHandleSliderWidget::~MultiHandleSliderWidget()
+MultiHandleSlider::~MultiHandleSlider()
 {
    if(colorChooseDialog)
        delete(colorChooseDialog);
@@ -43,17 +21,17 @@ MultiHandleSliderWidget::~MultiHandleSliderWidget()
 }
 
 // -----------------------------------------------------------
-void MultiHandleSliderWidget::setColorChoose(QColorDialog* coldlg)
+void MultiHandleSlider::setColorChoose(QColorDialog* coldlg)
 {
     colorChooseDialog = coldlg;
 }
 
-int MultiHandleSliderWidget::getBoundSpace()
+int MultiHandleSlider::getBoundSpace()
 {
     return boundarySpace;
 }
 
-void MultiHandleSliderWidget::addSlider(const QPoint &position, const QColor &color, bool skipIfExists) {
+void MultiHandleSlider::addSlider(const QPoint &position, const QColor &color, bool skipIfExists) {
     if(skipIfExists) {
         for (int i=0; i<sliderHandles.size(); i++)
         {
@@ -64,7 +42,7 @@ void MultiHandleSliderWidget::addSlider(const QPoint &position, const QColor &co
             }
         }
     }
-    SliderHandleWidget* sl = new SliderHandleWidget(orientation, color, this);
+    SliderHandle* sl = new SliderHandle(orientation, color, this);
     sliderHandles.push_back(sl);
     if (orientation==Qt::Horizontal)
     {
@@ -80,9 +58,9 @@ void MultiHandleSliderWidget::addSlider(const QPoint &position, const QColor &co
     emit colorRampChanged(getRamp());
 }
 
-void MultiHandleSliderWidget::addSlider(const double value, const QColor &color)
+void MultiHandleSlider::addSlider(const double value, const QColor &color)
 {
-    SliderHandleWidget* sl = new SliderHandleWidget(orientation, color, this);
+    SliderHandle* sl = new SliderHandle(orientation, color, this);
     sliderHandles.push_back(sl);
     QPoint position = getPositionForValue(value, sl->width(), sl->height());
     sl->move(position);
@@ -92,12 +70,12 @@ void MultiHandleSliderWidget::addSlider(const double value, const QColor &color)
     emit colorRampChanged(getRamp());
 }
 
-void MultiHandleSliderWidget::setSliderColor(int index, QColor col) {
+void MultiHandleSlider::setSliderColor(int index, QColor col) {
     if (index<0 || index>=sliderHandles.size()) return;
     sliderHandles[index]->setColor(col);
 }
 
-ColorRamp MultiHandleSliderWidget::getRamp() {
+ColorRamp MultiHandleSlider::getRamp() {
     // create output
     ColorRamp ret;
     for (int i=0; i<sliderHandles.size(); i++)
@@ -111,7 +89,7 @@ ColorRamp MultiHandleSliderWidget::getRamp() {
     return ret;
 }
 
-void MultiHandleSliderWidget::setRamp(ColorRamp ramp) {
+void MultiHandleSlider::setRamp(ColorRamp ramp) {
     if (ramp.size()<1) return;
 
     // sort the slider list
@@ -123,7 +101,7 @@ void MultiHandleSliderWidget::setRamp(ColorRamp ramp) {
     // create sliders
     for (int i=0; i<ramp.size(); i++)
     {
-        SliderHandleWidget* sl = new SliderHandleWidget(orientation,ramp[i].second, this);
+        SliderHandle* sl = new SliderHandle(orientation,ramp[i].second, this);
         sl->value = ramp[i].first;
         sliderHandles.push_back(sl);
         updatePos(sl);
@@ -134,7 +112,7 @@ void MultiHandleSliderWidget::setRamp(ColorRamp ramp) {
     update();
 }
 
-qreal MultiHandleSliderWidget::updateValue(SliderHandleWidget* sl) {
+qreal MultiHandleSlider::updateValue(SliderHandle* sl) {
     QRect crec = contentsRect();
     if (orientation==Qt::Horizontal)
     {
@@ -149,7 +127,7 @@ qreal MultiHandleSliderWidget::updateValue(SliderHandleWidget* sl) {
     return sl->value;
 }
 
-int MultiHandleSliderWidget::updatePos(SliderHandleWidget* sl) {
+int MultiHandleSlider::updatePos(SliderHandle* sl) {
     QRect crec = contentsRect();
     qreal pos;
     if (orientation==Qt::Horizontal)
@@ -171,26 +149,26 @@ int MultiHandleSliderWidget::updatePos(SliderHandleWidget* sl) {
     return pos;
 }
 
-qreal MultiHandleSliderWidget::getNormalizedValue(qreal value) {
+qreal MultiHandleSlider::getNormalizedValue(qreal value) {
     return MathUtil::getNormalizedValue(value, 0, 1);
 }
 
-void MultiHandleSliderWidget::resizeEvent (QResizeEvent*) {
+void MultiHandleSlider::resizeEvent (QResizeEvent*) {
     for (int i=0; i<sliderHandles.size(); i++)
     {
-        SliderHandleWidget* sl = sliderHandles[i];
+        SliderHandle* sl = sliderHandles[i];
         updatePos(sl);
     }
 }
 
-void MultiHandleSliderWidget::removeActiveSlider() {
+void MultiHandleSlider::removeActiveSlider() {
     delete(sliderHandles[activeSlider]);
     sliderHandles.removeAt(activeSlider);
     activeSlider = -1;
     emit colorRampChanged(getRamp());
 }
 
-void MultiHandleSliderWidget::mousePressEvent(QMouseEvent* e) {
+void MultiHandleSlider::mousePressEvent(QMouseEvent* e) {
     if (e->button()== Qt::LeftButton)
     {
         if (sliderHandles.size()<1) return;
@@ -210,7 +188,7 @@ void MultiHandleSliderWidget::mousePressEvent(QMouseEvent* e) {
     //emit colorRampChanged(getRamp());
 }
 
-void MultiHandleSliderWidget::mouseMoveEvent(QMouseEvent* e) {
+void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
     if (activeSlider>=0)
     {
         qreal activeSliderValue = getValueFromPosition(e->pos());
@@ -265,14 +243,14 @@ void MultiHandleSliderWidget::mouseMoveEvent(QMouseEvent* e) {
     }
 }
 
-void MultiHandleSliderWidget::mouseReleaseEvent(QMouseEvent* e) {
+void MultiHandleSlider::mouseReleaseEvent(QMouseEvent* e) {
     if (e->button()== Qt::LeftButton) {
         activeSlider = -1;
         emit colorRampChanged(getRamp());
     }
 }
 // -----------------------------------------------------------
-void MultiHandleSliderWidget::mouseDoubleClickEvent(QMouseEvent* e)
+void MultiHandleSlider::mouseDoubleClickEvent(QMouseEvent* e)
 {
     if (e->button()== Qt::LeftButton)
     {
@@ -300,7 +278,7 @@ void MultiHandleSliderWidget::mouseDoubleClickEvent(QMouseEvent* e)
     }
 }
 
-QRect MultiHandleSliderWidget::getContentsRectangle()
+QRect MultiHandleSlider::getContentsRectangle()
 {
     QRect crec = contentsRect();
 
@@ -313,14 +291,14 @@ QRect MultiHandleSliderWidget::getContentsRectangle()
     return crec;
 }
 
-qreal MultiHandleSliderWidget::getValueFromPosition(const QPoint &position)
+qreal MultiHandleSlider::getValueFromPosition(const QPoint &position)
 {
     QRect crec = getContentsRectangle();
     qreal pos = orientation == Qt::Horizontal ? 1.0*(position.x()-boundarySpace)/(crec.width()) : 1.0*(position.y()-boundarySpace)/(crec.height());
     return pos;
 }
 
-QPoint MultiHandleSliderWidget::getPositionForValue(qreal value, qreal sliderWidth, qreal sliderHeight)
+QPoint MultiHandleSlider::getPositionForValue(qreal value, qreal sliderWidth, qreal sliderHeight)
 {
     QPoint position;
     QRect crec = contentsRect();
@@ -346,68 +324,7 @@ QPoint MultiHandleSliderWidget::getPositionForValue(qreal value, qreal sliderWid
     return position;
 }
 
-// -----------------------------------------------------------
-int MultiHandleSliderWidget::getSliderNum()
+int MultiHandleSlider::getSliderNum()
 {
     return sliderHandles.size();
-}
-
-// -----------------------------------------------------------
-// QColorRampEditorSlider ------------------------------------
-// -----------------------------------------------------------
-SliderHandleWidget::SliderHandleWidget(Qt::Orientation orientation, QColor col, QWidget* parent) : QWidget(parent),
-    color(col)
-{
-    this->orientation = orientation;
-    if (orientation==Qt::Horizontal)
-        setFixedSize(9, 16);
-    else
-        setFixedSize(16,9);
-}
-// -----------------------------------------------------------
-void SliderHandleWidget::setColor(QColor col)
-{
-    color = col;
-}
-// -----------------------------------------------------------
-QColor SliderHandleWidget::getColor()
-{
-    return color;
-}
-
-void SliderHandleWidget::move(int ax, int ay)
-{
-    if (orientation==Qt::Horizontal)
-        QWidget::move(ax - geometry().width()/2, ay);
-    else
-        QWidget::move(ax, ay - geometry().height()/2);
-}
-
-void SliderHandleWidget::move(const QPoint &position) {
-    move(position.x(), position.y());
-}
-
-// -----------------------------------------------------------
-void SliderHandleWidget::paintEvent(QPaintEvent* e)
-{
-    QPainter painter(this);
-    painter.setPen(Qt::black);
-    painter.setBrush(color);
-    if (orientation==Qt::Horizontal)
-    {
-        //QRect rec(0,7,8,8);
-        //painter.drawRect(rec);
-        QPolygon pp;
-        pp << QPoint(0,7) << QPoint(4,0) << QPoint(8,7) << QPoint(8, 15) << QPoint(0, 15);
-        painter.drawPolygon(pp, Qt::OddEvenFill);
-    }
-    else
-    {
-        //QRect rec(7,0,8,8);
-        //painter.drawRect(rec);
-        QPolygon pp;
-        pp << QPoint(7,0) << QPoint(0,4) << QPoint(7,8) << QPoint(15, 8) << QPoint(15,0);
-        painter.drawPolygon(pp, Qt::OddEvenFill);
-    }
-
 }

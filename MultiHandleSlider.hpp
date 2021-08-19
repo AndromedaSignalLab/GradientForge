@@ -5,15 +5,15 @@
 #include <QColorDialog>
 typedef QVector<QPair<qreal, QColor>> ColorRamp;
 
-class SliderHandleWidget;
+class SliderHandle;
 
-class MultiHandleSliderWidget : public QWidget
+class MultiHandleSlider : public QWidget
 {
     Q_OBJECT
 public:
     /// Constructor
-    MultiHandleSliderWidget(Qt::Orientation orientation = Qt::Horizontal, QWidget* parent=NULL);
-    ~MultiHandleSliderWidget();
+    MultiHandleSlider(Qt::Orientation orientation = Qt::Horizontal, QWidget* parent=NULL);
+    ~MultiHandleSlider();
 
     /// get the number of sliders
     int getSliderNum();
@@ -25,10 +25,10 @@ public:
     void setRamp(ColorRamp ramp);
 
     /// get the value of a slider
-    qreal updateValue(SliderHandleWidget* sl);
+    qreal updateValue(SliderHandle* sl);
 
     /// get the position
-    int updatePos(SliderHandleWidget* sl);
+    int updatePos(SliderHandle* sl);
 
     qreal getNormalizedValue(qreal value);
 
@@ -67,7 +67,7 @@ protected:
     /// a color chooser dlg
     QColorDialog* colorChooseDialog;
     /// all poses with its sliders
-    QList<SliderHandleWidget*> sliderHandles;
+    QList<SliderHandle*> sliderHandles;
 
     QRect getContentsRectangle();
     qreal getValueFromPosition(const QPoint &position);
@@ -80,38 +80,4 @@ protected:
     int boundarySpace;
 
     void removeActiveSlider();
-};
-
-class SliderHandleWidget : public QWidget
-{
-    Q_OBJECT
-public:
-
-    /// Constructor
-    SliderHandleWidget(Qt::Orientation orientation = Qt::Horizontal, QColor col = Qt::black, QWidget* parent=0);
-
-    /// set the color of the slider
-    void setColor(QColor color);
-
-    /// get the color
-    QColor getColor();
-
-    /// the value
-    qreal value;
-
-    inline void move(int ax, int ay);
-    inline void move(const QPoint &position);
-
-protected slots:
-
-    /// paint the widget
-    virtual void paintEvent(QPaintEvent* event);
-
-protected:
-
-    /// the color of the slider
-    QColor color;
-
-    /// the orientation
-    Qt::Orientation orientation;
 };

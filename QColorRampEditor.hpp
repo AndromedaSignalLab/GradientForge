@@ -20,13 +20,9 @@
 #include <iostream>
 using namespace std;
 
-
-// -----------------------------------------------------------
-// QColorRampEditor ------------------------------------------
-// -----------------------------------------------------------
-class SliderHandleWidget;
+class SliderHandle;
 class ColorRampWidget;
-class MultiHandleSliderWidget;
+class MultiHandleSlider;
 class QSliderTextWidget;
 class QColorRampEditor : public QWidget
 {
@@ -41,7 +37,7 @@ public:
 
     // define friends to access protected members
     friend class ColorRampWidget;
-    friend class MultiHandleSliderWidget;
+    friend class MultiHandleSlider;
     friend class QSliderTextWidget;
 
 	/// return a 256 colortable from the ramp
@@ -70,5 +66,5 @@ protected:
 
     /// the widgets drawint the ramp, the sliders, the text
     ColorRampWidget* rampwid_;
-    MultiHandleSliderWidget* slidewid_;
+    MultiHandleSlider* slidewid_;
 };

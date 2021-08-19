@@ -11,7 +11,7 @@
 #include "QColorRampEditor.hpp"
 #include <QPainter>
 #include <QMouseEvent>
-#include "QSlidersWidget.hpp"
+#include "MultiHandleSlider.hpp"
 #include "ColorRampWidget.hpp"
 #include "MathUtil.hpp"
 #include <QDebug>
@@ -42,7 +42,7 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, Qt::Orientation orientation)
 
     layout()->addWidget(rampwid_);
 
-    slidewid_ = new MultiHandleSliderWidget(orientation);
+    slidewid_ = new MultiHandleSlider(orientation);
     if (orientation==Qt::Horizontal)
     {
         slidewid_->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
@@ -61,7 +61,7 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, Qt::Orientation orientation)
     //ramp.push_back(QPair<qreal, QColor>(0.0, Qt::black));
     ramp.push_back(QPair<qreal, QColor>(0.5, Qt::red));
     slidewid_->setRamp(ramp);
-    connect(slidewid_, &MultiHandleSliderWidget::colorRampChanged, rampwid_, &ColorRampWidget::onColorRampChanged);
+    connect(slidewid_, &MultiHandleSlider::colorRampChanged, rampwid_, &ColorRampWidget::onColorRampChanged);
     connect(rampwid_, &ColorRampWidget::colorClicked, this, &QColorRampEditor::onColorClicked);
 }
 
