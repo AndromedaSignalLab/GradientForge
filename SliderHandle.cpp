@@ -6,9 +6,9 @@ SliderHandle::SliderHandle(SliderHandleProperties properties, QWidget* parent) :
 {
     this->properties = properties;
     if (properties.orientation==Qt::Horizontal)
-        setFixedSize(9, 16);
+        setFixedSize(properties.width, properties.height);
     else
-        setFixedSize(16,9);
+        setFixedSize(properties.height, properties.width);
 }
 
 void SliderHandle::setColor(QColor col)
@@ -31,7 +31,12 @@ void SliderHandle::paintEvent(QPaintEvent*)
         //QRect rec(0,7,8,8);
         //painter.drawRect(rec);
         QPolygon pp;
-        pp << QPoint(0,7) << QPoint(4,0) << QPoint(8,7) << QPoint(8, 15) << QPoint(0, 15);
+        //7 = height - capHeight
+        //15 = height
+        //8 = width
+        //4 = width/2
+        //(0.00,7.00), (4.00,0.00), (8.00,7.00), (8.00,15.00), (0.00,15.00)
+        pp << QPoint(0,properties.height - properties.capHeight) << QPoint(properties.width/2,0) << QPoint(properties.width,properties.height - properties.capHeight) << QPoint(properties.width, properties.height) << QPoint(0, properties.height);
         painter.drawPolygon(pp, Qt::OddEvenFill);
     }
     else
@@ -39,7 +44,7 @@ void SliderHandle::paintEvent(QPaintEvent*)
         //QRect rec(7,0,8,8);
         //painter.drawRect(rec);
         QPolygon pp;
-        pp << QPoint(7,0) << QPoint(0,4) << QPoint(7,8) << QPoint(15, 8) << QPoint(15,0);
+        pp << QPoint(properties.height - properties.capHeight,0) << QPoint(0,properties.width/2) << QPoint(properties.height - properties.capHeight,properties.width) << QPoint(properties.height, properties.width) << QPoint(properties.height,0);
         painter.drawPolygon(pp, Qt::OddEvenFill);
     }
 

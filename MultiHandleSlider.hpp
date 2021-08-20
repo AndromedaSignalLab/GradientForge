@@ -3,9 +3,8 @@
 #include <QWidget>
 #include <QMouseEvent>
 #include <QColorDialog>
+#include "SliderHandle.hpp"
 typedef QVector<QPair<qreal, QColor>> ColorRamp;
-
-class SliderHandle;
 
 class MultiHandleSlider : public QWidget
 {
@@ -34,7 +33,7 @@ public:
 
     /// set a color choose dlg
     void setColorChoose(QColorDialog* coldlg);
-    int getBoundSpace();
+    int getBoundarySpace();
     void addSlider(const QPoint &position, const QColor &color, bool skipIfExists = true);
     void addSlider(const double value, const QColor &color);
 
@@ -75,9 +74,6 @@ protected:
 
     /// the orientation
     Qt::Orientation orientation;
-
-    /// bound space
-    int boundarySpace;
-
+    SliderHandleProperties handleProperties;
     void removeActiveSlider();
 };

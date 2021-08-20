@@ -36,11 +36,11 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, Qt::Orientation orientation)
     layout()->setSpacing(0);
     layout()->setContentsMargins(0,0,0,0);
 
-    rampwid_ = new ColorRampWidget();
-    rampwid_->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    rampwid_->setContentsMargins(0,0,0,0);
+    colorRampWidget = new ColorRampWidget();
+    colorRampWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    colorRampWidget->setContentsMargins(0,0,0,0);
 
-    layout()->addWidget(rampwid_);
+    layout()->addWidget(colorRampWidget);
 
     slidewid_ = new MultiHandleSlider(orientation);
     if (orientation==Qt::Horizontal)
@@ -61,8 +61,8 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, Qt::Orientation orientation)
     //ramp.push_back(QPair<qreal, QColor>(0.0, Qt::black));
     ramp.push_back(QPair<qreal, QColor>(0.5, Qt::red));
     slidewid_->setRamp(ramp);
-    connect(slidewid_, &MultiHandleSlider::colorRampChanged, rampwid_, &ColorRampWidget::onColorRampChanged);
-    connect(rampwid_, &ColorRampWidget::colorClicked, this, &QColorRampEditor::onColorClicked);
+    connect(slidewid_, &MultiHandleSlider::colorRampChanged, colorRampWidget, &ColorRampWidget::onColorRampChanged);
+    connect(colorRampWidget, &ColorRampWidget::colorClicked, this, &QColorRampEditor::onColorClicked);
 }
 
 QColorRampEditor::~QColorRampEditor() {

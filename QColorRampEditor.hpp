@@ -65,6 +65,6 @@ protected:
     Qt::Orientation orientation;
 
     /// the widgets drawint the ramp, the sliders, the text
-    ColorRampWidget* rampwid_;
+    ColorRampWidget* colorRampWidget;
     MultiHandleSlider* slidewid_;
 };

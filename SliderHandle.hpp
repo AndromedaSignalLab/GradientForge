@@ -45,9 +45,9 @@ protected:
 inline void SliderHandle::move(int ax, int ay)
 {
     if (properties.orientation==Qt::Horizontal)
-        QWidget::move(ax - geometry().width()/2, ay);
+        QWidget::move(ax - properties.width/2, ay);
     else
-        QWidget::move(ax, ay - geometry().height()/2);
+        QWidget::move(ax, ay - properties.height/2);
 }
 
 inline void SliderHandle::move(const QPoint &position) {
