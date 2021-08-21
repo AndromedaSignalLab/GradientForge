@@ -24,10 +24,13 @@ public:
     void setColor(QColor color);
 
     /// get the color
-    QColor getColor();
+    QColor getColor() const;
 
     /// the value
-    qreal value;
+    //qreal value;
+    qreal getValue() const;
+    void setValue(qreal value);
+    void update();
 
     inline void move(int ax, int ay);
     inline void move(const QPoint &position);
@@ -40,6 +43,8 @@ protected slots:
 protected:
 
     SliderHandleProperties properties;
+    QWidget *parent;
+    qreal value;
 };
 
 inline void SliderHandle::move(int ax, int ay)

@@ -1,10 +1,12 @@
 #include "SliderHandle.hpp"
 #include <QPainter>
 #include <QPolygon>
+#include "MathUtil.hpp"
 
 SliderHandle::SliderHandle(const SliderHandleProperties &properties, QWidget* parent) : QWidget(parent)
 {
     this->properties = properties;
+    this->parent = parent;
     if (properties.orientation==Qt::Horizontal)
         setFixedSize(properties.width, properties.height);
     else
@@ -16,9 +18,48 @@ void SliderHandle::setColor(QColor col)
     properties.color = col;
 }
 
-QColor SliderHandle::getColor()
+QColor SliderHandle::getColor() const
 {
     return properties.color;
+}
+
+qreal SliderHandle::getValue() const
+{
+    return value;
+    int boundarySpace = this->properties.width/2;
+    QRect crec = parent->contentsRect();
+
+    qreal position = properties.orientation == Qt::Horizontal ? 1.0*(pos().x()-boundarySpace)/(crec.width() - boundarySpace*2) : 1.0*(pos().y()-boundarySpace)/(crec.height() - boundarySpace*2);
+    return position;
+}
+
+void SliderHandle::setValue(qreal value) {
+    this->value = value;
+    update();
+    return;
+}
+
+void SliderHandle::update()
+{
+    QRect crec = parent->contentsRect();
+    qreal pos;
+    int boundarySpace = properties.width/2;
+    if (properties.orientation==Qt::Horizontal)
+    {
+        crec.adjust(boundarySpace,0,-boundarySpace,0);
+        pos = value*crec.width();
+        //pos -= getBoundarySpace();
+        pos += boundarySpace;
+        move(pos,0);
+    }
+    else
+    {
+        crec.adjust(0, boundarySpace,0,-boundarySpace);
+        pos = value*crec.height();
+        //pos -= getBoundarySpace();
+        pos += boundarySpace;
+        move(0,pos);
+    }
 }
 
 void SliderHandle::paintEvent(QPaintEvent*)

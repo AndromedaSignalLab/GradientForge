@@ -26,9 +26,6 @@ public:
     /// get the value of a slider
     qreal updateValue(SliderHandle* sl);
 
-    /// get the position
-    int updatePos(SliderHandle* sl);
-
     qreal getNormalizedValue(qreal value);
 
     /// set a color choose dlg

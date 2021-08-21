@@ -57,7 +57,7 @@ void MultiHandleSlider::addSlider(const QPoint &position, const QColor &color, b
     {
         sl->move(0,position.y());
     }
-    updateValue(sl);
+    //updateValue(sl);
     sl->show();
     std::sort(sliderHandles.begin(), sliderHandles.end(), Sorters::SliderSort);
     emit colorRampChanged(getRamp());
@@ -72,7 +72,7 @@ void MultiHandleSlider::addSlider(const double &value, const QColor &color)
     sliderHandles.push_back(sl);
     QPoint position = getPositionForValue(value, sl->width(), sl->height());
     sl->move(position);
-    updateValue(sl);
+    //updateValue(sl);
     sl->show();
     std::sort(sliderHandles.begin(), sliderHandles.end(), Sorters::SliderSort);
     emit colorRampChanged(getRamp());
@@ -89,7 +89,7 @@ ColorRamp MultiHandleSlider::getRamp() {
     for (int i=0; i<sliderHandles.size(); i++)
     {
         QColor col = sliderHandles[i]->getColor();
-        ret.push_back(QPair<qreal, QColor>(sliderHandles[i]->value,col));
+        ret.push_back(QPair<qreal, QColor>(sliderHandles[i]->getValue(),col));
     }
     // sort the slider list
     std::sort(ret.begin(), ret.end(), Sorters::colorRampSort);
@@ -113,9 +113,9 @@ void MultiHandleSlider::setRamp(ColorRamp ramp) {
     {
         handleProperties.color = ramp[i].second;
         SliderHandle* sl = new SliderHandle(handleProperties, this);
-        sl->value = ramp[i].first;
+        //sl->value = ramp[i].first;
         sliderHandles.push_back(sl);
-        updatePos(sl);
+        sl->setValue(ramp[i].first);
         sl->show();
     }
 
@@ -137,31 +137,8 @@ qreal MultiHandleSlider::updateValue(SliderHandle* sl) {
         //crec.adjust(0,boundarySpace,0,-boundarySpace);
         //sl->value = (1.0*sl->pos().y()-boundarySpace)/crec.height();
     }
-    sl->value = getValueFromPosition(sl->pos());
-    return sl->value;
-}
-
-int MultiHandleSlider::updatePos(SliderHandle* sl) {
-    QRect crec = contentsRect();
-    qreal pos;
-    int boundarySpace = getBoundarySpace();
-    if (orientation==Qt::Horizontal)
-    {
-        //crec.adjust(boundarySpace,0,-boundarySpace,0);
-        pos = (sl->value)*crec.width();
-        //pos -= getBoundarySpace();
-        //pos += boundarySpace;
-        //sl->move(pos,0);
-    }
-    else
-    {
-        crec.adjust(0, boundarySpace,0,-boundarySpace);
-        pos = (sl->value)*crec.height();
-        //pos -= getBoundarySpace();
-        pos += boundarySpace;
-        sl->move(0,pos);
-    }
-    return pos;
+    //sl->value = getValueFromPosition(sl->pos());
+    return 0;
 }
 
 qreal MultiHandleSlider::getNormalizedValue(qreal value) {
@@ -172,7 +149,7 @@ void MultiHandleSlider::resizeEvent (QResizeEvent*) {
     for (int i=0; i<sliderHandles.size(); i++)
     {
         SliderHandle* sl = sliderHandles[i];
-        updatePos(sl);
+        sl->update();
     }
 }
 
@@ -211,7 +188,7 @@ void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
         if (orientation==Qt::Horizontal)
         {
             if(activeSliderValue >=0 && activeSliderValue <=1) {
-                sliderHandles[activeSlider]->value = activeSliderValue;
+                //sliderHandles[activeSlider]->value = activeSliderValue;
                 sliderHandles[activeSlider]->move(e->pos().x(), 0);
                 qDebug()<<"Active slider value: " << activeSliderValue;
                 //updateValue(sliderHandles[activeSlider]);
