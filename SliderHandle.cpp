@@ -36,7 +36,7 @@ void SliderHandle::paintEvent(QPaintEvent*)
         //8 = width
         //4 = width/2
         //(0.00,7.00), (4.00,0.00), (8.00,7.00), (8.00,15.00), (0.00,15.00)
-        pp << QPoint(0, properties.height - properties.capHeight -1) << QPoint(properties.width/2, 0) << QPoint(properties.width - 1, properties.height - properties.capHeight - 1) << QPoint(properties.width - 1, properties.height - 1) << QPoint(0, properties.height - 1);
+        pp << QPoint(0, properties.height - properties.capHeight - 1) << QPoint(properties.width/2, 0) << QPoint(properties.width - 1, properties.height - properties.capHeight - 1) << QPoint(properties.width - 1, properties.height - 1) << QPoint(0, properties.height - 1);
         painter.drawPolygon(pp, Qt::OddEvenFill);
     }
     else
