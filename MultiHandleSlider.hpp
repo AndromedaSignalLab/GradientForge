@@ -35,7 +35,7 @@ public:
     void setColorChoose(QColorDialog* coldlg);
     int getBoundarySpace();
     void addSlider(const QPoint &position, const QColor &color, bool skipIfExists = true);
-    void addSlider(const double value, const QColor &color);
+    void addSlider(const double &value, const QColor &color);
 
 signals:
     void colorRampChanged(ColorRamp colorRamp);

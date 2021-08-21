@@ -18,7 +18,7 @@ class SliderHandle : public QWidget
 public:
 
     /// Constructor
-    SliderHandle(SliderHandleProperties properties, QWidget* parent=0);
+    SliderHandle(const SliderHandleProperties &properties, QWidget* parent=0);
 
     /// set the color of the slider
     void setColor(QColor color);

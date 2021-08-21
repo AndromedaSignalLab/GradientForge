@@ -2,7 +2,7 @@
 #include <QPainter>
 #include <QPolygon>
 
-SliderHandle::SliderHandle(SliderHandleProperties properties, QWidget* parent) : QWidget(parent)
+SliderHandle::SliderHandle(const SliderHandleProperties &properties, QWidget* parent) : QWidget(parent)
 {
     this->properties = properties;
     if (properties.orientation==Qt::Horizontal)

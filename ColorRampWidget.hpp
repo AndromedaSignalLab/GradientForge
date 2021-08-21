@@ -7,7 +7,7 @@ class ColorRampWidget : public QWidget
 {
     Q_OBJECT
 public:
-    ColorRampWidget(Qt::Orientation orientation = Qt::Horizontal, QWidget* parent=NULL);
+    ColorRampWidget(Qt::Orientation orientation = Qt::Horizontal, QWidget* parent=NULL, int boundarySpace = 12);
 
     QColor getColor(qreal key) const;
 signals:
@@ -23,4 +23,5 @@ protected:
     ColorRamp colorRamp;
     void paintEvent(QPaintEvent* e);
     Qt::Orientation orientation;
+    int boundarySpace;
 };

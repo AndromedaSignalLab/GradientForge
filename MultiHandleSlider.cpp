@@ -63,7 +63,7 @@ void MultiHandleSlider::addSlider(const QPoint &position, const QColor &color, b
     emit colorRampChanged(getRamp());
 }
 
-void MultiHandleSlider::addSlider(const double value, const QColor &color)
+void MultiHandleSlider::addSlider(const double &value, const QColor &color)
 {
     SliderHandleProperties handleProperties = this->handleProperties;
     handleProperties.orientation = orientation;
@@ -157,7 +157,7 @@ int MultiHandleSlider::updatePos(SliderHandle* sl) {
     {
         crec.adjust(0, boundarySpace,0,-boundarySpace);
         pos = (sl->value)*crec.height();
-        pos -= getBoundarySpace();
+        //pos -= getBoundarySpace();
         pos += boundarySpace;
         sl->move(0,pos);
     }
@@ -211,9 +211,10 @@ void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
         if (orientation==Qt::Horizontal)
         {
             if(activeSliderValue >=0 && activeSliderValue <=1) {
+                sliderHandles[activeSlider]->value = activeSliderValue;
                 sliderHandles[activeSlider]->move(e->pos().x(), 0);
                 qDebug()<<"Active slider value: " << activeSliderValue;
-                updateValue(sliderHandles[activeSlider]);
+                //updateValue(sliderHandles[activeSlider]);
             }
             if(activeSliderValue < 0.0) {
 
