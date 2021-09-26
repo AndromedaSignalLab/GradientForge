@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QPaintEvent>
 #include <QPoint>
+#include "MathUtil.hpp"
 
 struct SliderHandleProperties {
     Qt::Orientation orientation = Qt::Horizontal;
@@ -25,6 +26,7 @@ public:
 
     /// get the color
     QColor getColor() const;
+    int getBoundarySpace();
 
     /// the value
     //qreal value;
@@ -41,18 +43,21 @@ protected slots:
     virtual void paintEvent(QPaintEvent* event);
 
 protected:
-
     SliderHandleProperties properties;
     QWidget *parent;
     qreal value;
+    qreal calculateNominalValueFromPosition();
 };
 
 inline void SliderHandle::move(int ax, int ay)
 {
-    if (properties.orientation==Qt::Horizontal)
+    if (properties.orientation==Qt::Horizontal) {
+        value = MathUtil::getNormalizedValue(ax, )
         QWidget::move(ax - properties.width/2, ay);
-    else
+    }
+    else {
         QWidget::move(ax, ay - properties.height/2);
+    }
 }
 
 inline void SliderHandle::move(const QPoint &position) {

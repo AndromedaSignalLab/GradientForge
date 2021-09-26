@@ -2,6 +2,7 @@
 #include <QPainter>
 #include <QPolygon>
 #include "MathUtil.hpp"
+#include <cmath>
 
 SliderHandle::SliderHandle(const SliderHandleProperties &properties, QWidget* parent) : QWidget(parent)
 {
@@ -23,14 +24,14 @@ QColor SliderHandle::getColor() const
     return properties.color;
 }
 
+int SliderHandle::getBoundarySpace()
+{
+    return std::ceil(double(properties.width)/2);
+}
+
 qreal SliderHandle::getValue() const
 {
     return value;
-    int boundarySpace = this->properties.width/2;
-    QRect crec = parent->contentsRect();
-
-    qreal position = properties.orientation == Qt::Horizontal ? 1.0*(pos().x()-boundarySpace)/(crec.width() - boundarySpace*2) : 1.0*(pos().y()-boundarySpace)/(crec.height() - boundarySpace*2);
-    return position;
 }
 
 void SliderHandle::setValue(qreal value) {
@@ -67,8 +68,7 @@ void SliderHandle::paintEvent(QPaintEvent*)
     QPainter painter(this);
     painter.setPen(Qt::black);
     painter.setBrush(properties.color);
-    if (properties.orientation==Qt::Horizontal)
-    {
+    if (properties.orientation==Qt::Horizontal) {
         //QRect rec(0,7,8,8);
         //painter.drawRect(rec);
         QPolygon pp;
@@ -89,4 +89,13 @@ void SliderHandle::paintEvent(QPaintEvent*)
         painter.drawPolygon(pp, Qt::OddEvenFill);
     }
 
+}
+
+qreal SliderHandle::calculateNominalValueFromPosition()
+{
+    int boundarySpace = this->properties.width/2;
+    QRect crec = parent->contentsRect();
+
+    qreal position = properties.orientation == Qt::Horizontal ? 1.0*(pos().x()-boundarySpace)/(crec.width() - boundarySpace*2) : 1.0*(pos().y()-boundarySpace)/(crec.height() - boundarySpace*2);
+    return position;
 }

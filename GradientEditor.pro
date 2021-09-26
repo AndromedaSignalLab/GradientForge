@@ -15,6 +15,7 @@ SOURCES += \
     MathUtil.cpp \
     MultiHandleSlider.cpp \
     SliderHandle.cpp \
+    SliderUtil.cpp \
     Sorters.cpp \
     QColorRampEditor.cpp \
     main.cpp
@@ -27,6 +28,7 @@ HEADERS += \
     MathUtil.hpp \
     MultiHandleSlider.hpp \
     SliderHandle.hpp \
+    SliderUtil.hpp \
     Sorters.hpp \
     QColorRampEditor.hpp
 
