@@ -19,8 +19,7 @@ qreal getNormalizedValue(QPoint position, QRect contentsRect, qreal sliderHandle
     return normalizedValue;
 }
 
-
-QPoint getPosition(qreal normalizedValue, qreal boundarySpace, qreal sliderHandleWidth,  qreal sliderWidth, Qt::Orientation orientation)
+QPoint getPositionForNormalizedValue(qreal normalizedValue, qreal boundarySpace, qreal sliderHandleWidth,  qreal sliderWidth, Qt::Orientation orientation)
 {
     QPoint position;
     qreal pos;

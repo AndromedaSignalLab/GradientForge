@@ -38,14 +38,12 @@ void ColorRampWidget::mousePressEvent(QMouseEvent* e) {
         {
             if(orientation == Qt::Horizontal) {
                 crec.adjust(boundarySpace-1, 0, -boundarySpace+1, 0);
-                normalizedValue = MathUtil::getNormalizedValue(e->pos().x() - boundarySpace + 1, 0, crec.width());
-                colorJustClicked = ColorUtil::getColor(normalizedValue, colorRamp);
             }
             else {
                 crec.adjust(0, boundarySpace-1, 0, -boundarySpace+1);
-                normalizedValue = MathUtil::getNormalizedValue(e->pos().y(),0, crec.height());
-                colorJustClicked = ColorUtil::getColor(normalizedValue, colorRamp);
             }
+            normalizedValue = MathUtil::getNormalizedValue(e->pos(), crec, boundarySpace, orientation);
+            colorJustClicked = ColorUtil::getColor(normalizedValue, colorRamp);
             emit colorClicked(normalizedValue, colorJustClicked);
         }
     }

@@ -10,7 +10,7 @@ public:
     MathUtil();
     static qreal getNormalizedValue(qreal value, qreal min, qreal max);
     static qreal getNormalizedValue(qreal value, qreal min, qreal max, qreal boundarySpace, qreal sliderHandleWidth, qreal sliderWidth, qreal sliderHeight, Qt::Orientation orientation);
-    static qreal getNormalizedValue(QPoint position, QRect ,qreal boundarySpace);
-    static QPoint getPositionForNormalizedValue(qreal value, qreal boundarySpace, qreal sliderHandleWidth, qreal sliderWidth, qreal sliderHeight, Qt::Orientation orientation);
+    static qreal getNormalizedValue(QPoint position, QRect ,qreal boundarySpace, Qt::Orientation orientation);
+    static QPoint getPositionForNormalizedValue(qreal value, qreal boundarySpace, qreal sliderHandleWidth, qreal sliderWidth, Qt::Orientation orientation);
 };
 
