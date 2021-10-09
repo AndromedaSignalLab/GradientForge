@@ -4,22 +4,22 @@ MathUtil::MathUtil()
 {
 }
 
-qreal getNormalizedValue(qreal value, qreal min, qreal max) {
+qreal MathUtil::getNormalizedValue(qreal value, qreal min, qreal max) {
     return (value - min)/(max-min);
 }
 
-qreal getNormalizedValue(qreal value, qreal min, qreal max, qreal boundarySpace, qreal sliderHandleWidth, qreal sliderWidth, qreal sliderHeight, Qt::Orientation orientation) {
+qreal MathUtil::getNormalizedValue(qreal value, qreal min, qreal max, qreal boundarySpace, qreal sliderHandleWidth, qreal sliderWidth, qreal sliderHeight, Qt::Orientation orientation) {
     return (value - min)/(max-min);
 }
 
-qreal getNormalizedValue(QPoint position, QRect contentsRect, qreal sliderHandleWidth, Qt::Orientation orientation) {
+qreal MathUtil::getNormalizedValue(QPoint position, QRect contentsRect, qreal sliderHandleWidth, Qt::Orientation orientation) {
     int boundarySpace = sliderHandleWidth/2;
 
     qreal normalizedValue = orientation == Qt::Horizontal ? 1.0*(position.x()-boundarySpace)/(contentsRect.width() - boundarySpace*2) : 1.0*(position.y()-boundarySpace)/(contentsRect.height() - boundarySpace*2);
     return normalizedValue;
 }
 
-QPoint getPositionForNormalizedValue(qreal normalizedValue, qreal boundarySpace, qreal sliderHandleWidth,  qreal sliderWidth, Qt::Orientation orientation)
+QPoint MathUtil::getPositionForNormalizedValue(qreal normalizedValue, qreal boundarySpace, qreal sliderHandleWidth,  qreal sliderWidth, Qt::Orientation orientation)
 {
     QPoint position;
     qreal pos;
