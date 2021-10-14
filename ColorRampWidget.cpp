@@ -7,7 +7,7 @@
 #include "MathUtil.hpp"
 #include "ColorUtil.hpp"
 
-ColorRampWidget::ColorRampWidget(Qt::Orientation orientation, QWidget* parent, int boundarySpace) : QWidget(parent) {
+ColorRampWidget::ColorRampWidget(QWidget* parent, Qt::Orientation orientation, int boundarySpace) : QWidget(parent) {
     this->orientation = orientation;
     this->boundarySpace = boundarySpace;
     setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);

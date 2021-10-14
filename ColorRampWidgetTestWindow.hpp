@@ -13,6 +13,9 @@ class ColorRampWidgetTestWindow : public QMainWindow
         public:
                  explicit ColorRampWidgetTestWindow(QWidget *parent = nullptr);
     ~ColorRampWidgetTestWindow();
+             public slots:
+    void onColorClicked(double value, QColor color);
+
 
 private:
     Ui::ColorRampWidgetTestWindow *ui;
