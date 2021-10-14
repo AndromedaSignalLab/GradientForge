@@ -42,7 +42,7 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, Qt::Orientation orientation)
 
     layout()->addWidget(colorRampWidget);
 
-    slidewid_ = new MultiHandleSlider(orientation);
+    slidewid_ = new MultiHandleSlider(this, orientation);
     if (orientation==Qt::Horizontal)
     {
         slidewid_->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
@@ -105,7 +105,9 @@ QVector<QRgb> QColorRampEditor::getColorTable() {
 void QColorRampEditor::onColorClicked(double value, QColor color)
 {
     qDebug()<<"Color clicked. Value: "<< value << " Color: " << color;
-    QPoint position = MathUtil::getPositionForNormalizedValue(value, 5, 8, 6, 421, 31, Qt::Horizontal);
+    //static QPoint getPositionForNormalizedValue(qreal value, qreal boundarySpace, qreal sliderHandleWidth, qreal sliderWidth, Qt::Orientation orientation);
+
+    QPoint position = MathUtil::getPositionForNormalizedValue(value, 5, 8, 421, Qt::Horizontal);
     slidewid_->addSlider(position, color);
 }
 

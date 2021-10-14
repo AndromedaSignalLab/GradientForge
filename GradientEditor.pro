@@ -14,6 +14,7 @@ SOURCES += \
     MainWindow.cpp \
     MathUtil.cpp \
     MultiHandleSlider.cpp \
+    MultiHandleSliderTestWindow.cpp \
     SliderHandle.cpp \
     SliderUtil.cpp \
     Sorters.cpp \
@@ -27,12 +28,14 @@ HEADERS += \
     MainWindow.hpp \
     MathUtil.hpp \
     MultiHandleSlider.hpp \
+    MultiHandleSliderTestWindow.hpp \
     SliderHandle.hpp \
     SliderUtil.hpp \
     Sorters.hpp \
     QColorRampEditor.hpp
 
 FORMS += \
+    MultiHandleSliderTestWindow.ui \
     mainwindow.ui
 
 # Default rules for deployment.

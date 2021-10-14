@@ -52,7 +52,7 @@ protected:
 inline void SliderHandle::move(int ax, int ay)
 {
     if (properties.orientation==Qt::Horizontal) {
-        value = MathUtil::getNormalizedValue(ax, )
+        //value = MathUtil::getNormalizedValue(ax, )
         QWidget::move(ax - properties.width/2, ay);
     }
     else {

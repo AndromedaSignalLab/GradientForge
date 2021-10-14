@@ -11,7 +11,7 @@ class MultiHandleSlider : public QWidget
     Q_OBJECT
 public:
     /// Constructor
-    MultiHandleSlider(Qt::Orientation orientation = Qt::Horizontal, QWidget* parent=NULL);
+    MultiHandleSlider(QWidget* parent=nullptr, Qt::Orientation orientation = Qt::Horizontal);
     ~MultiHandleSlider();
 
     /// get the number of sliders

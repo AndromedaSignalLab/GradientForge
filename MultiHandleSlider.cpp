@@ -4,7 +4,7 @@
 #include "MathUtil.hpp"
 #include "Sorters.hpp"
 
-MultiHandleSlider::MultiHandleSlider(Qt::Orientation orientation, QWidget* parent) : QWidget(parent),
+MultiHandleSlider::MultiHandleSlider(QWidget* parent, Qt::Orientation orientation) : QWidget(parent),
     activeSlider(-1)
 {
     this->orientation = orientation;
@@ -199,11 +199,17 @@ void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
                     if(sliderHandles.count() > 1)
                         removeActiveSlider();
                 }
+                else {
+                    sliderHandles[activeSlider]->setValue(0);
+                }
             }
             else if(activeSliderValue > 1.0) {
                 if(activeSliderValue>=1.1) {
                     if(sliderHandles.count() > 1)
                     removeActiveSlider();
+                }
+                else {
+                    sliderHandles[activeSlider]->setValue(1);
                 }
             }
         }
