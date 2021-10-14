@@ -33,14 +33,14 @@ int MultiHandleSlider::getBoundarySpace()
     return handleProperties.width/2;
 }
 
-void MultiHandleSlider::addSlider(const QPoint &position, const QColor &color, bool skipIfExists) {
+SliderHandle * MultiHandleSlider::addSlider(const QPoint &position, const QColor &color, bool skipIfExists) {
     if(skipIfExists) {
         for (int i=0; i<sliderHandles.size(); i++)
         {
             QRect srec = sliderHandles[i]->geometry();
             if (srec.contains(position, true ))
             {
-                return;
+                return nullptr;
             }
         }
     }
@@ -61,9 +61,10 @@ void MultiHandleSlider::addSlider(const QPoint &position, const QColor &color, b
     sl->show();
     std::sort(sliderHandles.begin(), sliderHandles.end(), Sorters::SliderSort);
     emit colorRampChanged(getRamp());
+    return sl;
 }
 
-void MultiHandleSlider::addSlider(const double &value, const QColor &color)
+SliderHandle * MultiHandleSlider::addSlider(const double &value, const QColor &color)
 {
     SliderHandleProperties handleProperties = this->handleProperties;
     handleProperties.orientation = orientation;
@@ -76,6 +77,7 @@ void MultiHandleSlider::addSlider(const double &value, const QColor &color)
     sl->show();
     std::sort(sliderHandles.begin(), sliderHandles.end(), Sorters::SliderSort);
     emit colorRampChanged(getRamp());
+    return sl;
 }
 
 void MultiHandleSlider::setSliderColor(int index, QColor col) {
@@ -190,7 +192,8 @@ void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
             if(activeSliderValue >=0 && activeSliderValue <=1) {
                 //sliderHandles[activeSlider]->value = activeSliderValue;
                 sliderHandles[activeSlider]->move(e->pos().x(), 0);
-                qDebug()<<"Active slider value: " << activeSliderValue;
+                //qDebug()<<"Active slider value: " << activeSliderValue;
+                emit sliderValueChanged(sliderHandles[activeSlider]->id, activeSliderValue);
                 //updateValue(sliderHandles[activeSlider]);
             }
             if(activeSliderValue < 0.0) {
@@ -323,7 +326,7 @@ QPoint MultiHandleSlider::getPositionForValue(qreal value, qreal sliderWidth, qr
     return position;
 }
 
-int MultiHandleSlider::getSliderNum()
+int MultiHandleSlider::getSliderAmount()
 {
     return sliderHandles.size();
 }

@@ -4,6 +4,7 @@
 #include <QPaintEvent>
 #include <QPoint>
 #include "MathUtil.hpp"
+#include <QUuid>
 
 struct SliderHandleProperties {
     Qt::Orientation orientation = Qt::Horizontal;
@@ -21,6 +22,7 @@ public:
     /// Constructor
     SliderHandle(const SliderHandleProperties &properties, QWidget* parent=0);
 
+    const QUuid id = QUuid::createUuid();
     /// set the color of the slider
     void setColor(QColor color);
 

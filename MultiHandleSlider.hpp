@@ -15,7 +15,7 @@ public:
     ~MultiHandleSlider();
 
     /// get the number of sliders
-    int getSliderNum();
+    int getSliderAmount();
 
     /// return the Ramp definition
     ColorRamp getRamp();
@@ -31,11 +31,12 @@ public:
     /// set a color choose dlg
     void setColorChoose(QColorDialog* coldlg);
     int getBoundarySpace();
-    void addSlider(const QPoint &position, const QColor &color, bool skipIfExists = true);
-    void addSlider(const double &value, const QColor &color);
+    SliderHandle * addSlider(const QPoint &position, const QColor &color, bool skipIfExists = true);
+    SliderHandle * addSlider(const double &value, const QColor &color);
 
 signals:
     void colorRampChanged(ColorRamp colorRamp);
+    void sliderValueChanged(QUuid sliderId, qreal value);
 
 public slots:
     /// set the color of a slider to zero
