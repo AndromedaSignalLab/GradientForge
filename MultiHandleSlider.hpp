@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QMouseEvent>
 #include <QColorDialog>
+#include <QHash>
 #include "SliderHandle.hpp"
 typedef QVector<QPair<qreal, QColor>> ColorRamp;
 
@@ -40,7 +41,7 @@ signals:
 
 public slots:
     /// set the color of a slider to zero
-    void setSliderColor(int index, QColor col);
+    void setSliderColor(QUuid sliderId, QColor color);
 
 protected slots:
     /// resize required
@@ -60,11 +61,11 @@ protected slots:
 
 protected:
     /// the active slider
-    int activeSlider;
+    QUuid activeSliderId;
     /// a color chooser dlg
     QColorDialog* colorChooseDialog;
     /// all poses with its sliders
-    QList<SliderHandle*> sliderHandles;
+    QHash<QUuid, SliderHandle*> sliderHandles;
 
     QRect getContentsRectangle();
     qreal getValueFromPosition(const QPoint &position);

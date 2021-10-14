@@ -4,8 +4,7 @@
 #include "MathUtil.hpp"
 #include "Sorters.hpp"
 
-MultiHandleSlider::MultiHandleSlider(QWidget* parent, Qt::Orientation orientation) : QWidget(parent),
-    activeSlider(-1)
+MultiHandleSlider::MultiHandleSlider(QWidget* parent, Qt::Orientation orientation) : QWidget(parent)
 {
     this->orientation = orientation;
     setContentsMargins(0,0,0,0);
@@ -19,7 +18,10 @@ MultiHandleSlider::~MultiHandleSlider()
 {
    if(colorChooseDialog)
        delete(colorChooseDialog);
-   for (int i=0; i<sliderHandles.size(); i++) delete(sliderHandles[i]);
+   for(QUuid id : sliderHandles.keys()) {
+       delete sliderHandles[id];
+   }
+   sliderHandles.clear();
 }
 
 // -----------------------------------------------------------
@@ -35,9 +37,8 @@ int MultiHandleSlider::getBoundarySpace()
 
 SliderHandle * MultiHandleSlider::addSlider(const QPoint &position, const QColor &color, bool skipIfExists) {
     if(skipIfExists) {
-        for (int i=0; i<sliderHandles.size(); i++)
-        {
-            QRect srec = sliderHandles[i]->geometry();
+        for(QUuid id : sliderHandles.keys()) {
+            QRect srec = sliderHandles[id]->geometry();
             if (srec.contains(position, true ))
             {
                 return nullptr;
@@ -48,7 +49,7 @@ SliderHandle * MultiHandleSlider::addSlider(const QPoint &position, const QColor
     handleProperties.orientation = orientation;
     handleProperties.color = color;
     SliderHandle* sl = new SliderHandle(handleProperties, this);
-    sliderHandles.push_back(sl);
+    sliderHandles[sl->id] = sl;
     if (orientation==Qt::Horizontal)
     {
             sl->move(position.x(),0);
@@ -59,7 +60,7 @@ SliderHandle * MultiHandleSlider::addSlider(const QPoint &position, const QColor
     }
     //updateValue(sl);
     sl->show();
-    std::sort(sliderHandles.begin(), sliderHandles.end(), Sorters::SliderSort);
+    //std::sort(sliderHandles.begin(), sliderHandles.end(), Sorters::SliderSort);
     emit colorRampChanged(getRamp());
     return sl;
 }
@@ -70,28 +71,28 @@ SliderHandle * MultiHandleSlider::addSlider(const double &value, const QColor &c
     handleProperties.orientation = orientation;
     handleProperties.color = color;
     SliderHandle* sl = new SliderHandle(handleProperties, this);
-    sliderHandles.push_back(sl);
+    sliderHandles[sl->id] = sl;
     QPoint position = getPositionForValue(value, sl->width(), sl->height());
     sl->move(position);
     //updateValue(sl);
     sl->show();
-    std::sort(sliderHandles.begin(), sliderHandles.end(), Sorters::SliderSort);
+    //std::sort(sliderHandles.begin(), sliderHandles.end(), Sorters::SliderSort);
     emit colorRampChanged(getRamp());
     return sl;
 }
 
-void MultiHandleSlider::setSliderColor(int index, QColor col) {
-    if (index<0 || index>=sliderHandles.size()) return;
-    sliderHandles[index]->setColor(col);
+void MultiHandleSlider::setSliderColor(QUuid sliderId, QColor color) {
+    if(!sliderHandles.contains(sliderId))
+        return;
+    sliderHandles[sliderId]->setColor(color);
 }
 
 ColorRamp MultiHandleSlider::getRamp() {
     // create output
     ColorRamp ret;
-    for (int i=0; i<sliderHandles.size(); i++)
-    {
-        QColor col = sliderHandles[i]->getColor();
-        ret.push_back(QPair<qreal, QColor>(sliderHandles[i]->getValue(),col));
+    for(QUuid id : sliderHandles.keys()) {
+        QColor col = sliderHandles[id]->getColor();
+        ret.push_back(QPair<qreal, QColor>(sliderHandles[id]->getValue(),col));
     }
     // sort the slider list
     std::sort(ret.begin(), ret.end(), Sorters::colorRampSort);
@@ -105,7 +106,13 @@ void MultiHandleSlider::setRamp(ColorRamp ramp) {
     // sort the slider list
     std::sort(ramp.begin(), ramp.end(), Sorters::colorRampSort);
 
-    for (int i=0; i<sliderHandles.size(); i++) delete(sliderHandles[i]);
+    for(QUuid id : sliderHandles.keys()) {
+        //SliderHandle *sl = sliderHandles[id];
+        //sliderHandles.remove(id);
+        //delete sl;
+        delete sliderHandles[id];
+    }
+
     sliderHandles.clear();
 
     // create sliders
@@ -116,7 +123,7 @@ void MultiHandleSlider::setRamp(ColorRamp ramp) {
         handleProperties.color = ramp[i].second;
         SliderHandle* sl = new SliderHandle(handleProperties, this);
         //sl->value = ramp[i].first;
-        sliderHandles.push_back(sl);
+        sliderHandles[sl->id] = sl;
         sl->setValue(ramp[i].first);
         sl->show();
     }
@@ -148,17 +155,19 @@ qreal MultiHandleSlider::getNormalizedValue(qreal value) {
 }
 
 void MultiHandleSlider::resizeEvent (QResizeEvent*) {
-    for (int i=0; i<sliderHandles.size(); i++)
-    {
-        SliderHandle* sl = sliderHandles[i];
+    for(QUuid id : sliderHandles.keys()) {
+        SliderHandle* sl = sliderHandles[id];
         sl->update();
     }
 }
 
 void MultiHandleSlider::removeActiveSlider() {
-    delete(sliderHandles[activeSlider]);
-    sliderHandles.removeAt(activeSlider);
-    activeSlider = -1;
+    if(!activeSliderId.isNull() && sliderHandles.contains(activeSliderId)) {
+        delete sliderHandles[activeSliderId];
+        sliderHandles.remove(activeSliderId);
+    }
+    QUuid nullId;
+    activeSliderId = nullId;
     emit colorRampChanged(getRamp());
 }
 
@@ -166,12 +175,12 @@ void MultiHandleSlider::mousePressEvent(QMouseEvent* e) {
     if (e->button()== Qt::LeftButton)
     {
         if (sliderHandles.size()<1) return;
-        for (int i=0; i<sliderHandles.size(); i++)
-        {
-            QRect srec = sliderHandles[i]->geometry();
+
+        for(QUuid id : sliderHandles.keys()) {
+            QRect srec = sliderHandles[id]->geometry();
             if (srec.contains(e->pos(), true ))
             {
-                activeSlider = i;
+                activeSliderId = id;
                 break;
             }
         }
@@ -183,7 +192,7 @@ void MultiHandleSlider::mousePressEvent(QMouseEvent* e) {
 }
 
 void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
-    if (activeSlider>=0)
+    if (!activeSliderId.isNull())
     {
         qreal activeSliderValue = getValueFromPosition(e->pos());
 
@@ -191,9 +200,9 @@ void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
         {
             if(activeSliderValue >=0 && activeSliderValue <=1) {
                 //sliderHandles[activeSlider]->value = activeSliderValue;
-                sliderHandles[activeSlider]->move(e->pos().x(), 0);
+                sliderHandles[activeSliderId]->move(e->pos().x(), 0);
                 //qDebug()<<"Active slider value: " << activeSliderValue;
-                emit sliderValueChanged(sliderHandles[activeSlider]->id, activeSliderValue);
+                emit sliderValueChanged(sliderHandles[activeSliderId]->id, activeSliderValue);
                 //updateValue(sliderHandles[activeSlider]);
             }
             if(activeSliderValue < 0.0) {
@@ -203,7 +212,7 @@ void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
                         removeActiveSlider();
                 }
                 else {
-                    sliderHandles[activeSlider]->setValue(0);
+                    sliderHandles[activeSliderId]->setValue(0);
                 }
             }
             else if(activeSliderValue > 1.0) {
@@ -212,7 +221,7 @@ void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
                     removeActiveSlider();
                 }
                 else {
-                    sliderHandles[activeSlider]->setValue(1);
+                    sliderHandles[activeSliderId]->setValue(1);
                 }
             }
         }
@@ -245,7 +254,8 @@ void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
 
 void MultiHandleSlider::mouseReleaseEvent(QMouseEvent* e) {
     if (e->button()== Qt::LeftButton) {
-        activeSlider = -1;
+        QUuid nullId;
+        activeSliderId = nullId;
         emit colorRampChanged(getRamp());
     }
 }
@@ -254,17 +264,26 @@ void MultiHandleSlider::mouseDoubleClickEvent(QMouseEvent* e)
 {
     if (e->button()== Qt::LeftButton)
     {
-        int index = -1;
-        for (int i=0; i<sliderHandles.size(); i++)
-        {
-            QRect srec = sliderHandles[i]->geometry();
+        QUuid index;
+
+        for(QUuid id : sliderHandles.keys()) {
+            QRect srec = sliderHandles[id]->geometry();
             if (srec.contains(e->pos(), true ))
             {
-                index = i;
+                index = id;
                 break;
             }
         }
-        if (index>=0)
+
+        for(QUuid id : sliderHandles.keys()) {
+            QRect srec = sliderHandles[id]->geometry();
+            if (srec.contains(e->pos(), true ))
+            {
+                index = id;
+                break;
+            }
+        }
+        if (!index.isNull())
         {
             if (colorChooseDialog)
             {
