@@ -61,7 +61,7 @@ SliderHandle * MultiHandleSlider::addSlider(const QPoint &position, const QColor
     //updateValue(sl);
     sl->show();
     //std::sort(sliderHandles.begin(), sliderHandles.end(), Sorters::SliderSort);
-    emit colorRampChanged(getRamp());
+    emit sliderChanged();
     return sl;
 }
 
@@ -77,7 +77,7 @@ SliderHandle * MultiHandleSlider::addSlider(const double &value, const QColor &c
     //updateValue(sl);
     sl->show();
     //std::sort(sliderHandles.begin(), sliderHandles.end(), Sorters::SliderSort);
-    emit colorRampChanged(getRamp());
+    emit sliderChanged();
     return sl;
 }
 
@@ -128,7 +128,7 @@ void MultiHandleSlider::setRamp(ColorRamp ramp) {
         sl->show();
     }
 
-    emit colorRampChanged(ramp);
+    emit sliderChanged();
     update();
 }
 
@@ -168,7 +168,7 @@ void MultiHandleSlider::removeActiveSlider() {
     }
     QUuid nullId;
     activeSliderId = nullId;
-    emit colorRampChanged(getRamp());
+    emit sliderChanged();
 }
 
 void MultiHandleSlider::mousePressEvent(QMouseEvent* e) {
@@ -248,7 +248,7 @@ void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
             //if (rampeditor_->slideUpdate_) rampeditor_->updateRamp();
         }
         update();
-        emit colorRampChanged(getRamp());
+        emit sliderChanged();
     }
 }
 
@@ -256,7 +256,7 @@ void MultiHandleSlider::mouseReleaseEvent(QMouseEvent* e) {
     if (e->button()== Qt::LeftButton) {
         QUuid nullId;
         activeSliderId = nullId;
-        emit colorRampChanged(getRamp());
+        emit sliderChanged();
     }
 }
 // -----------------------------------------------------------
@@ -289,7 +289,7 @@ void MultiHandleSlider::mouseDoubleClickEvent(QMouseEvent* e)
             {
                 colorChooseDialog->exec();
                 sliderHandles[index]->setColor(colorChooseDialog->selectedColor());
-                emit colorRampChanged(getRamp());
+                emit sliderChanged();
             }
         }
 
@@ -326,7 +326,7 @@ QPoint MultiHandleSlider::getPositionForValue(qreal value, qreal sliderWidth, qr
     int boundarySpace = getBoundarySpace();
     if (orientation==Qt::Horizontal) {
         position.setY(0);
-        //crec.adjust(boundarySpace,0,-boundarySpace,0);
+        crec.adjust(boundarySpace,0,-boundarySpace,0);
         pos = (value)*crec.width();
         //pos -= sliderWidth;
         pos += boundarySpace;
@@ -335,7 +335,7 @@ QPoint MultiHandleSlider::getPositionForValue(qreal value, qreal sliderWidth, qr
     else
     {
         position.setX(0);
-        //crec.adjust(0, boundarySpace,0,-boundarySpace);
+        crec.adjust(0, boundarySpace,0,-boundarySpace);
         pos = (value)*crec.height();
         //pos -= sliderHeight/2;
         pos += boundarySpace;

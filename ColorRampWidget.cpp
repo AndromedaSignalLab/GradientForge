@@ -21,10 +21,10 @@ QColor ColorRampWidget::getColor(qreal key) const
     return ColorUtil::getColor(key, colorRamp);
 }
 
-void ColorRampWidget::onColorRampChanged(ColorRamp colorRamp)
+void ColorRampWidget::onColorRampChanged()
 {
-    this->colorRamp = colorRamp;
-    update();
+    //this->colorRamp = colorRamp;
+    //update();
 }
 
 void ColorRampWidget::mousePressEvent(QMouseEvent* e) {

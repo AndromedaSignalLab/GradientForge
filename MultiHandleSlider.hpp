@@ -36,7 +36,7 @@ public:
     SliderHandle * addSlider(const double &value, const QColor &color);
 
 signals:
-    void colorRampChanged(ColorRamp colorRamp);
+    void sliderChanged();
     void sliderValueChanged(QUuid sliderId, qreal value);
 
 public slots:

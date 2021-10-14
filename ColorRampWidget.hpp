@@ -14,7 +14,7 @@ signals:
     void colorClicked(double value, QColor color);
 
 public slots:
-    void onColorRampChanged(ColorRamp colorRamp);
+    void onColorRampChanged();
 
 protected slots:
     virtual void mousePressEvent(QMouseEvent* e);
