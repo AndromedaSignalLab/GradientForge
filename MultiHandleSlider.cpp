@@ -132,24 +132,6 @@ void MultiHandleSlider::setRamp(ColorRamp ramp) {
     update();
 }
 
-qreal MultiHandleSlider::updateValue(SliderHandle* sl) {
-    QRect crec = contentsRect();
-    int boundarySpace = getBoundarySpace();
-    if (orientation==Qt::Horizontal)
-    {
-        //crec.adjust(boundarySpace,0,-boundarySpace,0);
-        //sl->value = (1.0*sl->pos().x()-boundarySpace)/crec.width();
-
-    }
-    else
-    {
-        //crec.adjust(0,boundarySpace,0,-boundarySpace);
-        //sl->value = (1.0*sl->pos().y()-boundarySpace)/crec.height();
-    }
-    //sl->value = getValueFromPosition(sl->pos());
-    return 0;
-}
-
 qreal MultiHandleSlider::getNormalizedValue(qreal value) {
     return MathUtil::getNormalizedValue(value, 0, 1);
 }

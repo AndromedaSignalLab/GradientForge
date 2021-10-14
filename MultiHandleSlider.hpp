@@ -24,9 +24,6 @@ public:
     /// set Ramp definition
     void setRamp(ColorRamp ramp);
 
-    /// get the value of a slider
-    qreal updateValue(SliderHandle* sl);
-
     qreal getNormalizedValue(qreal value);
 
     /// set a color choose dlg
