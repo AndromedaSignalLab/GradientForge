@@ -12,6 +12,7 @@ CONFIG += link_pkgconfig
 
 SOURCES += \
     ColorRampWidget.cpp \
+    ColorRampWidgetTestWindow.cpp \
     ColorUtil.cpp \
     MainWindow.cpp \
     MathUtil.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
 HEADERS += \
     ColorRamp.hpp \
     ColorRampWidget.hpp \
+    ColorRampWidgetTestWindow.hpp \
     ColorUtil.hpp \
     MainWindow.hpp \
     MathUtil.hpp \
@@ -37,6 +39,7 @@ HEADERS += \
     QColorRampEditor.hpp
 
 FORMS += \
+    ColorRampWidgetTestWindow.ui \
     MultiHandleSliderTestWindow.ui \
     mainwindow.ui
 
