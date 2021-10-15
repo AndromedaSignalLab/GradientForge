@@ -11,8 +11,6 @@ ColorRampWidget::ColorRampWidget(QWidget* parent, Qt::Orientation orientation) :
     this->orientation = orientation;
     setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     setContentsMargins(0,0,0,0);
-    setMinimumHeight(5);
-    setMinimumWidth(5);
 }
 
 QColor ColorRampWidget::getColor(qreal key) const
@@ -33,7 +31,7 @@ void ColorRampWidget::mousePressEvent(QMouseEvent* e) {
         //crec.adjust(bspace_,0,-bspace_,0);
         QColor colorJustClicked;
         qreal normalizedValue;
-        if (crec.contains(e->pos(), true )) // test mouse is in ramp
+        if (crec.contains(e->pos(), false )) // test mouse is in ramp
         {
             /*
             if(orientation == Qt::Horizontal) {
@@ -91,7 +89,7 @@ void ColorRampWidget::paintEvent(QPaintEvent* e) {
     }*/
 
     painter.fillRect( crec, grad);
-    painter.drawRect(crec);
+    //painter.drawRect(crec);
 
     QWidget::paintEvent(e);
 }
