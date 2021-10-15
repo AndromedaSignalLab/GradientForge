@@ -50,7 +50,7 @@ signals:
 
 public slots:
     void onColorClicked(double value, QColor color);
-
+    void onColorRampChanged();
 
 protected slots:
 
@@ -66,5 +66,5 @@ protected:
 
     /// the widgets drawint the ramp, the sliders, the text
     ColorRampWidget* colorRampWidget;
-    MultiHandleSlider* slidewid_;
+    MultiHandleSlider* multiHandleSlider;
 };

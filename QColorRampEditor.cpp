@@ -42,26 +42,26 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, Qt::Orientation orientation)
 
     layout()->addWidget(colorRampWidget);
 
-    slidewid_ = new MultiHandleSlider(this, orientation);
+    multiHandleSlider = new MultiHandleSlider(this, orientation);
     if (orientation==Qt::Horizontal)
     {
-        slidewid_->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-        slidewid_->setFixedHeight(16);
+        multiHandleSlider->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+        multiHandleSlider->setFixedHeight(16);
     }
     else
     {
-        slidewid_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-        slidewid_->setFixedWidth(16);
+        multiHandleSlider->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+        multiHandleSlider->setFixedWidth(16);
     }
-    slidewid_->setContentsMargins(0,0,0,0);
-    layout()->addWidget(slidewid_);
+    multiHandleSlider->setContentsMargins(0,0,0,0);
+    layout()->addWidget(multiHandleSlider);
 
     // init sliders
     QVector<QPair<qreal, QColor> > ramp;
     //ramp.push_back(QPair<qreal, QColor>(0.0, Qt::black));
     ramp.push_back(QPair<qreal, QColor>(0.5, Qt::red));
-    slidewid_->setRamp(ramp);
-    connect(slidewid_, &MultiHandleSlider::sliderChanged, colorRampWidget, &ColorRampWidget::onColorRampChanged);
+    multiHandleSlider->setRamp(ramp);
+    connect(multiHandleSlider, &MultiHandleSlider::sliderChanged, this, &QColorRampEditor::onColorRampChanged);
     connect(colorRampWidget, &ColorRampWidget::colorClicked, this, &QColorRampEditor::onColorClicked);
 }
 
@@ -70,8 +70,8 @@ QColorRampEditor::~QColorRampEditor() {
 
 QVector<QRgb> QColorRampEditor::getColorTable() {
     // get ramp and normalize
-    QVector<QPair<qreal, QColor> > ramp = slidewid_->getRamp();
-    for (int i=0; i<ramp.size(); i++) ramp[i].first = slidewid_->getNormalizedValue(ramp[i].first);
+    QVector<QPair<qreal, QColor> > ramp = multiHandleSlider->getColorRamp();
+    for (int i=0; i<ramp.size(); i++) ramp[i].first = multiHandleSlider->getNormalizedValue(ramp[i].first);
     QVector<QRgb> ctable;
     int index = 0;
     for (int i = 0; i < 256; i++)
@@ -108,7 +108,15 @@ void QColorRampEditor::onColorClicked(double value, QColor color)
     //static QPoint getPositionForNormalizedValue(qreal value, qreal boundarySpace, qreal sliderHandleWidth, qreal sliderWidth, Qt::Orientation orientation);
 
     QPoint position = MathUtil::getPositionForNormalizedValue(value, 5, 8, 421, Qt::Horizontal);
-    slidewid_->addSlider(position, color);
+    multiHandleSlider->addSlider(position, color);
+}
+
+void QColorRampEditor::onColorRampChanged()
+{
+    qDebug()<<"Slider changed";
+    ColorRamp colorRamp = multiHandleSlider->getColorRamp();
+    colorRampWidget->setColorRamp(colorRamp);
+    colorRampWidget->update();
 }
 
 void QColorRampEditor::resizeEvent (QResizeEvent*) {
@@ -121,7 +129,7 @@ void QColorRampEditor::mousePressEvent(QMouseEvent* e) {
         //crec.adjust(bspace_,0,-bspace_,0);
         if (crec.contains(e->pos(), true )) // test mouse is in ramp
         {
-            slidewid_->addSlider(e->pos(), Qt::white);
+            multiHandleSlider->addSlider(e->pos(), Qt::white);
         }
     }
 }

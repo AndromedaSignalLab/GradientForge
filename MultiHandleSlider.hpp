@@ -19,7 +19,7 @@ public:
     int getSliderAmount();
 
     /// return the Ramp definition
-    ColorRamp getRamp();
+    ColorRamp getColorRamp();
 
     /// set Ramp definition
     void setRamp(ColorRamp ramp);
@@ -66,7 +66,7 @@ protected:
 
     QRect getContentsRectangle();
     qreal getValueFromPosition(const QPoint &position);
-    QPoint getPositionForValue(qreal value, qreal sliderWidth, qreal sliderHeight);
+    QPoint getPositionForValue(qreal value);
 
     /// the orientation
     Qt::Orientation orientation;

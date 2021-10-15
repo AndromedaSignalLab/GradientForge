@@ -30,10 +30,8 @@ public:
     QColor getColor() const;
     int getBoundarySpace();
 
-    /// the value
-    //qreal value;
     qreal getValue() const;
-    void setValue(qreal value);
+    void setValue(const qreal &value);
     void update();
 
     inline void move(int ax, int ay);
@@ -47,7 +45,6 @@ protected slots:
 protected:
     SliderHandleProperties properties;
     QWidget *parent;
-    qreal value;
     qreal calculateNominalValueFromPosition();
 };
 

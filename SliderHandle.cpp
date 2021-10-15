@@ -31,13 +31,15 @@ int SliderHandle::getBoundarySpace()
 
 qreal SliderHandle::getValue() const
 {
-    return value;
+    QRect crec = parent->contentsRect();
+    return MathUtil::getNormalizedValue(pos(), crec, properties.width/2, properties.orientation);
 }
 
-void SliderHandle::setValue(qreal value) {
-    this->value = value;
-    update();
-    return;
+void SliderHandle::setValue(const qreal & value)
+{
+    QRect crec = parent->contentsRect();
+    QPoint pos = MathUtil::getPositionForNormalizedValue(value, properties.width/2, properties.width, properties.height, properties.orientation);
+    move(pos);
 }
 
 void SliderHandle::update()
@@ -48,7 +50,7 @@ void SliderHandle::update()
     if (properties.orientation==Qt::Horizontal)
     {
         crec.adjust(boundarySpace,0,-boundarySpace,0);
-        pos = value*crec.width();
+        pos = getValue()*crec.width();
         //pos -= getBoundarySpace();
         pos += boundarySpace;
         move(pos,0);
@@ -56,7 +58,7 @@ void SliderHandle::update()
     else
     {
         crec.adjust(0, boundarySpace,0,-boundarySpace);
-        pos = value*crec.height();
+        pos = getValue()*crec.height();
         //pos -= getBoundarySpace();
         pos += boundarySpace;
         move(0,pos);
