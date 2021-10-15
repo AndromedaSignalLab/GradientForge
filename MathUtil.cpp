@@ -15,7 +15,7 @@ qreal MathUtil::getNormalizedValue(qreal value, qreal min, qreal max, qreal boun
 qreal MathUtil::getNormalizedValue(QPoint position, QRect contentsRect, qreal sliderHandleWidth, Qt::Orientation orientation) {
     int boundarySpace = sliderHandleWidth/2;
 
-    qreal normalizedValue = orientation == Qt::Horizontal ? 1.0*(position.x()-boundarySpace)/(contentsRect.width() - boundarySpace*2) : 1.0*(position.y()-boundarySpace)/(contentsRect.height() - boundarySpace*2);
+    qreal normalizedValue = orientation == Qt::Horizontal ? 1.0*(position.x() + 1 - boundarySpace)/(contentsRect.width() - boundarySpace*2) : 1.0*(position.y() + 1 -boundarySpace)/(contentsRect.height() - boundarySpace*2);
     return normalizedValue;
 }
 
