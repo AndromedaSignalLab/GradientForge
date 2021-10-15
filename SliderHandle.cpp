@@ -44,6 +44,7 @@ void SliderHandle::setValue(const qreal & value)
 
 void SliderHandle::update()
 {
+    /*
     QRect crec = parent->contentsRect();
     qreal pos;
     int boundarySpace = properties.width/2;
@@ -62,7 +63,7 @@ void SliderHandle::update()
         //pos -= getBoundarySpace();
         pos += boundarySpace;
         move(0,pos);
-    }
+    }*/
 }
 
 void SliderHandle::paintEvent(QPaintEvent*)

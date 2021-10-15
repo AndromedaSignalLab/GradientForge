@@ -195,7 +195,6 @@ void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
                 }
                 else {
                     sliderHandles[activeSliderId]->setValue(0);
-                    sliderHandles[activeSliderId]->update();
                 }
             }
             else if(activeSliderValue > 1.0) {
@@ -205,7 +204,6 @@ void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
                 }
                 else {
                     sliderHandles[activeSliderId]->setValue(1);
-                    sliderHandles[activeSliderId]->update();
                 }
             }
         }
