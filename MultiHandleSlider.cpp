@@ -195,6 +195,7 @@ void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
                 }
                 else {
                     sliderHandles[activeSliderId]->setValue(0);
+                    sliderHandles[activeSliderId]->update();
                 }
             }
             else if(activeSliderValue > 1.0) {
@@ -204,6 +205,7 @@ void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
                 }
                 else {
                     sliderHandles[activeSliderId]->setValue(1);
+                    sliderHandles[activeSliderId]->update();
                 }
             }
         }
@@ -296,13 +298,14 @@ qreal MultiHandleSlider::getValueFromPosition(const QPoint &position)
 {
     int boundarySpace = getBoundarySpace();
     QRect crec = getContentsRectangle();
-    qreal pos = orientation == Qt::Horizontal ? 1.0*(position.x()-boundarySpace)/(crec.width() - boundarySpace*2) : 1.0*(position.y()-boundarySpace)/(crec.height() - boundarySpace*2);
-    return pos;
+    qreal value = MathUtil::getNormalizedValue(position, crec, boundarySpace, orientation);
+    //qreal value = orientation == Qt::Horizontal ? 1.0*(position.x()-boundarySpace)/(crec.width() - boundarySpace*2) : 1.0*(position.y()-boundarySpace)/(crec.height() - boundarySpace*2);
+    return value;
 }
 
 QPoint MultiHandleSlider::getPositionForValue(qreal value)
 {
-    return MathUtil::getPositionForNormalizedValue(value, contentsRect(), getBoundarySpace(), handleProperties.width/2, orientation);
+    return MathUtil::getPositionForNormalizedValue(value, contentsRect(), getBoundarySpace(), orientation);
 }
 
 int MultiHandleSlider::getSliderAmount()

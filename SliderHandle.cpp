@@ -38,7 +38,7 @@ qreal SliderHandle::getValue() const
 void SliderHandle::setValue(const qreal & value)
 {
     QRect crec = parent->contentsRect();
-    QPoint pos = MathUtil::getPositionForNormalizedValue(value, properties.width/2, properties.width, properties.height, properties.orientation);
+    QPoint pos = MathUtil::getPositionForNormalizedValue(value, crec, getBoundarySpace(), properties.orientation);
     move(pos);
 }
 

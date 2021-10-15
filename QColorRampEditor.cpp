@@ -107,7 +107,7 @@ void QColorRampEditor::onColorClicked(double value, QColor color)
     qDebug()<<"Color clicked. Value: "<< value << " Color: " << color;
     //static QPoint getPositionForNormalizedValue(qreal value, qreal boundarySpace, qreal sliderHandleWidth, qreal sliderWidth, Qt::Orientation orientation);
 
-    QPoint position = MathUtil::getPositionForNormalizedValue(value, 5, 8, 421, Qt::Horizontal);
+    QPoint position = MathUtil::getPositionForNormalizedValue(value, colorRampWidget->contentsRect(), 0, Qt::Horizontal);
     multiHandleSlider->addSlider(position, color);
 }
 
