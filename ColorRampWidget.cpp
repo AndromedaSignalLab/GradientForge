@@ -7,9 +7,8 @@
 #include "MathUtil.hpp"
 #include "ColorUtil.hpp"
 
-ColorRampWidget::ColorRampWidget(QWidget* parent, Qt::Orientation orientation, int boundarySpace) : QWidget(parent) {
+ColorRampWidget::ColorRampWidget(QWidget* parent, Qt::Orientation orientation) : QWidget(parent) {
     this->orientation = orientation;
-    this->boundarySpace = boundarySpace;
     setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     setContentsMargins(0,0,0,0);
     setMinimumHeight(5);
@@ -36,17 +35,28 @@ void ColorRampWidget::mousePressEvent(QMouseEvent* e) {
         qreal normalizedValue;
         if (crec.contains(e->pos(), true )) // test mouse is in ramp
         {
+            /*
             if(orientation == Qt::Horizontal) {
                 crec.adjust(boundarySpace-1, 0, -boundarySpace+1, 0);
             }
             else {
                 crec.adjust(0, boundarySpace-1, 0, -boundarySpace+1);
-            }
-            normalizedValue = MathUtil::getNormalizedValue(e->pos(), crec, boundarySpace, orientation);
+            }*/
+            normalizedValue = MathUtil::getNormalizedValue(e->pos(), crec, 0, orientation);
             colorJustClicked = ColorUtil::getColor(normalizedValue, colorRamp);
             emit colorClicked(normalizedValue, colorJustClicked);
         }
     }
+}
+
+const ColorRamp & ColorRampWidget::getcolorRamp() const
+{
+    return colorRamp;
+}
+
+void ColorRampWidget::setColorRamp(const ColorRamp & newColorRamp)
+{
+    colorRamp = newColorRamp;
 }
 
 void ColorRampWidget::paintEvent(QPaintEvent* e) {
@@ -58,13 +68,13 @@ void ColorRampWidget::paintEvent(QPaintEvent* e) {
     if (orientation==Qt::Horizontal)
     {
         //crec.adjust(rampeditor_->slidewid_->getBoundSpace(),0,-rampeditor_->slidewid_->getBoundSpace(),-1);
-        crec.adjust(boundarySpace-1, 0, -boundarySpace+1, 0);
+        //crec.adjust(boundarySpace-1, 0, -boundarySpace+1, 0);
         grad = QLinearGradient( 0, 0, crec.width()-1, 0);
     }
     else
     {
         //crec.adjust(0,rampeditor_->slidewid_->getBoundSpace(),-1,-rampeditor_->slidewid_->getBoundSpace());
-        crec.adjust(0, boundarySpace-1, 0, -boundarySpace+1);
+        //crec.adjust(0, boundarySpace-1, 0, -boundarySpace+1);
         grad = QLinearGradient( 0, 0, 0, crec.height()-1);
     }
 

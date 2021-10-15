@@ -6,6 +6,11 @@ ColorRampWidgetTestWindow::ColorRampWidgetTestWindow(QWidget *parent) :
     ui(new Ui::ColorRampWidgetTestWindow)
 {
     ui->setupUi(this);
+    ColorRamp colorRamp;
+    colorRamp.push_back(ColorRampElement(0, Qt::red));
+    colorRamp.push_back(ColorRampElement(0.5, Qt::green));
+    colorRamp.push_back(ColorRampElement(1, Qt::blue));
+    ui->colorRampWidget->setColorRamp(colorRamp);
     connect(ui->colorRampWidget, &ColorRampWidget::colorClicked, this, &ColorRampWidgetTestWindow::onColorClicked);
 }
 
