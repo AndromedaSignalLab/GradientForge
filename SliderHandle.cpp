@@ -69,9 +69,15 @@ void SliderHandle::update()
 void SliderHandle::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
-    painter.setPen(Qt::black);
+    painter.setRenderHints(QPainter::RenderHint::Antialiasing|QPainter::RenderHint::SmoothPixmapTransform);
+    painter.setPen(Qt::black | Qt::SolidLine);
     painter.setBrush(properties.color);
     if (properties.orientation==Qt::Horizontal) {
+        /*
+           handleProperties.width = 24;
+           handleProperties.capHeight = 8;
+           handleProperties.height = 16;
+         */
         //QRect rec(0,7,8,8);
         //painter.drawRect(rec);
         QPolygon pp;
@@ -81,10 +87,11 @@ void SliderHandle::paintEvent(QPaintEvent*)
         //4 = width/2
         //(0.00,7.00), (4.00,0.00), (8.00,7.00), (8.00,15.00), (0.00,15.00)
         //--> (4,0), (8,7), (8,15), (0,15), (0,7)
-        pp << QPoint(properties.width/2, 0) << QPoint(properties.width, properties.capHeight) << QPoint(properties.width, properties.height) << QPoint(0, properties.height) << QPoint(0, properties.capHeight);
+        pp << QPoint((properties.width/2) -1, 0) << QPoint(properties.width-1, properties.capHeight-1) << QPoint(properties.width-1, properties.height-1) << QPoint(0, properties.height-1) << QPoint(0, properties.capHeight-1);
 //        pp<<QPoint(0,7)<<QPoint(4,4)<<QPoint(8,7)<<QPoint(8,15)<<QPoint(0,15);
         //pp<<QPoint(7,0)<<QPoint(4,4)<<QPoint(7,8)<<QPoint(15,8)<<QPoint(15,0);
 
+        //painter.drawLines(pp);
         painter.drawPolygon(pp, Qt::OddEvenFill);
     }
     else
@@ -110,7 +117,7 @@ void SliderHandle::paintEvent(QPaintEvent*)
         //pp<<QPoint(7.0,0.0) << QPoint(15.0,4.0) << QPoint(7.0,8.0) << QPoint(0.0,8.0) << QPoint(0.0,0.0);
         //(0,0) (height-capheight,0) (height, width/2) (height-capheight, width) (0, width)
         //pp<<QPoint(0,0)<<QPoint(7,0) << QPoint(15, 4) << QPoint(7, 8) <<QPoint(0, 8);
-        pp<<QPoint(0,0)<<QPoint(properties.height - properties.capHeight, 0) << QPoint(properties.height, properties.width/2)<<QPoint(properties.height - properties.capHeight, properties.width) <<QPoint(0,properties.width);
+        pp<<QPoint(0,0)<<QPoint(properties.height - properties.capHeight - 1, 0) << QPoint(properties.height -1, (properties.width/2) - 1)<<QPoint(properties.height - properties.capHeight - 1, properties.width - 1) <<QPoint(0,properties.width - 1);
         //pp<<QPoint(0,0)<<QPoint(properties.height - properties.capHeight, 0) << QPoint(properties.height, properties.width/2)<<QPoint(properties.height - properties.capHeight, properties.width) <<QPoint(0,properties.width);
         painter.drawPolygon(pp, Qt::OddEvenFill);
     }
