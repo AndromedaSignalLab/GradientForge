@@ -133,3 +133,13 @@ void QColorRampEditor::mousePressEvent(QMouseEvent* e) {
         }
     }
 }
+
+bool QColorRampEditor::isVertical() const
+{
+    return orientation == Qt::Orientation::Vertical;
+}
+
+void QColorRampEditor::setVertical(const bool &vertical)
+{
+    orientation = vertical ? Qt::Orientation::Vertical : Qt::Orientation::Horizontal;
+}

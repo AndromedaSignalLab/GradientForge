@@ -10,8 +10,10 @@ ColorRampWidgetTestWindow::ColorRampWidgetTestWindow(QWidget *parent) :
     colorRamp.push_back(ColorRampElement(0, Qt::red));
     colorRamp.push_back(ColorRampElement(0.5, Qt::green));
     colorRamp.push_back(ColorRampElement(1, Qt::blue));
-    ui->colorRampWidget->setColorRamp(colorRamp);
-    connect(ui->colorRampWidget, &ColorRampWidget::colorClicked, this, &ColorRampWidgetTestWindow::onColorClicked);
+    ui->colorRampWidgetHorizontal->setColorRamp(colorRamp);
+    ui->colorRampWidgetVertical->setColorRamp(colorRamp);
+    connect(ui->colorRampWidgetHorizontal, &ColorRampWidget::colorClicked, this, &ColorRampWidgetTestWindow::onColorClicked);
+    connect(ui->colorRampWidgetVertical, &ColorRampWidget::colorClicked, this, &ColorRampWidgetTestWindow::onColorClicked);
 }
 
 ColorRampWidgetTestWindow::~ColorRampWidgetTestWindow()

@@ -24,7 +24,16 @@ MultiHandleSlider::~MultiHandleSlider()
    sliderHandles.clear();
 }
 
-// -----------------------------------------------------------
+bool MultiHandleSlider::isVertical() const
+{
+    return orientation == Qt::Orientation::Vertical;
+}
+
+void MultiHandleSlider::setVertical(const bool &vertical)
+{
+    orientation = vertical ? Qt::Orientation::Vertical : Qt::Orientation::Horizontal;
+}
+
 void MultiHandleSlider::setColorChoose(QColorDialog* coldlg)
 {
     colorChooseDialog = coldlg;
@@ -241,7 +250,7 @@ void MultiHandleSlider::mouseReleaseEvent(QMouseEvent* e) {
         emit sliderChanged();
     }
 }
-// -----------------------------------------------------------
+
 void MultiHandleSlider::mouseDoubleClickEvent(QMouseEvent* e)
 {
     if (e->button()== Qt::LeftButton)

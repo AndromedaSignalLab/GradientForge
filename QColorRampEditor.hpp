@@ -1,13 +1,3 @@
-/****************************************************************************
-**
-** Copyright (c) 2012 Richard Steffen and/or its subsidiary(-ies).
-** All rights reserved.
-** Contact: rsteffen@messbild.de, rsteffen@uni-bonn.de
-**
-** QColorRampEditor is free to use unter the terms of the LGPL 2.1 License in
-** Free and Commercial Products.
-****************************************************************************/
-
 #pragma once
 
 #include <QWidget>
@@ -27,6 +17,8 @@ class QSliderTextWidget;
 class QColorRampEditor : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(bool Vertical READ isVertical WRITE setVertical)
+
 public:
 
     /// Basic Constructor
@@ -34,6 +26,9 @@ public:
 
     /// Destructor
     virtual ~QColorRampEditor();
+
+    bool isVertical() const;
+    void setVertical(const bool &vertical);
 
     // define friends to access protected members
     friend class ColorRampWidget;

@@ -94,4 +94,12 @@ void ColorRampWidget::paintEvent(QPaintEvent* e) {
     QWidget::paintEvent(e);
 }
 
+bool ColorRampWidget::isVertical() const
+{
+    return orientation == Qt::Orientation::Vertical;
+}
 
+void ColorRampWidget::setVertical(const bool &vertical)
+{
+    orientation = vertical ? Qt::Orientation::Vertical : Qt::Orientation::Horizontal;
+}

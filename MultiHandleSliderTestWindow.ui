@@ -53,6 +53,9 @@
        <property name="styleSheet">
         <string notr="true"/>
        </property>
+       <property name="Vertical" stdset="0">
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
     </layout>

@@ -6,12 +6,16 @@
 class ColorRampWidget : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(bool Vertical READ isVertical WRITE setVertical)
 public:
     ColorRampWidget(QWidget* parent=NULL, Qt::Orientation orientation = Qt::Horizontal);
 
     QColor getColor(qreal key) const;
     const ColorRamp & getcolorRamp() const;
     void setColorRamp(const ColorRamp & newColorRamp);
+
+    bool isVertical() const;
+    void setVertical(const bool &vertical);
 
 signals:
     void colorClicked(double value, QColor color);

@@ -10,6 +10,7 @@ typedef QVector<QPair<qreal, QColor>> ColorRamp;
 class MultiHandleSlider : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(bool Vertical READ isVertical WRITE setVertical)
 public:
     /// Constructor
     MultiHandleSlider(QWidget* parent=nullptr, Qt::Orientation orientation = Qt::Horizontal);
@@ -31,6 +32,9 @@ public:
     int getBoundarySpace();
     SliderHandle * addSlider(const QPoint &position, const QColor &color, bool skipIfExists = true);
     SliderHandle * addSlider(const double &value, const QColor &color);
+
+    bool isVertical() const;
+    void setVertical(const bool &vertical);
 
 signals:
     void sliderChanged();
