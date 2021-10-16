@@ -10,7 +10,7 @@ MultiHandleSlider::MultiHandleSlider(QWidget* parent, Qt::Orientation orientatio
     setContentsMargins(0,0,0,0);
     colorChooseDialog = new QColorDialog();
     handleProperties.width = 24;
-    handleProperties.capHeight = 4;
+    handleProperties.capHeight = 8;
     handleProperties.height = 16;
 }
 
