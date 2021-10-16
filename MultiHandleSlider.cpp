@@ -34,6 +34,30 @@ void MultiHandleSlider::setVertical(const bool &vertical)
     orientation = vertical ? Qt::Orientation::Vertical : Qt::Orientation::Horizontal;
 }
 
+void MultiHandleSlider::setValue(const QUuid & sliderHandleId, const qreal & value)
+{
+    sliderHandles[sliderHandleId]->setValue(value);
+    updatePosition(sliderHandleId);
+}
+
+qreal MultiHandleSlider::calculateValue(const QUuid & sliderHandleId)
+{
+    QRect crec = contentsRect();
+    return MathUtil::getNormalizedValue(sliderHandles[sliderHandleId]->pos(), crec, handleProperties.width/2, handleProperties.orientation);
+}
+
+qreal MultiHandleSlider::getValue(const QUuid & sliderHandleId)
+{
+    return sliderHandles[sliderHandleId]->getValue();
+}
+
+void MultiHandleSlider::updatePosition(const QUuid & sliderHandleId)
+{
+    QRect crec = contentsRect();
+    QPoint pos = MathUtil::getPositionForNormalizedValue(sliderHandles[sliderHandleId]->getValue(), crec, getBoundarySpace(), handleProperties.orientation);
+    sliderHandles[sliderHandleId]->move(pos);
+}
+
 void MultiHandleSlider::setColorChoose(QColorDialog* coldlg)
 {
     colorChooseDialog = coldlg;
@@ -133,7 +157,7 @@ void MultiHandleSlider::setRamp(ColorRamp ramp) {
         SliderHandle* sl = new SliderHandle(handleProperties, this);
         //sl->value = ramp[i].first;
         sliderHandles[sl->id] = sl;
-        sl->setValue(ramp[i].first);
+        setValue(sl->id, ramp[i].first);
         sl->show();
     }
 
@@ -147,8 +171,7 @@ qreal MultiHandleSlider::getNormalizedValue(qreal value) {
 
 void MultiHandleSlider::resizeEvent (QResizeEvent*) {
     for(QUuid id : sliderHandles.keys()) {
-        SliderHandle* sl = sliderHandles[id];
-        sl->update();
+        updatePosition(id);
     }
 }
 
@@ -203,7 +226,7 @@ void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
                         removeActiveSlider();
                 }
                 else {
-                    sliderHandles[activeSliderId]->setValue(0);
+                    setValue(activeSliderId, 0);
                 }
             }
             else if(activeSliderValue > 1.0) {
@@ -212,7 +235,7 @@ void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
                     removeActiveSlider();
                 }
                 else {
-                    sliderHandles[activeSliderId]->setValue(1);
+                    setValue(activeSliderId, 1);
                 }
             }
         }
@@ -233,7 +256,7 @@ void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
                         removeActiveSlider();
                 }
                 else {
-                    sliderHandles[activeSliderId]->setValue(0);
+                    setValue(activeSliderId, 0);
                 }
             }
             else if(activeSliderValue > 1.0) {
@@ -242,7 +265,7 @@ void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
                         removeActiveSlider();
                 }
                 else {
-                    sliderHandles[activeSliderId]->setValue(1);
+                    setValue(activeSliderId, 1);
                 }
             }
         }

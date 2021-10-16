@@ -36,6 +36,11 @@ public:
     bool isVertical() const;
     void setVertical(const bool &vertical);
 
+    void setValue(const QUuid &sliderHandleId, const qreal &value);
+    qreal calculateValue(const QUuid &sliderHandleId);
+    qreal getValue(const QUuid &sliderHandleId);
+    void updatePosition(const QUuid &sliderHandleId);
+
 signals:
     void sliderChanged();
     void sliderValueChanged(QUuid sliderId, qreal value);

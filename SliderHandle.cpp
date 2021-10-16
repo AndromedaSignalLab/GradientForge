@@ -8,6 +8,7 @@ SliderHandle::SliderHandle(const SliderHandleProperties &properties, QWidget* pa
 {
     this->properties = properties;
     this->parent = parent;
+    this->value = 0;
     if (properties.orientation==Qt::Horizontal)
         setFixedSize(properties.width, properties.height);
     else
@@ -31,39 +32,12 @@ int SliderHandle::getBoundarySpace()
 
 qreal SliderHandle::getValue() const
 {
-    QRect crec = parent->contentsRect();
-    return MathUtil::getNormalizedValue(pos(), crec, properties.width/2, properties.orientation);
+    return value;
 }
 
 void SliderHandle::setValue(const qreal & value)
 {
-    QRect crec = parent->contentsRect();
-    QPoint pos = MathUtil::getPositionForNormalizedValue(value, crec, getBoundarySpace(), properties.orientation);
-    move(pos);
-}
-
-void SliderHandle::update()
-{
-    /*
-    QRect crec = parent->contentsRect();
-    qreal pos;
-    int boundarySpace = properties.width/2;
-    if (properties.orientation==Qt::Horizontal)
-    {
-        crec.adjust(boundarySpace,0,-boundarySpace,0);
-        pos = getValue()*crec.width();
-        //pos -= getBoundarySpace();
-        pos += boundarySpace;
-        move(pos,0);
-    }
-    else
-    {
-        crec.adjust(0, boundarySpace,0,-boundarySpace);
-        pos = getValue()*crec.height();
-        //pos -= getBoundarySpace();
-        pos += boundarySpace;
-        move(0,pos);
-    }*/
+    this->value = value;
 }
 
 void SliderHandle::paintEvent(QPaintEvent*)

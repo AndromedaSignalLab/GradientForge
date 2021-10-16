@@ -32,7 +32,6 @@ public:
 
     qreal getValue() const;
     void setValue(const qreal &value);
-    void update();
 
     inline void move(int ax, int ay);
     inline void move(const QPoint &position);
@@ -46,6 +45,7 @@ protected:
     SliderHandleProperties properties;
     QWidget *parent;
     qreal calculateNominalValueFromPosition();
+    qreal value;
 };
 
 inline void SliderHandle::move(int ax, int ay)
