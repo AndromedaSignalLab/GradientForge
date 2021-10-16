@@ -16,7 +16,7 @@ qreal MathUtil::getNormalizedValue(QPoint position, QRect contentsRect, qreal bo
     }
     else {
         contentsRect.adjust(0, boundarySpace,0,-boundarySpace);
-        normalizedValue = (1.0*(position.y() - contentsRect.y()))/(contentsRect.height());
+        normalizedValue = 1 - (1.0*(position.y() - contentsRect.y()))/(contentsRect.height());
     }
     return normalizedValue;
 }

@@ -54,7 +54,7 @@ qreal MultiHandleSlider::getValue(const QUuid & sliderHandleId)
 void MultiHandleSlider::updatePosition(const QUuid & sliderHandleId)
 {
     QRect crec = contentsRect();
-    QPoint pos = MathUtil::getPositionForNormalizedValue(sliderHandles[sliderHandleId]->getValue(), crec, getBoundarySpace(), handleProperties.orientation);
+    QPoint pos = MathUtil::getPositionForNormalizedValue(sliderHandles[sliderHandleId]->getValue(), crec, getBoundarySpace(), orientation);
     sliderHandles[sliderHandleId]->move(pos);
 }
 
@@ -105,8 +105,7 @@ SliderHandle * MultiHandleSlider::addSlider(const double &value, const QColor &c
     handleProperties.color = color;
     SliderHandle* sl = new SliderHandle(handleProperties, this);
     sliderHandles[sl->id] = sl;
-    QPoint position = getPositionForValue(value);
-    sl->move(position);
+    setValue(sl->id, value);
     //updateValue(sl);
     sl->show();
     //std::sort(sliderHandles.begin(), sliderHandles.end(), Sorters::SliderSort);
@@ -170,7 +169,7 @@ qreal MultiHandleSlider::getNormalizedValue(qreal value) {
 }
 
 void MultiHandleSlider::resizeEvent (QResizeEvent*) {
-    for(QUuid id : sliderHandles.keys()) {
+    for(const QUuid &id : sliderHandles.keys()) {
         updatePosition(id);
     }
 }
@@ -210,63 +209,36 @@ void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
     {
         qreal activeSliderValue = getValueFromPosition(e->pos());
 
-        if (orientation==Qt::Horizontal)
-        {
-            if(activeSliderValue >=0 && activeSliderValue <=1) {
-                //sliderHandles[activeSlider]->value = activeSliderValue;
+        if(activeSliderValue >=0 && activeSliderValue <=1) {
+            //if(orientation == Qt::Vertical)
+             //   activeSliderValue = 1 - activeSliderValue;
+            //sliderHandles[activeSlider]->value = activeSliderValue;
+            sliderHandles[activeSliderId]->setValue(activeSliderValue);
+            if (orientation==Qt::Horizontal)
                 sliderHandles[activeSliderId]->move(e->pos().x(), 0);
-                //qDebug()<<"Active slider value: " << activeSliderValue;
-                emit sliderValueChanged(sliderHandles[activeSliderId]->id, activeSliderValue);
-                //updateValue(sliderHandles[activeSlider]);
-            }
-            if(activeSliderValue < 0.0) {
+            else
+                sliderHandles[activeSliderId]->move(0, e->pos().y());
+            //qDebug()<<"Active slider value: " << activeSliderValue;
+            emit sliderValueChanged(sliderHandles[activeSliderId]->id, activeSliderValue);
+            //updateValue(sliderHandles[activeSlider]);
+        }
+        if(activeSliderValue < 0.0) {
 
-                if(activeSliderValue<=-0.1) {
-                    if(sliderHandles.count() > 1)
-                        removeActiveSlider();
-                }
-                else {
-                    setValue(activeSliderId, 0);
-                }
-            }
-            else if(activeSliderValue > 1.0) {
-                if(activeSliderValue>=1.1) {
-                    if(sliderHandles.count() > 1)
+            if(activeSliderValue<=-0.1) {
+                if(sliderHandles.count() > 1)
                     removeActiveSlider();
-                }
-                else {
-                    setValue(activeSliderId, 1);
-                }
+            }
+            else {
+                setValue(activeSliderId, 0);
             }
         }
-        else
-        {
-            activeSliderValue = 1 - activeSliderValue;
-            if(activeSliderValue >=0 && activeSliderValue <=1) {
-                //sliderHandles[activeSlider]->value = activeSliderValue;
-                sliderHandles[activeSliderId]->move(0, e->pos().y());
-                //qDebug()<<"Active slider value: " << activeSliderValue;
-                emit sliderValueChanged(sliderHandles[activeSliderId]->id, activeSliderValue);
-                //updateValue(sliderHandles[activeSlider]);
+        else if(activeSliderValue > 1.0) {
+            if(activeSliderValue>=1.1) {
+                if(sliderHandles.count() > 1)
+                removeActiveSlider();
             }
-            if(activeSliderValue < 0.0) {
-
-                if(activeSliderValue<=-0.1) {
-                    if(sliderHandles.count() > 1)
-                        removeActiveSlider();
-                }
-                else {
-                    setValue(activeSliderId, 0);
-                }
-            }
-            else if(activeSliderValue > 1.0) {
-                if(activeSliderValue>=1.1) {
-                    if(sliderHandles.count() > 1)
-                        removeActiveSlider();
-                }
-                else {
-                    setValue(activeSliderId, 1);
-                }
+            else {
+                setValue(activeSliderId, 1);
             }
         }
 
