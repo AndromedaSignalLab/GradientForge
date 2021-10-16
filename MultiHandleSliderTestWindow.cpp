@@ -6,9 +6,12 @@ MultiHandleSliderTestWindow::MultiHandleSliderTestWindow(QWidget *parent) :
     ui(new Ui::MultiHandleSliderTestWindow)
 {
     ui->setupUi(this);
-    SliderHandle* sl = ui->multiHandleSlider->addSlider(0.5, Qt::red);
-    if(sl != nullptr)
-        QObject::connect(ui->multiHandleSlider, &MultiHandleSlider::sliderValueChanged, this, &MultiHandleSliderTestWindow::onSliderValueChanged);
+    SliderHandle* slh = ui->multiHandleSliderHorizontal->addSlider(0.5, Qt::red);
+    SliderHandle* slv = ui->multiHandleSliderVertical->addSlider(0.5, Qt::red);
+    if(slh != nullptr)
+        QObject::connect(ui->multiHandleSliderHorizontal, &MultiHandleSlider::sliderValueChanged, this, &MultiHandleSliderTestWindow::onSliderValueChanged);
+    if(slv != nullptr)
+        QObject::connect(ui->multiHandleSliderVertical, &MultiHandleSlider::sliderValueChanged, this, &MultiHandleSliderTestWindow::onSliderValueChanged);
 
 }
 
@@ -28,7 +31,8 @@ void MultiHandleSliderTestWindow::on_pushButtonAdd_clicked()
     bool ok = false;
     double value = ui->lineEditValue->text().toDouble(&ok);
     if(ok && value <= 1 && value >= 0) {
-        ui->multiHandleSlider->addSlider(value, Qt::blue);
+        ui->multiHandleSliderHorizontal->addSlider(value, Qt::blue);
+        ui->multiHandleSliderVertical->addSlider(value, Qt::blue);
     }
 }
 
