@@ -29,7 +29,6 @@ QPoint MathUtil::getPositionForNormalizedValue(qreal normalizedValue, QRect cont
         position.setY(contentsRect.y());
         contentsRect.adjust(boundarySpace,0,-boundarySpace,0);
         pos = (normalizedValue)*contentsRect.width();
-        //pos -= sliderWidth;
         pos += boundarySpace;
         position.setX(pos);
         position.setY(contentsRect.y());
@@ -38,33 +37,13 @@ QPoint MathUtil::getPositionForNormalizedValue(qreal normalizedValue, QRect cont
     {
         position.setX(contentsRect.x());
         contentsRect.adjust(0, boundarySpace,0,-boundarySpace);
-        pos = (normalizedValue)*contentsRect.height();
-        //pos -= sliderHeight/2;
+        pos = (1-normalizedValue)*contentsRect.height();
         pos += boundarySpace;
         position.setX(contentsRect.x());
         position.setY(pos);
     }
 
     return position;
-
-    /*
-    QPoint position;
-    qreal pos;
-    pos = normalizedValue*sliderWidth;
-    pos -= sliderHandleWidth/2;
-    pos += boundarySpace;
-    if (orientation==Qt::Horizontal) {
-        position.setY(0);
-        position.setX(pos);
-    }
-    else
-    {
-        position.setX(0);
-        position.setY(pos);
-    }
-
-    return position;
-*/
 }
 
 /*

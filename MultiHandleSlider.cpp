@@ -218,6 +218,33 @@ void MultiHandleSlider::mouseMoveEvent(QMouseEvent* e) {
         }
         else
         {
+            activeSliderValue = 1 - activeSliderValue;
+            if(activeSliderValue >=0 && activeSliderValue <=1) {
+                //sliderHandles[activeSlider]->value = activeSliderValue;
+                sliderHandles[activeSliderId]->move(0, e->pos().y());
+                //qDebug()<<"Active slider value: " << activeSliderValue;
+                emit sliderValueChanged(sliderHandles[activeSliderId]->id, activeSliderValue);
+                //updateValue(sliderHandles[activeSlider]);
+            }
+            if(activeSliderValue < 0.0) {
+
+                if(activeSliderValue<=-0.1) {
+                    if(sliderHandles.count() > 1)
+                        removeActiveSlider();
+                }
+                else {
+                    sliderHandles[activeSliderId]->setValue(0);
+                }
+            }
+            else if(activeSliderValue > 1.0) {
+                if(activeSliderValue>=1.1) {
+                    if(sliderHandles.count() > 1)
+                        removeActiveSlider();
+                }
+                else {
+                    sliderHandles[activeSliderId]->setValue(1);
+                }
+            }
         }
 
         if (activeSliderValue<0.0 || activeSliderValue>1.0)

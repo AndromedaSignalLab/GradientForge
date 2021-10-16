@@ -55,7 +55,7 @@ inline void SliderHandle::move(int ax, int ay)
         QWidget::move(ax - properties.width/2, ay);
     }
     else {
-        QWidget::move(ax, ay - properties.height/2);
+        QWidget::move(ax, ay - properties.width/2);
     }
 }
 
