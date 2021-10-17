@@ -36,7 +36,7 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, Qt::Orientation orientation)
     layout()->setSpacing(0);
     layout()->setContentsMargins(0,0,0,0);
 
-    colorRampWidget = new ColorRampWidget();
+    colorRampWidget = new ColorRampWidget(this, orientation);
     colorRampWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     colorRampWidget->setContentsMargins(0,0,0,0);
 

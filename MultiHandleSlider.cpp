@@ -145,9 +145,8 @@ void MultiHandleSlider::setRamp(ColorRamp ramp) {
     {
         handleProperties.color = ramp[i].second;
         SliderHandle* sl = new SliderHandle(handleProperties, this);
-        setValue(sl->id, ramp[i].first);
-        //sl->value = ramp[i].first;
         addSliderHandle(sl);
+        setValue(sl->id, ramp[i].first);
         sl->show();
     }
 
