@@ -21,6 +21,7 @@ public:
 
     /// Constructor
     SliderHandle(const SliderHandleProperties &properties, QWidget* parent=0);
+    void init();
 
     const QUuid id = QUuid::createUuid();
     /// set the color of the slider
@@ -35,6 +36,9 @@ public:
 
     inline void move(int ax, int ay);
     inline void move(const QPoint &position);
+
+    void setOrientation(const Qt::Orientation &orientation);
+    Qt::Orientation getOrientation() const;
 
 protected slots:
 

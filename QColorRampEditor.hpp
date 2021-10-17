@@ -62,4 +62,7 @@ protected:
     /// the widgets drawint the ramp, the sliders, the text
     ColorRampWidget* colorRampWidget;
     MultiHandleSlider* multiHandleSlider;
+    QGridLayout* verticalLayout;
+    QGridLayout* horizontalLayout;
+    QSpacerItem *leftSpacer, *rightSpacer, *topSpacer, *bottomSpacer;
 };

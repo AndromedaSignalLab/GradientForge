@@ -9,6 +9,11 @@ SliderHandle::SliderHandle(const SliderHandleProperties &properties, QWidget* pa
     this->properties = properties;
     this->parent = parent;
     this->value = 0;
+    init();
+}
+
+void SliderHandle::init()
+{
     if (properties.orientation==Qt::Horizontal)
         setFixedSize(properties.width, properties.height);
     else
@@ -38,6 +43,17 @@ qreal SliderHandle::getValue() const
 void SliderHandle::setValue(const qreal & value)
 {
     this->value = value;
+}
+
+void SliderHandle::setOrientation(const Qt::Orientation & orientation)
+{
+    properties.orientation = orientation;
+    init();
+}
+
+Qt::Orientation SliderHandle::getOrientation() const
+{
+    return properties.orientation;
 }
 
 void SliderHandle::paintEvent(QPaintEvent*)

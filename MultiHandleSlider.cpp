@@ -32,6 +32,9 @@ bool MultiHandleSlider::isVertical() const
 void MultiHandleSlider::setVertical(const bool &vertical)
 {
     orientation = vertical ? Qt::Orientation::Vertical : Qt::Orientation::Horizontal;
+    for(SliderHandle *sliderHandle : sliderHandles.values()) {
+        sliderHandle->setOrientation(orientation);
+    }
 }
 
 void MultiHandleSlider::setValue(const QUuid & sliderHandleId, const qreal & value)
