@@ -5,6 +5,8 @@
 #include <QColorDialog>
 #include <QHash>
 #include "SliderHandle.hpp"
+#include <QStack>
+
 typedef QVector<QPair<qreal, QColor>> ColorRamp;
 
 class MultiHandleSlider : public QWidget
@@ -72,8 +74,8 @@ protected:
     QColorDialog* colorChooseDialog;
     /// all poses with its sliders
     QHash<QUuid, SliderHandle*> sliderHandles;
+    QStack<SliderHandle*> sliderHandleStack;
 
-    QRect getContentsRectangle();
     qreal getValueFromPosition(const QPoint &position);
     QPoint getPositionForValue(qreal value);
 
@@ -81,4 +83,7 @@ protected:
     Qt::Orientation orientation;
     SliderHandleProperties handleProperties;
     void removeActiveSlider();
+    void addSliderHandle(SliderHandle * sliderHandle);
+    void removeSliderHandle(SliderHandle * sliderHandle);
+    void raiseSliderHandle(SliderHandle * sliderHandle);
 };
