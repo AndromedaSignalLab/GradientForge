@@ -6,6 +6,8 @@
 #include <QHBoxLayout>
 #include <QPainter>
 #include "ColorRamp.hpp"
+#include <QUuid>
+#include <QColor>
 
 #include <iostream>
 using namespace std;
@@ -41,10 +43,13 @@ public:
 signals:
 
     /// signal that hide is changed
-    void rampChanged();
+    void colorRampChanged();
+    void colorClicked(double value, QColor color);
+    void sliderValueChanged(QUuid sliderId, qreal value);
 
 public slots:
     void onColorClicked(double value, QColor color);
+    void onSliderValueChanged(QUuid sliderId, qreal value);
     void onColorRampChanged();
 
 protected slots:
