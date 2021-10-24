@@ -133,7 +133,7 @@ ColorRamp MultiHandleSlider::getColorRamp() {
     return ret;
 }
 
-void MultiHandleSlider::setRamp(ColorRamp ramp) {
+void MultiHandleSlider::setColorRamp(ColorRamp ramp) {
     if (ramp.size()<1) return;
 
     // sort the slider list
