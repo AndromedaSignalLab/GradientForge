@@ -98,7 +98,6 @@ SliderHandle * MultiHandleSlider::addSlider(const QPoint &position, const QColor
     //updateValue(sl);
     sl->show();
     //std::sort(sliderHandles.begin(), sliderHandles.end(), Sorters::SliderSort);
-    emit sliderChanged();
     emit sliderAdded(sl->id, sl->getColor(), sl->getValue());
     return sl;
 }
@@ -112,7 +111,7 @@ SliderHandle * MultiHandleSlider::addSlider(const double &value, const QColor &c
     addSliderHandle(sl);
     setValue(sl->id, value);
     sl->show();
-    emit sliderChanged();
+    emit sliderAdded(sl->id, sl->getColor(), sl->getValue());
     return sl;
 }
 
@@ -187,6 +186,7 @@ void MultiHandleSlider::addSliderHandle(SliderHandle * sliderHandle)
     if(!sliderHandleStack.contains(sliderHandle)){
         sliderHandleStack.push(sliderHandle);
     }
+    emit sliderAdded(sliderHandle->id, sliderHandle->getColor(), sliderHandle->getValue());
 }
 
 void MultiHandleSlider::removeSliderHandle(SliderHandle * sliderHandle)
@@ -199,6 +199,7 @@ void MultiHandleSlider::removeSliderHandle(SliderHandle * sliderHandle)
     }
     if(sliderHandles.contains(sliderHandle->id))
         sliderHandles.remove(sliderHandle->id);
+    emit sliderRemoved(sliderHandle->id);
     delete sliderHandle;
 }
 
@@ -332,12 +333,17 @@ void MultiHandleSlider::mouseDoubleClickEvent(QMouseEvent* e)
             if (colorChooseDialog)
             {
                 colorChooseDialog->exec();
-                sliderHandles[index]->setColor(colorChooseDialog->selectedColor());
-                emit sliderChanged();
+                QColor selectedColor = colorChooseDialog->selectedColor();
+                if(selectedColor.isValid()) {
+                    sliderHandles[index]->setColor(selectedColor);
+                    emit sliderChanged();
+                }
             }
         }
-
-        addSlider(e->pos(), Qt::white);
+        else {
+            addSlider(e->pos(), Qt::white);
+            emit sliderChanged();
+        }
     }
 }
 
