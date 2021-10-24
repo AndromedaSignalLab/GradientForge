@@ -46,6 +46,8 @@ public:
 signals:
     void sliderChanged();
     void sliderValueChanged(QUuid sliderId, qreal value);
+    void sliderRemoved(QUuid sliderId);
+    void sliderAdded(QUuid sliderId, QColor color, qreal value);
 
 public slots:
     /// set the color of a slider to zero

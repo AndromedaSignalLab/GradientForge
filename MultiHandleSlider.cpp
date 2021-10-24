@@ -94,10 +94,12 @@ SliderHandle * MultiHandleSlider::addSlider(const QPoint &position, const QColor
     {
         sl->move(0,position.y());
     }
+    sl->setValue(getValueFromPosition(position));
     //updateValue(sl);
     sl->show();
     //std::sort(sliderHandles.begin(), sliderHandles.end(), Sorters::SliderSort);
     emit sliderChanged();
+    emit sliderAdded(sl->id, sl->getColor(), sl->getValue());
     return sl;
 }
 

@@ -73,10 +73,14 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, Qt::Orientation orientation)
     QVector<QPair<qreal, QColor> > ramp;
     //ramp.push_back(QPair<qreal, QColor>(0.0, Qt::black));
     ramp.push_back(QPair<qreal, QColor>(0.5, Qt::red));
-    multiHandleSlider->setRamp(ramp);
+    multiHandleSlider->setColorRamp(ramp);
     connect(multiHandleSlider, &MultiHandleSlider::sliderChanged, this, &QColorRampEditor::onColorRampChanged);
     connect(colorRampWidget, &ColorRampWidget::colorClicked, this, &QColorRampEditor::onColorClicked);
-    QObject::connect(multiHandleSlider, &MultiHandleSlider::sliderValueChanged, this, &QColorRampEditor::onSliderValueChanged);
+    connect(multiHandleSlider, &MultiHandleSlider::sliderValueChanged, this, &QColorRampEditor::onSliderValueChanged);
+
+    connect(multiHandleSlider, &MultiHandleSlider::sliderChanged, this, &QColorRampEditor::onColorRampChanged);
+    connect(colorRampWidget, &ColorRampWidget::colorClicked, this, &QColorRampEditor::onColorClicked);
+    connect(multiHandleSlider, &MultiHandleSlider::sliderValueChanged, this, &QColorRampEditor::onSliderValueChanged);
 }
 
 QColorRampEditor::~QColorRampEditor() {
@@ -122,7 +126,7 @@ void QColorRampEditor::onColorClicked(double value, QColor color)
     //static QPoint getPositionForNormalizedValue(qreal value, qreal boundarySpace, qreal sliderHandleWidth, qreal sliderWidth, Qt::Orientation orientation);
 
     QPoint position = MathUtil::getPositionForNormalizedValue(value, colorRampWidget->contentsRect(), 0, Qt::Horizontal);
-    multiHandleSlider->addSlider(position, color);
+    multiHandleSlider->addSlider(value, color);
     emit colorClicked(value, color);
 }
 
@@ -142,7 +146,7 @@ void QColorRampEditor::onColorRampChanged()
 
 void QColorRampEditor::resizeEvent (QResizeEvent*) {
 }
-
+/*
 void QColorRampEditor::mousePressEvent(QMouseEvent* e) {
     if (e->button()== Qt::LeftButton)
     {
@@ -154,6 +158,7 @@ void QColorRampEditor::mousePressEvent(QMouseEvent* e) {
         }
     }
 }
+*/
 
 bool QColorRampEditor::isVertical() const
 {

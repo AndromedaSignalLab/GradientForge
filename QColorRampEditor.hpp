@@ -58,7 +58,7 @@ protected slots:
     virtual void resizeEvent(QResizeEvent* e);
 
     /// detect a mouse is pressed
-    virtual void mousePressEvent(QMouseEvent* e);    
+    //virtual void mousePressEvent(QMouseEvent* e);
 
 protected:
     /// the orientation
