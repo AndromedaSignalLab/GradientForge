@@ -75,20 +75,27 @@ SliderHandle * MultiHandleSlider::addSlider(const QPoint &position, const QColor
             }
         }
     }
+
+    qreal value = getValueFromPosition(position);
+
+    if(value < 0)
+        return addSlider(0, color);
+
+    if(value > 1)
+        return addSlider(1, color);
+
     SliderHandleProperties handleProperties = this->handleProperties;
     handleProperties.orientation = orientation;
     handleProperties.color = color;
     SliderHandle* sl = new SliderHandle(handleProperties, this);
     addSliderHandle(sl);
-    if (orientation==Qt::Horizontal)
-    {
+    if (orientation==Qt::Horizontal) {
             sl->move(position.x(),0);
     }
-    else
-    {
+    else {
         sl->move(0,position.y());
     }
-    sl->setValue(getValueFromPosition(position));
+    sl->setValue(value);
     //updateValue(sl);
     sl->show();
     //std::sort(sliderHandles.begin(), sliderHandles.end(), Sorters::SliderSort);
