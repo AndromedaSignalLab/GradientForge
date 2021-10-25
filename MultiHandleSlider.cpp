@@ -8,7 +8,6 @@ MultiHandleSlider::MultiHandleSlider(QWidget* parent, Qt::Orientation orientatio
 {
     this->orientation = orientation;
     setContentsMargins(0,0,0,0);
-    colorChooseDialog = new QColorDialog();
     handleProperties.width = 24;
     handleProperties.capHeight = 8;
     handleProperties.height = 16;
@@ -16,8 +15,6 @@ MultiHandleSlider::MultiHandleSlider(QWidget* parent, Qt::Orientation orientatio
 
 MultiHandleSlider::~MultiHandleSlider()
 {
-   if(colorChooseDialog)
-       delete(colorChooseDialog);
    for(QUuid id : sliderHandles.keys()) {
        delete sliderHandles[id];
    }
@@ -41,6 +38,8 @@ void MultiHandleSlider::setValue(const QUuid & sliderHandleId, const qreal & val
 {
     sliderHandles[sliderHandleId]->setValue(value);
     updatePosition(sliderHandleId);
+    emit sliderValueChanged(sliderHandleId, value);
+    emit sliderChanged();
 }
 
 qreal MultiHandleSlider::calculateValue(const QUuid & sliderHandleId)
@@ -59,11 +58,6 @@ void MultiHandleSlider::updatePosition(const QUuid & sliderHandleId)
     QRect crec = contentsRect();
     QPoint pos = MathUtil::getPositionForNormalizedValue(sliderHandles[sliderHandleId]->getValue(), crec, getBoundarySpace(), orientation);
     sliderHandles[sliderHandleId]->move(pos);
-}
-
-void MultiHandleSlider::setColorChoose(QColorDialog* coldlg)
-{
-    colorChooseDialog = coldlg;
 }
 
 int MultiHandleSlider::getBoundarySpace()
@@ -220,7 +214,7 @@ void MultiHandleSlider::mousePressEvent(QMouseEvent* e) {
 
         for(QUuid id : sliderHandles.keys()) {
             QRect srec = sliderHandles[id]->geometry();
-            if (srec.contains(e->pos(), true ))
+            if (srec.contains(e->pos(), true))
             {
                 activeSliderId = id;
                 SliderHandle * sliderHandle = sliderHandles[id];
@@ -320,30 +314,24 @@ void MultiHandleSlider::mouseDoubleClickEvent(QMouseEvent* e)
             }
         }
 
-        for(QUuid id : sliderHandles.keys()) {
-            QRect srec = sliderHandles[id]->geometry();
-            if (srec.contains(e->pos(), true ))
-            {
-                index = id;
-                break;
-            }
-        }
         if (!index.isNull())
         {
-            if (colorChooseDialog)
-            {
-                colorChooseDialog->exec();
-                QColor selectedColor = colorChooseDialog->selectedColor();
+            QColorDialog colorChooseDialog(this);
+            colorChooseDialog.setCurrentColor(sliderHandles[index]->getColor());
+            if(colorChooseDialog.exec() == QColorDialog::Accepted) {
+                QColor selectedColor = colorChooseDialog.selectedColor();
                 if(selectedColor.isValid()) {
                     sliderHandles[index]->setColor(selectedColor);
-                    emit sliderChanged();
+                    emit sliderColorChanged(index, selectedColor);
                 }
             }
+            else
+                return;
         }
         else {
             addSlider(e->pos(), Qt::white);
-            emit sliderChanged();
         }
+        emit sliderChanged();
     }
 }
 

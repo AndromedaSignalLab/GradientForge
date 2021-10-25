@@ -29,8 +29,6 @@ public:
 
     qreal getNormalizedValue(qreal value);
 
-    /// set a color choose dlg
-    void setColorChoose(QColorDialog* coldlg);
     int getBoundarySpace();
     SliderHandle * addSlider(const QPoint &position, const QColor &color, bool skipIfExists = true);
     SliderHandle * addSlider(const double &value, const QColor &color);
@@ -46,6 +44,7 @@ public:
 signals:
     void sliderChanged();
     void sliderValueChanged(QUuid sliderId, qreal value);
+    void sliderColorChanged(QUuid sliderId, QColor color);
     void sliderRemoved(QUuid sliderId);
     void sliderAdded(QUuid sliderId, QColor color, qreal value);
 
@@ -72,8 +71,6 @@ protected slots:
 protected:
     /// the active slider
     QUuid activeSliderId;
-    /// a color chooser dlg
-    QColorDialog* colorChooseDialog;
     /// all poses with its sliders
     QHash<QUuid, SliderHandle*> sliderHandles;
     QStack<SliderHandle*> sliderHandleStack;
