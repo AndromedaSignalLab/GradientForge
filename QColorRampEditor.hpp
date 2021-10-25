@@ -70,4 +70,5 @@ protected:
     QGridLayout* verticalLayout;
     QGridLayout* horizontalLayout;
     QSpacerItem *leftSpacer, *rightSpacer, *topSpacer, *bottomSpacer;
+    void changeLayout(QLayout *newLayout);
 };

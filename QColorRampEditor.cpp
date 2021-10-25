@@ -16,9 +16,6 @@
 #include "MathUtil.hpp"
 #include <QDebug>
 
-// -----------------------------------------------------------
-// QColorRampEditor ------------------------------------------
-// -----------------------------------------------------------
 QColorRampEditor::QColorRampEditor(QWidget* parent, Qt::Orientation orientation) : QWidget(parent)
 {
     this->orientation = orientation;
@@ -144,6 +141,18 @@ void QColorRampEditor::onColorRampChanged()
 
 void QColorRampEditor::resizeEvent (QResizeEvent*) {
 }
+
+void QColorRampEditor::changeLayout(QLayout * newLayout)
+{
+    QLayout *oldLayout = layout();
+
+    if(oldLayout != nullptr){
+        oldLayout->deleteLater();
+    }
+
+    setLayout(newLayout);
+
+}
 /*
 void QColorRampEditor::mousePressEvent(QMouseEvent* e) {
     if (e->button()== Qt::LeftButton)
@@ -166,7 +175,7 @@ bool QColorRampEditor::isVertical() const
 void QColorRampEditor::setVertical(const bool &vertical)
 {
     orientation = vertical ? Qt::Orientation::Vertical : Qt::Orientation::Horizontal;
-    setLayout(vertical ? verticalLayout : horizontalLayout);
+    changeLayout(vertical ? verticalLayout : horizontalLayout);
     multiHandleSlider->setVertical(vertical);
     colorRampWidget->setVertical(vertical);
     if (orientation==Qt::Horizontal)
