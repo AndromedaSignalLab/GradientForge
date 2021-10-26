@@ -11,6 +11,7 @@ CONFIG += c++20
 CONFIG += link_pkgconfig
 
 SOURCES += \
+    ColorRampEditor.cpp \
     ColorRampWidget.cpp \
     ColorRampWidgetTestWindow.cpp \
     ColorUtil.cpp \
@@ -21,7 +22,6 @@ SOURCES += \
     SliderHandle.cpp \
     SliderUtil.cpp \
     Sorters.cpp \
-    QColorRampEditor.cpp \
     main.cpp
 
 HEADERS += \
@@ -36,8 +36,7 @@ HEADERS += \
     MultiHandleSliderTestWindow.hpp \
     SliderHandle.hpp \
     SliderUtil.hpp \
-    Sorters.hpp \
-    QColorRampEditor.hpp
+    Sorters.hpp
 
 FORMS += \
     ColorRampWidgetTestWindow.ui \

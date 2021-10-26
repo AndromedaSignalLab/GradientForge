@@ -1,14 +1,4 @@
-/****************************************************************************
-**
-** Copyright (c) 2012 Richard Steffen and/or its subsidiary(-ies).
-** All rights reserved.
-** Contact: rsteffen@messbild.de, rsteffen@uni-bonn.de
-**
-** QColorRampEditor is free to use unter the terms of the LGPL 2.1 License in
-** Free and Commercial Products.
-****************************************************************************/
-
-#include "QColorRampEditor.hpp"
+#include "ColorRampEditor.hpp"
 #include <QPainter>
 #include <QMouseEvent>
 #include "MultiHandleSlider.hpp"
@@ -16,7 +6,7 @@
 #include "MathUtil.hpp"
 #include <QDebug>
 
-QColorRampEditor::QColorRampEditor(QWidget* parent, Qt::Orientation orientation) : QWidget(parent)
+ColorRampEditor::ColorRampEditor(QWidget* parent, Qt::Orientation orientation) : QWidget(parent)
 {
     this->orientation = orientation;
     horizontalLayout = new QGridLayout();
@@ -71,19 +61,19 @@ QColorRampEditor::QColorRampEditor(QWidget* parent, Qt::Orientation orientation)
     //ramp.push_back(QPair<qreal, QColor>(0.0, Qt::black));
     ramp.push_back(QPair<qreal, QColor>(0.5, Qt::red));
     multiHandleSlider->setColorRamp(ramp);
-    connect(multiHandleSlider, &MultiHandleSlider::sliderChanged, this, &QColorRampEditor::onColorRampChanged);
-    connect(colorRampWidget, &ColorRampWidget::colorClicked, this, &QColorRampEditor::onColorClicked);
-    connect(multiHandleSlider, &MultiHandleSlider::sliderValueChanged, this, &QColorRampEditor::onSliderValueChanged);
+    connect(multiHandleSlider, &MultiHandleSlider::sliderChanged, this, &ColorRampEditor::onColorRampChanged);
+    connect(colorRampWidget, &ColorRampWidget::colorClicked, this, &ColorRampEditor::onColorClicked);
+    connect(multiHandleSlider, &MultiHandleSlider::sliderValueChanged, this, &ColorRampEditor::onSliderValueChanged);
 
-    connect(multiHandleSlider, &MultiHandleSlider::sliderChanged, this, &QColorRampEditor::colorRampChanged);
-    connect(colorRampWidget, &ColorRampWidget::colorClicked, this, &QColorRampEditor::colorClicked);
-    connect(multiHandleSlider, &MultiHandleSlider::sliderValueChanged, this, &QColorRampEditor::sliderValueChanged);
+    connect(multiHandleSlider, &MultiHandleSlider::sliderChanged, this, &ColorRampEditor::colorRampChanged);
+    connect(colorRampWidget, &ColorRampWidget::colorClicked, this, &ColorRampEditor::colorClicked);
+    connect(multiHandleSlider, &MultiHandleSlider::sliderValueChanged, this, &ColorRampEditor::sliderValueChanged);
 }
 
-QColorRampEditor::~QColorRampEditor() {
+ColorRampEditor::~ColorRampEditor() {
 }
 
-QVector<QRgb> QColorRampEditor::getColorTable() {
+QVector<QRgb> ColorRampEditor::getColorTable() {
     // get ramp and normalize
     QVector<QPair<qreal, QColor> > ramp = multiHandleSlider->getColorRamp();
     for (int i=0; i<ramp.size(); i++) ramp[i].first = multiHandleSlider->getNormalizedValue(ramp[i].first);
@@ -117,7 +107,7 @@ QVector<QRgb> QColorRampEditor::getColorTable() {
     return ctable;
 }
 
-void QColorRampEditor::onColorClicked(double value, QColor color)
+void ColorRampEditor::onColorClicked(double value, QColor color)
 {
     qDebug()<<"Color clicked. Value: "<< value << " Color: " << color;
     //static QPoint getPositionForNormalizedValue(qreal value, qreal boundarySpace, qreal sliderHandleWidth, qreal sliderWidth, Qt::Orientation orientation);
@@ -126,12 +116,12 @@ void QColorRampEditor::onColorClicked(double value, QColor color)
     multiHandleSlider->addSlider(value, color);
 }
 
-void QColorRampEditor::onSliderValueChanged(QUuid sliderId, qreal value)
+void ColorRampEditor::onSliderValueChanged(QUuid sliderId, qreal value)
 {
     emit sliderValueChanged(sliderId, value);
 }
 
-void QColorRampEditor::onColorRampChanged()
+void ColorRampEditor::onColorRampChanged()
 {
     qDebug()<<"Slider changed";
     ColorRamp colorRamp = multiHandleSlider->getColorRamp();
@@ -139,10 +129,10 @@ void QColorRampEditor::onColorRampChanged()
     colorRampWidget->update();
 }
 
-void QColorRampEditor::resizeEvent (QResizeEvent*) {
+void ColorRampEditor::resizeEvent (QResizeEvent*) {
 }
 
-void QColorRampEditor::changeLayout(QLayout * newLayout)
+void ColorRampEditor::changeLayout(QLayout * newLayout)
 {
     QLayout *oldLayout = layout();
 
@@ -167,12 +157,12 @@ void QColorRampEditor::mousePressEvent(QMouseEvent* e) {
 }
 */
 
-bool QColorRampEditor::isVertical() const
+bool ColorRampEditor::isVertical() const
 {
     return orientation == Qt::Orientation::Vertical;
 }
 
-void QColorRampEditor::setVertical(const bool &vertical)
+void ColorRampEditor::setVertical(const bool &vertical)
 {
     orientation = vertical ? Qt::Orientation::Vertical : Qt::Orientation::Horizontal;
     changeLayout(vertical ? verticalLayout : horizontalLayout);
