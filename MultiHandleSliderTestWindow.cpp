@@ -36,3 +36,8 @@ void MultiHandleSliderTestWindow::on_pushButtonAdd_clicked()
     }
 }
 
+void MultiHandleSliderTestWindow::closeEvent(QCloseEvent * event)
+{
+    QApplication::exit();
+}
+

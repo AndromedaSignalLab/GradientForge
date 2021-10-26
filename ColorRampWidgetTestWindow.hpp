@@ -17,7 +17,8 @@ class ColorRampWidgetTestWindow : public QMainWindow
     void onColorClicked(double value, QColor color);
 
 
-private:
+protected:
     Ui::ColorRampWidgetTestWindow *ui;
+    void closeEvent(QCloseEvent *event);
 };
 

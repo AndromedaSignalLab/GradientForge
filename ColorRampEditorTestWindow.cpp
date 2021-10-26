@@ -30,3 +30,8 @@ void ColorRampEditorTestWindow::onSliderValueChanged(QUuid sliderId, qreal value
     ui->sliderValue->setText(QString::number(value));
 }
 
+void ColorRampEditorTestWindow::closeEvent(QCloseEvent * event)
+{
+    QApplication::exit();
+}
+

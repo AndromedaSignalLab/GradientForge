@@ -20,7 +20,8 @@ class MultiHandleSliderTestWindow : public QMainWindow
         private slots:
             void on_pushButtonAdd_clicked();
 
-        private:
-    Ui::MultiHandleSliderTestWindow *ui;
+        protected:
+            Ui::MultiHandleSliderTestWindow *ui;
+            void closeEvent(QCloseEvent *event);
 };
 

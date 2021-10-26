@@ -20,7 +20,8 @@ public slots:
     void onColorClicked(double value, QColor color);
     void onSliderValueChanged(QUuid sliderId, qreal value);
 
-private:
+protected:
     Ui::MainWindow *ui;
+    void closeEvent(QCloseEvent *event);
 };
 #endif // COLORRAMPEDITORTESTWINDOW_H
