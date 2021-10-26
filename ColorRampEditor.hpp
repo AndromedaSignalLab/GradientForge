@@ -32,6 +32,9 @@ public:
     bool isVertical() const;
     void setVertical(const bool &vertical);
 
+    ColorRamp getColorRamp();
+    void setColorRamp(const ColorRamp &colorRamp);
+
 	/// return a 256 colortable from the ramp
 	QVector<QRgb> getColorTable();
 
@@ -66,4 +69,5 @@ protected:
     QGridLayout* horizontalLayout;
     QSpacerItem *leftSpacer, *rightSpacer, *topSpacer, *bottomSpacer;
     void changeLayout(QLayout *newLayout);
+    void updateColorRamp();
 };

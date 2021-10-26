@@ -135,23 +135,23 @@ ColorRamp MultiHandleSlider::getColorRamp() {
     return ret;
 }
 
-void MultiHandleSlider::setColorRamp(ColorRamp ramp) {
-    if (ramp.size()<1) return;
+void MultiHandleSlider::setColorRamp(ColorRamp colorRamp) {
+    if (colorRamp.size()<1) return;
 
     // sort the slider list
-    std::sort(ramp.begin(), ramp.end(), Sorters::colorRampSort);
+    std::sort(colorRamp.begin(), colorRamp.end(), Sorters::colorRampSort);
     sliderHandles.clear();
     sliderHandleStack.clear();
 
     // create sliders
     SliderHandleProperties handleProperties = this->handleProperties;
     handleProperties.orientation = orientation;
-    for (int i=0; i<ramp.size(); i++)
+    for (int i=0; i<colorRamp.size(); i++)
     {
-        handleProperties.color = ramp[i].second;
+        handleProperties.color = colorRamp[i].second;
         SliderHandle* sl = new SliderHandle(handleProperties, this);
         addSliderHandle(sl);
-        setValue(sl->id, ramp[i].first);
+        setValue(sl->id, colorRamp[i].first);
         sl->show();
     }
 

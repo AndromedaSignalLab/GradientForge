@@ -68,6 +68,7 @@ ColorRampEditor::ColorRampEditor(QWidget* parent, Qt::Orientation orientation) :
     connect(multiHandleSlider, &MultiHandleSlider::sliderChanged, this, &ColorRampEditor::colorRampChanged);
     connect(colorRampWidget, &ColorRampWidget::colorClicked, this, &ColorRampEditor::colorClicked);
     connect(multiHandleSlider, &MultiHandleSlider::sliderValueChanged, this, &ColorRampEditor::sliderValueChanged);
+    updateColorRamp();
 }
 
 ColorRampEditor::~ColorRampEditor() {
@@ -124,9 +125,7 @@ void ColorRampEditor::onSliderValueChanged(QUuid sliderId, qreal value)
 void ColorRampEditor::onColorRampChanged()
 {
     qDebug()<<"Slider changed";
-    ColorRamp colorRamp = multiHandleSlider->getColorRamp();
-    colorRampWidget->setColorRamp(colorRamp);
-    colorRampWidget->update();
+    updateColorRamp();
 }
 
 void ColorRampEditor::resizeEvent (QResizeEvent*) {
@@ -142,6 +141,13 @@ void ColorRampEditor::changeLayout(QLayout * newLayout)
 
     setLayout(newLayout);
 
+}
+
+void ColorRampEditor::updateColorRamp()
+{
+    ColorRamp colorRamp = multiHandleSlider->getColorRamp();
+    colorRampWidget->setColorRamp(colorRamp);
+    colorRampWidget->update();
 }
 /*
 void QColorRampEditor::mousePressEvent(QMouseEvent* e) {
@@ -178,4 +184,14 @@ void ColorRampEditor::setVertical(const bool &vertical)
         multiHandleSlider->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
         multiHandleSlider->setFixedWidth(16);
     }
+}
+
+ColorRamp ColorRampEditor::getColorRamp()
+{
+    return multiHandleSlider->getColorRamp();
+}
+
+void ColorRampEditor::setColorRamp(const ColorRamp & colorRamp)
+{
+    multiHandleSlider->setColorRamp(colorRamp);
 }
