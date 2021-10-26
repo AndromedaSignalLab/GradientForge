@@ -16,7 +16,7 @@ class SliderHandle;
 class ColorRampWidget;
 class MultiHandleSlider;
 class QSliderTextWidget;
-class ColorRampEditor : public QWidget
+class QColorRampEditor : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(bool Vertical READ isVertical WRITE setVertical)
@@ -24,16 +24,18 @@ class ColorRampEditor : public QWidget
 public:
 
     /// Basic Constructor
-    ColorRampEditor(QWidget* parent=0, Qt::Orientation orientation = Qt::Horizontal);
+    QColorRampEditor(QWidget* parent=0, Qt::Orientation orientation = Qt::Horizontal);
 
     /// Destructor
-    virtual ~ColorRampEditor();
+    virtual ~QColorRampEditor();
 
     bool isVertical() const;
     void setVertical(const bool &vertical);
 
-    ColorRamp getColorRamp();
-    void setColorRamp(const ColorRamp &colorRamp);
+    // define friends to access protected members
+    friend class ColorRampWidget;
+    friend class MultiHandleSlider;
+    friend class QSliderTextWidget;
 
 	/// return a 256 colortable from the ramp
 	QVector<QRgb> getColorTable();
@@ -69,5 +71,4 @@ protected:
     QGridLayout* horizontalLayout;
     QSpacerItem *leftSpacer, *rightSpacer, *topSpacer, *bottomSpacer;
     void changeLayout(QLayout *newLayout);
-    void updateColorRamp();
 };

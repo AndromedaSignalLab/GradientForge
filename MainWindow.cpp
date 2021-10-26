@@ -6,11 +6,11 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    connect(ui->colorRampHorizontal, &ColorRampEditor::colorClicked, this, &MainWindow::onColorClicked);
-    connect(ui->colorRampVertical, &ColorRampEditor::colorClicked, this, &MainWindow::onColorClicked);
+    connect(ui->colorRampHorizontal, &QColorRampEditor::colorClicked, this, &MainWindow::onColorClicked);
+    connect(ui->colorRampVertical, &QColorRampEditor::colorClicked, this, &MainWindow::onColorClicked);
 
-    connect(ui->colorRampHorizontal, &ColorRampEditor::sliderValueChanged, this, &MainWindow::onSliderValueChanged);
-    connect(ui->colorRampVertical, &ColorRampEditor::sliderValueChanged, this, &MainWindow::onSliderValueChanged);
+    connect(ui->colorRampHorizontal, &QColorRampEditor::sliderValueChanged, this, &MainWindow::onSliderValueChanged);
+    connect(ui->colorRampVertical, &QColorRampEditor::sliderValueChanged, this, &MainWindow::onSliderValueChanged);
 }
 
 MainWindow::~MainWindow()
