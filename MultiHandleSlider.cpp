@@ -3,6 +3,7 @@
 #include <QDebug>
 #include "MathUtil.hpp"
 #include "Sorters.hpp"
+#include "ColorUtil.hpp"
 
 MultiHandleSlider::MultiHandleSlider(QWidget* parent, Qt::Orientation orientation) : QWidget(parent)
 {
@@ -336,7 +337,9 @@ void MultiHandleSlider::mouseDoubleClickEvent(QMouseEvent* e)
                 return;
         }
         else {
-            addSlider(e->pos(), Qt::white);
+            qreal normalizedValue = MathUtil::getNormalizedValue(e->pos(), contentsRect(), getBoundarySpace(), orientation);
+            QColor color = ColorUtil::getColor(normalizedValue, getColorRamp());
+            addSlider(e->pos(), color);
         }
         emit sliderChanged();
     }
