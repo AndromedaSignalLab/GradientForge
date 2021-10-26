@@ -12,10 +12,10 @@ CONFIG += link_pkgconfig
 
 SOURCES += \
     ColorRampEditor.cpp \
+    ColorRampEditorTestWindow.cpp \
     ColorRampWidget.cpp \
     ColorRampWidgetTestWindow.cpp \
     ColorUtil.cpp \
-    MainWindow.cpp \
     MathUtil.cpp \
     MultiHandleSlider.cpp \
     MultiHandleSliderTestWindow.cpp \
@@ -27,10 +27,10 @@ SOURCES += \
 HEADERS += \
     ColorRamp.hpp \
     ColorRampEditor.hpp \
+    ColorRampEditorTestWindow.hpp \
     ColorRampWidget.hpp \
     ColorRampWidgetTestWindow.hpp \
     ColorUtil.hpp \
-    MainWindow.hpp \
     MathUtil.hpp \
     MultiHandleSlider.hpp \
     MultiHandleSliderTestWindow.hpp \
@@ -39,9 +39,9 @@ HEADERS += \
     Sorters.hpp
 
 FORMS += \
+    ColorRampEditorTestWindow.ui \
     ColorRampWidgetTestWindow.ui \
-    MultiHandleSliderTestWindow.ui \
-    mainwindow.ui
+    MultiHandleSliderTestWindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

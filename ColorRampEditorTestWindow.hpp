@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef COLORRAMPEDITORTESTWINDOW_H
+#define COLORRAMPEDITORTESTWINDOW_H
 
 #include <QMainWindow>
 #include <QUuid>
@@ -9,13 +9,13 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class ColorRampEditorTestWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    ColorRampEditorTestWindow(QWidget *parent = nullptr);
+    ~ColorRampEditorTestWindow();
 public slots:
     void onColorClicked(double value, QColor color);
     void onSliderValueChanged(QUuid sliderId, qreal value);
@@ -23,4 +23,4 @@ public slots:
 private:
     Ui::MainWindow *ui;
 };
-#endif // MAINWINDOW_H
+#endif // COLORRAMPEDITORTESTWINDOW_H

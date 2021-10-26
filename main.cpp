@@ -1,4 +1,4 @@
-#include "MainWindow.hpp"
+#include "ColorRampEditorTestWindow.hpp"
 #include "MultiHandleSliderTestWindow.hpp"
 #include "ColorRampWidgetTestWindow.hpp"
 
@@ -8,14 +8,14 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    //MainWindow m;
-    //m.show();
+    ColorRampEditorTestWindow colorRampEditorTestWindow;
+    colorRampEditorTestWindow.show();
 
-    //MultiHandleSliderTestWindow w;
-    //w.show();
+    MultiHandleSliderTestWindow multiHandleSliderTestWindow;
+    multiHandleSliderTestWindow.show();
 
-    ColorRampWidgetTestWindow c;
-    c.show();
+    ColorRampWidgetTestWindow colorRampWidgetTestWindow;
+    colorRampWidgetTestWindow.show();
 
     return a.exec();
 }
