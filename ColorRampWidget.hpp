@@ -11,7 +11,7 @@ public:
     ColorRampWidget(QWidget* parent=NULL, Qt::Orientation orientation = Qt::Horizontal);
 
     QColor getColor(qreal key) const;
-    const ColorRamp getcolorRamp() const;
+    const ColorRamp & getcolorRamp() const;
     void setColorRamp(const ColorRamp & newColorRamp);
 
     bool isVertical() const;

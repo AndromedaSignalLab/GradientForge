@@ -26,6 +26,7 @@ SOURCES += \
 
 HEADERS += \
     ColorRamp.hpp \
+    ColorRampEditor.hpp \
     ColorRampWidget.hpp \
     ColorRampWidgetTestWindow.hpp \
     ColorUtil.hpp \
