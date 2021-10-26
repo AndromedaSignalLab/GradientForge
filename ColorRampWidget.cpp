@@ -47,7 +47,7 @@ void ColorRampWidget::mousePressEvent(QMouseEvent* e) {
     }
 }
 
-const ColorRamp & ColorRampWidget::getcolorRamp() const
+const ColorRamp ColorRampWidget::getcolorRamp() const
 {
     return colorRamp;
 }
