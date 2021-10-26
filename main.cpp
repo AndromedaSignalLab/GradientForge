@@ -7,15 +7,17 @@
 
 int main(int argc, char *argv[])
 {
+
     QApplication a(argc, argv);
-    //MainWindow m;
-    //m.show();
+
+    MainWindow m;
+    m.show();
 
     //MultiHandleSliderTestWindow w;
     //w.show();
 
-    ColorRampWidgetTestWindow c;
-    c.show();
+    //ColorRampWidgetTestWindow c;
+    //c.show();
 
     return a.exec();
 }

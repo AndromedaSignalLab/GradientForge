@@ -124,34 +124,34 @@ void MultiHandleSlider::setSliderColor(QUuid sliderId, QColor color) {
 
 ColorRamp MultiHandleSlider::getColorRamp() {
     // create output
-    ColorRamp ret;
+    ColorRamp colorRamp;
     for(QUuid id : sliderHandles.keys()) {
         QColor col = sliderHandles[id]->getColor();
-        ret.push_back(QPair<qreal, QColor>(sliderHandles[id]->getValue(),col));
+        colorRamp.push_back(QPair<qreal, QColor>(sliderHandles[id]->getValue(),col));
     }
     // sort the slider list
-    std::sort(ret.begin(), ret.end(), Sorters::colorRampSort);
+    std::sort(colorRamp.begin(), colorRamp.end(), Sorters::colorRampSort);
 
-    return ret;
+    return colorRamp;
 }
 
-void MultiHandleSlider::setColorRamp(ColorRamp ramp) {
-    if (ramp.size()<1) return;
+void MultiHandleSlider::setColorRamp(const ColorRamp &colorRamp) {
+    if (colorRamp.size()<1) return;
 
     // sort the slider list
-    std::sort(ramp.begin(), ramp.end(), Sorters::colorRampSort);
+    std::sort(colorRamp.begin(), colorRamp.end(), Sorters::colorRampSort);
     sliderHandles.clear();
     sliderHandleStack.clear();
 
     // create sliders
     SliderHandleProperties handleProperties = this->handleProperties;
     handleProperties.orientation = orientation;
-    for (int i=0; i<ramp.size(); i++)
+    for (int i=0; i<colorRamp.size(); i++)
     {
-        handleProperties.color = ramp[i].second;
+        handleProperties.color = colorRamp[i].second;
         SliderHandle* sl = new SliderHandle(handleProperties, this);
         addSliderHandle(sl);
-        setValue(sl->id, ramp[i].first);
+        setValue(sl->id, colorRamp[i].first);
         sl->show();
     }
 

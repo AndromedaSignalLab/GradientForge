@@ -25,7 +25,7 @@ public:
     ColorRamp getColorRamp();
 
     /// set Ramp definition
-    void setColorRamp(ColorRamp ramp);
+    void setColorRamp(const ColorRamp &colorRamp);
 
     qreal getNormalizedValue(qreal value);
 

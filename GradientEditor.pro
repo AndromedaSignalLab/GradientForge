@@ -21,11 +21,12 @@ SOURCES += \
     SliderHandle.cpp \
     SliderUtil.cpp \
     Sorters.cpp \
-    QColorRampEditor.cpp \
+    ColorRampEditor.cpp \
     main.cpp
 
 HEADERS += \
     ColorRamp.hpp \
+    ColorRampEditor.hpp \
     ColorRampWidget.hpp \
     ColorRampWidgetTestWindow.hpp \
     ColorUtil.hpp \
@@ -36,7 +37,7 @@ HEADERS += \
     SliderHandle.hpp \
     SliderUtil.hpp \
     Sorters.hpp \
-    QColorRampEditor.hpp
+    ColorRampEditor.hpp
 
 FORMS += \
     ColorRampWidgetTestWindow.ui \
