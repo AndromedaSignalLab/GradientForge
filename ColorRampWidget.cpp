@@ -79,7 +79,7 @@ void ColorRampWidget::paintEvent(QPaintEvent* e) {
     for (int i=0; i<colorRamp.size(); i++)
     {
         //qreal nval = rampeditor_->slidewid_->getNormalizedValue(colorRamp[i].first);
-        grad.setColorAt(colorRamp[i].first, colorRamp[i].second);
+        grad.setColorAt(1.0 - colorRamp[i].first, colorRamp[i].second);
     }
 
     /*for (int i=0; i<rampeditor_->sliders.size(); i++)
