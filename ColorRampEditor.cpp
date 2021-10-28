@@ -12,7 +12,7 @@ ColorRampEditor::ColorRampEditor(QWidget* parent, Qt::Orientation orientation) :
     horizontalLayout = new QGridLayout();
     verticalLayout = new QGridLayout();
 
-    leftSpacer = new QSpacerItem(12, 3, QSizePolicy::Fixed, QSizePolicy::Fixed);
+    leftSpacer = new QSpacerItem(11, 3, QSizePolicy::Fixed, QSizePolicy::Fixed);
     rightSpacer = new QSpacerItem(12, 3, QSizePolicy::Fixed, QSizePolicy::Fixed);
     topSpacer = new QSpacerItem(3, 11, QSizePolicy::Fixed, QSizePolicy::Fixed);
     bottomSpacer = new QSpacerItem(3, 12, QSizePolicy::Fixed, QSizePolicy::Fixed);
