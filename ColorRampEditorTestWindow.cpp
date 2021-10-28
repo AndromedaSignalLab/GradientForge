@@ -1,9 +1,9 @@
 #include "ColorRampEditorTestWindow.hpp"
-#include "ui_mainwindow.h"
+#include "ui_ColorRampEditorTestWindow.h"
 
 ColorRampEditorTestWindow::ColorRampEditorTestWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    : QMainWindow(parent),
+      ui(new Ui::ColorRampEditorTestWindow)
 {
     ui->setupUi(this);
     connect(ui->colorRampHorizontal, &ColorRampEditor::colorClicked, this, &ColorRampEditorTestWindow::onColorClicked);

@@ -1,5 +1,4 @@
-#ifndef COLORRAMPEDITORTESTWINDOW_H
-#define COLORRAMPEDITORTESTWINDOW_H
+#pragma once
 
 #include <QMainWindow>
 #include <QUuid>
@@ -24,4 +23,3 @@ protected:
     Ui::MainWindow *ui;
     void closeEvent(QCloseEvent *event);
 };
-#endif // COLORRAMPEDITORTESTWINDOW_H
