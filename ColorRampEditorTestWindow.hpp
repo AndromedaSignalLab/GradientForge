@@ -4,22 +4,23 @@
 #include <QUuid>
 #include <QColor>
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
+namespace Ui {
+class ColorRampEditorTestWindow;
+}
 
 class ColorRampEditorTestWindow : public QMainWindow
 {
     Q_OBJECT
 
-public:
-    ColorRampEditorTestWindow(QWidget *parent = nullptr);
+        public:
+                 explicit ColorRampEditorTestWindow(QWidget *parent = nullptr);
     ~ColorRampEditorTestWindow();
 public slots:
     void onColorClicked(double value, QColor color);
     void onSliderValueChanged(QUuid sliderId, qreal value);
 
 protected:
-    Ui::MainWindow *ui;
+    Ui::ColorRampEditorTestWindow *ui;
     void closeEvent(QCloseEvent *event);
 };
+

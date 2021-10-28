@@ -1,9 +1,9 @@
 #include "ColorRampEditorTestWindow.hpp"
 #include "ui_ColorRampEditorTestWindow.h"
 
-ColorRampEditorTestWindow::ColorRampEditorTestWindow(QWidget *parent)
-    : QMainWindow(parent),
-      ui(new Ui::ColorRampEditorTestWindow)
+ColorRampEditorTestWindow::ColorRampEditorTestWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::ColorRampEditorTestWindow)
 {
     ui->setupUi(this);
     connect(ui->colorRampHorizontal, &ColorRampEditor::colorClicked, this, &ColorRampEditorTestWindow::onColorClicked);
@@ -30,7 +30,7 @@ void ColorRampEditorTestWindow::onSliderValueChanged(QUuid sliderId, qreal value
     ui->sliderValue->setText(QString::number(value));
 }
 
-void ColorRampEditorTestWindow::closeEvent(QCloseEvent * event)
+void ColorRampEditorTestWindow::closeEvent(QCloseEvent *)
 {
     QApplication::exit();
 }
