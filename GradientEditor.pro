@@ -10,38 +10,15 @@ CONFIG += c++20
 
 CONFIG += link_pkgconfig
 
-SOURCES += \
-    ColorRampEditor.cpp \
-    ColorRampEditorTestWindow.cpp \
-    ColorRampWidget.cpp \
-    ColorRampWidgetTestWindow.cpp \
-    ColorUtil.cpp \
-    MathUtil.cpp \
-    MultiHandleSlider.cpp \
-    MultiHandleSliderTestWindow.cpp \
-    SliderHandle.cpp \
-    SliderUtil.cpp \
-    Sorters.cpp \
-    main.cpp
+INCLUDEPATH += "./src"
 
-HEADERS += \
-    ColorRamp.hpp \
-    ColorRampEditor.hpp \
-    ColorRampEditorTestWindow.hpp \
-    ColorRampWidget.hpp \
-    ColorRampWidgetTestWindow.hpp \
-    ColorUtil.hpp \
-    MathUtil.hpp \
-    MultiHandleSlider.hpp \
-    MultiHandleSliderTestWindow.hpp \
-    SliderHandle.hpp \
-    SliderUtil.hpp \
-    Sorters.hpp
+INCLUDEPATH += "./test"
 
-FORMS += \
-    ColorRampEditorTestWindow.ui \
-    ColorRampWidgetTestWindow.ui \
-    MultiHandleSliderTestWindow.ui
+SOURCES = $$files(*.cpp, true)
+
+HEADERS = $$files(*.hpp, true)
+
+FORMS += $$files(*.ui, true)
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
