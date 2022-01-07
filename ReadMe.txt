@@ -4,4 +4,4 @@ Inspired by the design and algorithms of Richard Steffen's QColorRampEditor ( ht
 Contact of the Inpired Component: rsteffen@messbild.de, rsteffen@uni-bonn.de
 
 Copyright (C) 2021 Volkan Orhan 
-Contact: volkanorhan@modlpugplayer.org
+Contact: volkanorhan@modplugplayer.org
