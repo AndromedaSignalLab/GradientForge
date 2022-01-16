@@ -12,15 +12,11 @@ You should have received a copy of the GNU Lesser General Public License along w
 
 #include "MathUtil.hpp"
 
-MathUtil::MathUtil()
-{
-}
-
-qreal MathUtil::getNormalizedValue(qreal value, qreal min, qreal max) {
+qreal GradientEditor::MathUtil::getNormalizedValue(qreal value, qreal min, qreal max) {
     return (value - min)/(max-min);
 }
 
-qreal MathUtil::getNormalizedValue(QPoint position, QRect contentsRect, qreal boundarySpace, Qt::Orientation orientation) {
+qreal GradientEditor::MathUtil::getNormalizedValue(QPoint position, QRect contentsRect, qreal boundarySpace, Qt::Orientation orientation) {
     qreal normalizedValue;
     if (orientation==Qt::Horizontal) {
         contentsRect.adjust(boundarySpace,0,-boundarySpace,0);
@@ -33,7 +29,7 @@ qreal MathUtil::getNormalizedValue(QPoint position, QRect contentsRect, qreal bo
     return normalizedValue;
 }
 
-QPoint MathUtil::getPositionForNormalizedValue(qreal normalizedValue, QRect contentsRect, qreal boundarySpace, Qt::Orientation orientation)
+QPoint GradientEditor::MathUtil::getPositionForNormalizedValue(qreal normalizedValue, QRect contentsRect, qreal boundarySpace, Qt::Orientation orientation)
 {
     QPoint position;
     qreal pos;

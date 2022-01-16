@@ -16,12 +16,11 @@ You should have received a copy of the GNU Lesser General Public License along w
 #include <QRect>
 #include <QtGlobal>
 
-class MathUtil
-{
-public:
-    MathUtil();
-    static qreal getNormalizedValue(qreal value, qreal min, qreal max);
-    static qreal getNormalizedValue(QPoint position, QRect contentsRect, qreal boundarySpace, Qt::Orientation orientation);
-    //static QPoint getPositionForNormalizedValue(qreal value, qreal boundarySpace, qreal sliderWidth, Qt::Orientation orientation);
-    static QPoint getPositionForNormalizedValue(qreal normalizedValue, QRect contentsRect, qreal boundarySpace, Qt::Orientation orientation);
-};
+namespace GradientEditor {
+    namespace MathUtil {
+        qreal getNormalizedValue(qreal value, qreal min, qreal max);
+        qreal getNormalizedValue(QPoint position, QRect contentsRect, qreal boundarySpace, Qt::Orientation orientation);
+        //QPoint getPositionForNormalizedValue(qreal value, qreal boundarySpace, qreal sliderWidth, Qt::Orientation orientation);
+        QPoint getPositionForNormalizedValue(qreal normalizedValue, QRect contentsRect, qreal boundarySpace, Qt::Orientation orientation);
+    }
+}

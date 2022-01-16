@@ -17,6 +17,8 @@ You should have received a copy of the GNU Lesser General Public License along w
 #include "MathUtil.hpp"
 #include <QDebug>
 
+using namespace GradientEditor;
+
 ColorRampEditor::ColorRampEditor(QWidget* parent, Qt::Orientation orientation) : QWidget(parent)
 {
     this->orientation = orientation;

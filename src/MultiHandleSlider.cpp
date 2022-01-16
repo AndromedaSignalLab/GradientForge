@@ -13,7 +13,6 @@ You should have received a copy of the GNU Lesser General Public License along w
 #include "MultiHandleSlider.hpp"
 #include <QPainter>
 #include <QDebug>
-#include "MathUtil.hpp"
 #include "Sorters.hpp"
 #include "ColorUtil.hpp"
 
@@ -58,7 +57,7 @@ void MultiHandleSlider::setValue(const QUuid & sliderHandleId, const qreal & val
 qreal MultiHandleSlider::calculateValue(const QUuid & sliderHandleId)
 {
     QRect crec = contentsRect();
-    return MathUtil::getNormalizedValue(sliderHandles[sliderHandleId]->pos(), crec, handleProperties.width/2, handleProperties.orientation);
+    return GradientEditor::MathUtil::getNormalizedValue(sliderHandles[sliderHandleId]->pos(), crec, handleProperties.width/2, handleProperties.orientation);
 }
 
 qreal MultiHandleSlider::getValue(const QUuid & sliderHandleId)
@@ -69,7 +68,7 @@ qreal MultiHandleSlider::getValue(const QUuid & sliderHandleId)
 void MultiHandleSlider::updatePosition(const QUuid & sliderHandleId)
 {
     QRect crec = contentsRect();
-    QPoint pos = MathUtil::getPositionForNormalizedValue(sliderHandles[sliderHandleId]->getValue(), crec, getBoundarySpace(), orientation);
+    QPoint pos = GradientEditor::MathUtil::getPositionForNormalizedValue(sliderHandles[sliderHandleId]->getValue(), crec, getBoundarySpace(), orientation);
     sliderHandles[sliderHandleId]->move(pos);
 }
 
@@ -173,7 +172,7 @@ void MultiHandleSlider::setColorRamp(ColorRamp colorRamp) {
 }
 
 qreal MultiHandleSlider::getNormalizedValue(qreal value) {
-    return MathUtil::getNormalizedValue(value, 0, 1);
+    return GradientEditor::MathUtil::getNormalizedValue(value, 0, 1);
 }
 
 void MultiHandleSlider::resizeEvent (QResizeEvent*) {
@@ -349,7 +348,7 @@ void MultiHandleSlider::mouseDoubleClickEvent(QMouseEvent* e)
                 return;
         }
         else {
-            qreal normalizedValue = MathUtil::getNormalizedValue(e->pos(), contentsRect(), getBoundarySpace(), orientation);
+            qreal normalizedValue = GradientEditor::MathUtil::getNormalizedValue(e->pos(), contentsRect(), getBoundarySpace(), orientation);
             QColor color = ColorUtil::getColor(normalizedValue, getColorRamp());
             addSlider(e->pos(), color);
         }
@@ -361,14 +360,14 @@ qreal MultiHandleSlider::getValueFromPosition(const QPoint &position)
 {
     int boundarySpace = getBoundarySpace();
     QRect crec = contentsRect();
-    qreal value = MathUtil::getNormalizedValue(position, crec, boundarySpace, orientation);
+    qreal value = GradientEditor::MathUtil::getNormalizedValue(position, crec, boundarySpace, orientation);
     //qreal value = orientation == Qt::Horizontal ? 1.0*(position.x()-boundarySpace)/(crec.width() - boundarySpace*2) : 1.0*(position.y()-boundarySpace)/(crec.height() - boundarySpace*2);
     return value;
 }
 
 QPoint MultiHandleSlider::getPositionForValue(qreal value)
 {
-    return MathUtil::getPositionForNormalizedValue(value, contentsRect(), getBoundarySpace(), orientation);
+    return GradientEditor::MathUtil::getPositionForNormalizedValue(value, contentsRect(), getBoundarySpace(), orientation);
 }
 
 int MultiHandleSlider::getSliderAmount()
