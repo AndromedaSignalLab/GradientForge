@@ -23,8 +23,8 @@ public:
     ColorRampWidget(QWidget* parent=NULL, Qt::Orientation orientation = Qt::Horizontal);
 
     QColor getColor(qreal key) const;
-    const ColorRamp & getcolorRamp() const;
-    void setColorRamp(const ColorRamp & newColorRamp);
+    const QGradientStops &getcolorRamp() const;
+    void setColorRamp(const QGradientStops &colorRamp);
 
     bool isVertical() const;
     void setVertical(const bool &vertical);
@@ -39,7 +39,7 @@ protected slots:
     virtual void mousePressEvent(QMouseEvent* e);
 
 protected:
-    ColorRamp colorRamp;
+    QGradientStops colorRamp;
     void paintEvent(QPaintEvent* e);
     Qt::Orientation orientation;
 };

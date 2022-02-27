@@ -14,7 +14,7 @@ You should have received a copy of the GNU Lesser General Public License along w
 
 #include <QPropertyAnimation>
 
-QColor ColorUtil::getColor(qreal key, ColorRampMap colorRamp) {
+QColor ColorUtil::getColor(qreal key, const ColorRampMap &colorRamp) {
     // key must belong to [0,1]
     //key = Clip(key, 0.0, 1.0) ;
     key = std::clamp(key, 0.0, 1.0);
@@ -38,13 +38,13 @@ QColor ColorUtil::getColor(qreal key, ColorRampMap colorRamp) {
     return interpolator.currentValue().value<QColor>() ;
 }
 
-QColor ColorUtil::getColor(qreal key, ColorRamp colorRamp) {
+QColor ColorUtil::getColor(qreal key, const QGradientStops &colorRamp) {
     // key must belong to [0,1]
     //key = Clip(key, 0.0, 1.0) ;
     key = std::clamp(key, 0.0, 1.0);
 
     // directly get color if known
-    for(ColorRampElement &colorRampElement : colorRamp) {
+    for(const QGradientStop &colorRampElement : colorRamp) {
         if(colorRampElement.first == key)
             return colorRampElement.second;
     }
@@ -63,7 +63,7 @@ QColor ColorUtil::getColor(qreal key, ColorRamp colorRamp) {
     const qreal granularite = 100.0 ;
     interpolator.setEasingCurve(QEasingCurve::Linear) ;
     interpolator.setDuration(granularite) ;
-    for(ColorRampElement &colorRampElement : colorRamp) {
+    for(const QGradientStop &colorRampElement : colorRamp) {
         interpolator.setKeyValueAt(colorRampElement.first, colorRampElement.second) ;
     }
 

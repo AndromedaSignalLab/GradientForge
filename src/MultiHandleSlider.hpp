@@ -18,8 +18,7 @@ You should have received a copy of the GNU Lesser General Public License along w
 #include <QHash>
 #include "SliderHandle.hpp"
 #include <QStack>
-
-typedef QVector<QPair<qreal, QColor>> ColorRamp;
+#include <QGradientStops>
 
 class MultiHandleSlider : public QWidget
 {
@@ -34,10 +33,10 @@ public:
     int getSliderAmount();
 
     /// return the Ramp definition
-    ColorRamp getColorRamp();
+    QGradientStops getColorRamp();
 
     /// set Ramp definition
-    void setColorRamp(ColorRamp colorRamp);
+    void setColorRamp(QGradientStops colorRamp);
 
     qreal getNormalizedValue(qreal value);
 

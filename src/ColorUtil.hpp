@@ -14,11 +14,12 @@ You should have received a copy of the GNU Lesser General Public License along w
 
 #include <QColor>
 #include "ColorRamp.hpp"
+#include <QGradientStops>
 
 class ColorUtil
 {
 public:
     ColorUtil();
-    static QColor getColor(qreal key, ColorRampMap colorRamp);
-    static QColor getColor(qreal key, ColorRamp colorRamp);
+    static QColor getColor(qreal key, const ColorRampMap &colorRamp);
+    static QColor getColor(qreal key, const QGradientStops &colorRamp);
 };

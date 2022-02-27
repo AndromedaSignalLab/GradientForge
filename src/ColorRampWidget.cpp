@@ -59,14 +59,14 @@ void ColorRampWidget::mousePressEvent(QMouseEvent* e) {
     }
 }
 
-const ColorRamp & ColorRampWidget::getcolorRamp() const
+const QGradientStops & ColorRampWidget::getcolorRamp() const
 {
     return colorRamp;
 }
 
-void ColorRampWidget::setColorRamp(const ColorRamp & newColorRamp)
+void ColorRampWidget::setColorRamp(const QGradientStops &colorRamp)
 {
-    colorRamp = newColorRamp;
+    this->colorRamp = colorRamp;
 }
 
 void ColorRampWidget::paintEvent(QPaintEvent* e) {

@@ -15,11 +15,13 @@ You should have received a copy of the GNU Lesser General Public License along w
 #include "SliderHandle.hpp"
 #include <QPair>
 #include <QColor>
+#include <QGradientStop>
 
 class Sorters {
 public:
-    /// sort the slider list
-    static bool SliderSort(const SliderHandle* a1, const SliderHandle* a2);
     /// sort the color ramp
-    static bool colorRampSort(const QPair<qreal, QColor> &a1, const QPair<qreal, QColor> &a2);
+    static bool colorRampSort(const QGradientStop &a1, const QGradientStop &a2);
+
+    /// sort the slider list
+    static bool SliderSort(const SliderHandle *a1, const SliderHandle* a2);
 };

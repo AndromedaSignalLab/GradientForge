@@ -134,12 +134,12 @@ void MultiHandleSlider::setSliderColor(QUuid sliderId, QColor color) {
     sliderHandles[sliderId]->setColor(color);
 }
 
-ColorRamp MultiHandleSlider::getColorRamp() {
+QGradientStops MultiHandleSlider::getColorRamp() {
     // create output
-    ColorRamp ret;
+    QGradientStops ret;
     for(QUuid id : sliderHandles.keys()) {
         QColor col = sliderHandles[id]->getColor();
-        ret.push_back(QPair<qreal, QColor>(sliderHandles[id]->getValue(),col));
+        ret.push_back(QGradientStop(sliderHandles[id]->getValue(),col));
     }
     // sort the slider list
     std::sort(ret.begin(), ret.end(), Sorters::colorRampSort);
@@ -147,7 +147,7 @@ ColorRamp MultiHandleSlider::getColorRamp() {
     return ret;
 }
 
-void MultiHandleSlider::setColorRamp(ColorRamp colorRamp) {
+void MultiHandleSlider::setColorRamp(QGradientStops colorRamp) {
     if (colorRamp.size()<1) return;
 
     // sort the slider list

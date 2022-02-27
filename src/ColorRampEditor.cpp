@@ -158,7 +158,7 @@ void ColorRampEditor::changeLayout(QLayout * newLayout)
 
 void ColorRampEditor::updateColorRamp()
 {
-    ColorRamp colorRamp = multiHandleSlider->getColorRamp();
+    QGradientStops colorRamp = multiHandleSlider->getColorRamp();
     colorRampWidget->setColorRamp(colorRamp);
     colorRampWidget->update();
 }
@@ -199,12 +199,12 @@ void ColorRampEditor::setVertical(const bool &vertical)
     }
 }
 
-ColorRamp ColorRampEditor::getColorRamp()
+QGradientStops ColorRampEditor::getColorRamp()
 {
     return multiHandleSlider->getColorRamp();
 }
 
-void ColorRampEditor::setColorRamp(const ColorRamp & colorRamp)
+void ColorRampEditor::setColorRamp(const QGradientStops & colorRamp)
 {
     multiHandleSlider->setColorRamp(colorRamp);
 }

@@ -14,7 +14,4 @@ You should have received a copy of the GNU Lesser General Public License along w
 #include <QtGlobal>
 #include <QColor>
 
-typedef QVector<QPair<qreal, QColor>> ColorRamp;
-typedef QPair<qreal, QColor> ColorRampElement;
-
 typedef QMap<qreal, QColor> ColorRampMap;

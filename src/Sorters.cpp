@@ -12,7 +12,7 @@ You should have received a copy of the GNU Lesser General Public License along w
 
 #include "Sorters.hpp"
 
-bool Sorters::colorRampSort(const QPair<qreal, QColor> &a1, const QPair<qreal, QColor> &a2)
+bool Sorters::colorRampSort(const QGradientStop &a1, const QGradientStop &a2)
 {
     return a1.first < a2.first;
 }

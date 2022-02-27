@@ -44,8 +44,8 @@ public:
     bool isVertical() const;
     void setVertical(const bool &vertical);
 
-    ColorRamp getColorRamp();
-    void setColorRamp(const ColorRamp &colorRamp);
+    QGradientStops getColorRamp();
+    void setColorRamp(const QGradientStops &colorRamp);
 
 	/// return a 256 colortable from the ramp
 	QVector<QRgb> getColorTable();
