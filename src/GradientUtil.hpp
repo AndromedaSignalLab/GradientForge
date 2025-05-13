@@ -1,5 +1,5 @@
 /*
-ColorUtil utilization class declarations
+GradientUtil utilization class declarations
 Belongs to GradientEditor Project
 Copyright (C) 2021 Volkan Orhan
 
@@ -16,10 +16,10 @@ You should have received a copy of the GNU Lesser General Public License along w
 #include "ColorRamp.hpp"
 #include <QGradientStops>
 
-class ColorUtil
+class GradientUtil
 {
 public:
-    ColorUtil();
+    GradientUtil();
     static QColor getColor(qreal key, const ColorRampMap &colorRamp);
     static QColor getColor(qreal key, const QGradientStops &colorRamp);
 };

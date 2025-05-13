@@ -16,7 +16,7 @@ You should have received a copy of the GNU Lesser General Public License along w
 #include <QMouseEvent>
 #include <QPropertyAnimation>
 #include <algorithm>
-#include "ColorUtil.hpp"
+#include "GradientUtil.hpp"
 #include "MathUtil.hpp"
 
 ColorRampWidget::ColorRampWidget(QWidget* parent, Qt::Orientation orientation) : QWidget(parent) {
@@ -27,7 +27,7 @@ ColorRampWidget::ColorRampWidget(QWidget* parent, Qt::Orientation orientation) :
 
 QColor ColorRampWidget::getColor(qreal key) const
 {
-    return ColorUtil::getColor(key, colorRamp);
+    return GradientUtil::getColor(key, colorRamp);
 }
 
 void ColorRampWidget::onColorRampChanged()
@@ -53,7 +53,7 @@ void ColorRampWidget::mousePressEvent(QMouseEvent* e) {
                 crec.adjust(0, boundarySpace-1, 0, -boundarySpace+1);
             }*/
             normalizedValue = GradientEditor::MathUtil::getNormalizedValue(e->pos(), crec, 0, orientation);
-            colorJustClicked = ColorUtil::getColor(normalizedValue, colorRamp);
+            colorJustClicked = GradientUtil::getColor(normalizedValue, colorRamp);
             emit colorClicked(normalizedValue, colorJustClicked);
         }
     }

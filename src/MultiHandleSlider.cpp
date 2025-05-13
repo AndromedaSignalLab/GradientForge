@@ -14,7 +14,7 @@ You should have received a copy of the GNU Lesser General Public License along w
 #include <QPainter>
 #include <QDebug>
 #include "Sorters.hpp"
-#include "ColorUtil.hpp"
+#include <GradientUtil.hpp>
 
 MultiHandleSlider::MultiHandleSlider(QWidget* parent, Qt::Orientation orientation) : QWidget(parent)
 {
@@ -349,7 +349,7 @@ void MultiHandleSlider::mouseDoubleClickEvent(QMouseEvent* e)
         }
         else {
             qreal normalizedValue = GradientEditor::MathUtil::getNormalizedValue(e->pos(), contentsRect(), getBoundarySpace(), orientation);
-            QColor color = ColorUtil::getColor(normalizedValue, getColorRamp());
+            QColor color = GradientUtil::getColor(normalizedValue, getColorRamp());
             addSlider(e->pos(), color);
         }
         emit sliderChanged();

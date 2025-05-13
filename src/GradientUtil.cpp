@@ -1,5 +1,5 @@
 /*
-ColorUtil utilization class definitions
+GradientUtil utilization class definitions
 Belongs to GradientEditor Project
 Copyright (C) 2021 Volkan Orhan
 
@@ -10,11 +10,11 @@ This library is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include "ColorUtil.hpp"
+#include "GradientUtil.hpp"
 
 #include <QPropertyAnimation>
 
-QColor ColorUtil::getColor(qreal key, const ColorRampMap &colorRamp) {
+QColor GradientUtil::getColor(qreal key, const ColorRampMap &colorRamp) {
     // key must belong to [0,1]
     //key = Clip(key, 0.0, 1.0) ;
     key = std::clamp(key, 0.0, 1.0);
@@ -38,7 +38,7 @@ QColor ColorUtil::getColor(qreal key, const ColorRampMap &colorRamp) {
     return interpolator.currentValue().value<QColor>() ;
 }
 
-QColor ColorUtil::getColor(qreal key, const QGradientStops &colorRamp) {
+QColor GradientUtil::getColor(qreal key, const QGradientStops &colorRamp) {
     // key must belong to [0,1]
     //key = Clip(key, 0.0, 1.0) ;
     key = std::clamp(key, 0.0, 1.0);
